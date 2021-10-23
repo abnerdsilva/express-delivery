@@ -46,6 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormCardapio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCardapio.Designer.cs">
+      <DependentUpon>FormCardapio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormClientes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormClientes.Designer.cs">
+      <DependentUpon>FormClientes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDashboard.Designer.cs">
+      <DependentUpon>FormDashboard.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormHome.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,13 +76,40 @@
     <Compile Include="FormLogin.Designer.cs">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormPedido.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPedido.Designer.cs">
+      <DependentUpon>FormPedido.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUsuarios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUsuarios.Designer.cs">
+      <DependentUpon>FormUsuarios.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormCardapio.resx">
+      <DependentUpon>FormCardapio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormClientes.resx">
+      <DependentUpon>FormClientes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDashboard.resx">
+      <DependentUpon>FormDashboard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormHome.resx">
       <DependentUpon>FormHome.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPedido.resx">
+      <DependentUpon>FormPedido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUsuarios.resx">
+      <DependentUpon>FormUsuarios.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
