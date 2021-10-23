@@ -34,11 +34,11 @@ namespace ExpressDelivery
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLogin));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtLoginUsuario = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.txtLoginSenha = new System.Windows.Forms.TextBox();
+            this.btnSair = new System.Windows.Forms.Button();
+            this.btnEntrar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -62,12 +62,12 @@ namespace ExpressDelivery
             this.label1.TabIndex = 1;
             this.label1.Text = "Usuáro";
             // 
-            // textBox1
+            // txtLoginUsuario
             // 
-            this.textBox1.Location = new System.Drawing.Point(370, 70);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(184, 20);
-            this.textBox1.TabIndex = 2;
+            this.txtLoginUsuario.Location = new System.Drawing.Point(370, 70);
+            this.txtLoginUsuario.Name = "txtLoginUsuario";
+            this.txtLoginUsuario.Size = new System.Drawing.Size(184, 20);
+            this.txtLoginUsuario.TabIndex = 2;
             // 
             // label2
             // 
@@ -79,41 +79,43 @@ namespace ExpressDelivery
             this.label2.TabIndex = 3;
             this.label2.Text = "Senha";
             // 
-            // textBox2
+            // txtLoginSenha
             // 
-            this.textBox2.Location = new System.Drawing.Point(370, 121);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(184, 20);
-            this.textBox2.TabIndex = 4;
+            this.txtLoginSenha.Location = new System.Drawing.Point(370, 121);
+            this.txtLoginSenha.Name = "txtLoginSenha";
+            this.txtLoginSenha.Size = new System.Drawing.Size(184, 20);
+            this.txtLoginSenha.TabIndex = 4;
             // 
-            // button1
+            // btnSair
             // 
-            this.button1.Location = new System.Drawing.Point(297, 218);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(120, 36);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Sair";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSair.Location = new System.Drawing.Point(297, 218);
+            this.btnSair.Name = "btnSair";
+            this.btnSair.Size = new System.Drawing.Size(120, 36);
+            this.btnSair.TabIndex = 5;
+            this.btnSair.Text = "Sair";
+            this.btnSair.UseVisualStyleBackColor = true;
+            this.btnSair.Click += new System.EventHandler(this.btnSair_Click);
             // 
-            // button2
+            // btnEntrar
             // 
-            this.button2.Location = new System.Drawing.Point(452, 218);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(119, 36);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Entrar";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnEntrar.Location = new System.Drawing.Point(452, 218);
+            this.btnEntrar.Name = "btnEntrar";
+            this.btnEntrar.Size = new System.Drawing.Size(119, 36);
+            this.btnEntrar.TabIndex = 6;
+            this.btnEntrar.Text = "Entrar";
+            this.btnEntrar.UseVisualStyleBackColor = true;
+            this.btnEntrar.Click += new System.EventHandler(this.btnEntrar_Click);
             // 
             // FormLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(583, 282);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.btnEntrar);
+            this.Controls.Add(this.btnSair);
+            this.Controls.Add(this.txtLoginSenha);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtLoginUsuario);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -126,13 +128,17 @@ namespace ExpressDelivery
             this.PerformLayout();
         }
 
+        private System.Windows.Forms.TextBox txtLoginSenha;
+
+        private System.Windows.Forms.TextBox txtLoginUsuario;
+
+        private System.Windows.Forms.Button btnSair;
+
+        private System.Windows.Forms.Button btnEntrar;
+
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
 
         #endregion
     }
