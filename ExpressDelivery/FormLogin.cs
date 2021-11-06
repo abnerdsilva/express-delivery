@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using ExpressDelivery.Controllers;
 
 namespace ExpressDelivery
 {
@@ -13,7 +14,16 @@ namespace ExpressDelivery
         {
             if (txtLoginUsuario.Text == "" || txtLoginSenha.Text == "")
             {
-                MessageBox.Show("Usuário e/ou senha inválido(s)", "Alerta!");
+                MessageBox.Show(@"Usuário e/ou senha inválido(s)", "Alerta!");
+                return;
+            }
+
+            LoginController controle = new LoginController();
+            controle.Acessar(txtLoginUsuario.Text, txtLoginSenha.Text);
+
+            if (!controle.Status)
+            {
+                MessageBox.Show(controle.Message);
                 return;
             }
 
