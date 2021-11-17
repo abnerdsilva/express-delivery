@@ -228,7 +228,7 @@ namespace ExpressDelivery
             this.panelDetalheCliente.Controls.Add(this.label5);
             this.panelDetalheCliente.Controls.Add(this.radioInativo);
             this.panelDetalheCliente.Controls.Add(this.radioAtivo);
-            this.panelDetalheCliente.Location = new System.Drawing.Point(12, 36);
+            this.panelDetalheCliente.Location = new System.Drawing.Point(12, 37);
             this.panelDetalheCliente.Name = "panelDetalheCliente";
             this.panelDetalheCliente.Size = new System.Drawing.Size(776, 399);
             this.panelDetalheCliente.TabIndex = 9;
