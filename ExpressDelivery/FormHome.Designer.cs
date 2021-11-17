@@ -235,13 +235,8 @@ namespace ExpressDelivery
 
         private System.Windows.Forms.Panel panelSideMenu;
         private System.Windows.Forms.Button btnSair;
-        private System.Windows.Forms.Button btnPedido;
         private System.Windows.Forms.Panel panelCadastros;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnCadastro;
-        private System.Windows.Forms.Button btnDashbord;
         private System.Windows.Forms.Panel panel1;
     }
 }
