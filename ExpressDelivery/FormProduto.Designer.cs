@@ -33,22 +33,31 @@ namespace ExpressDelivery
         {
             this.label1 = new System.Windows.Forms.Label();
             this.painelConsultaCardapio = new System.Windows.Forms.Panel();
+            this.cmbTipoPesquisa = new System.Windows.Forms.ComboBox();
+            this.txtDescricao = new System.Windows.Forms.TextBox();
+            this.cmbStatusPesquisa = new System.Windows.Forms.ComboBox();
+            this.listProdutos = new System.Windows.Forms.ListView();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnNovo = new System.Windows.Forms.Button();
+            this.btnPesquisar = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.panelDetalheCardapio = new System.Windows.Forms.Panel();
-            this.txtLocalizacaoProduto = new System.Windows.Forms.TextBox();
-            this.txtMargemLucroProduto = new System.Windows.Forms.TextBox();
-            this.txtObservacaoProduto = new System.Windows.Forms.TextBox();
+            this.txtLocalizacao = new System.Windows.Forms.TextBox();
+            this.txtMargemLucro = new System.Windows.Forms.TextBox();
+            this.txtObservacao = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.txtCodBarrasProduto = new System.Windows.Forms.TextBox();
+            this.txtCodBarras = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.txtPrecoCompraProduto = new System.Windows.Forms.TextBox();
+            this.txtPrecoCompra = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.txtPrecoVendaProduto = new System.Windows.Forms.TextBox();
+            this.txtPrecoVenda = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.txtCategoriaProduto = new System.Windows.Forms.TextBox();
+            this.txtCategoria = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.txtNomeProduto = new System.Windows.Forms.TextBox();
+            this.txtNome = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.btnVoltarProduto = new System.Windows.Forms.Button();
             this.btnNovoProduto = new System.Windows.Forms.Button();
@@ -57,15 +66,6 @@ namespace ExpressDelivery
             this.label5 = new System.Windows.Forms.Label();
             this.radioProdutoInativo = new System.Windows.Forms.RadioButton();
             this.radioProdutoAtivo = new System.Windows.Forms.RadioButton();
-            this.listViewCardapio = new System.Windows.Forms.ListView();
-            this.cmbTipoPesquisaCardapio = new System.Windows.Forms.ComboBox();
-            this.cmbStatusPesquisaCardapio = new System.Windows.Forms.ComboBox();
-            this.txtDescricaoCardapio = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.btnNovoCardapio = new System.Windows.Forms.Button();
-            this.btnPesquisarCardapio = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.painelConsultaCardapio.SuspendLayout();
             this.panelDetalheCardapio.SuspendLayout();
             this.SuspendLayout();
@@ -74,7 +74,7 @@ namespace ExpressDelivery
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 33);
@@ -83,38 +83,125 @@ namespace ExpressDelivery
             // 
             // painelConsultaCardapio
             // 
-            this.painelConsultaCardapio.Controls.Add(this.panelDetalheCardapio);
-            this.painelConsultaCardapio.Controls.Add(this.listViewCardapio);
-            this.painelConsultaCardapio.Controls.Add(this.cmbTipoPesquisaCardapio);
-            this.painelConsultaCardapio.Controls.Add(this.cmbStatusPesquisaCardapio);
-            this.painelConsultaCardapio.Controls.Add(this.txtDescricaoCardapio);
+            this.painelConsultaCardapio.Controls.Add(this.cmbTipoPesquisa);
+            this.painelConsultaCardapio.Controls.Add(this.txtDescricao);
+            this.painelConsultaCardapio.Controls.Add(this.cmbStatusPesquisa);
+            this.painelConsultaCardapio.Controls.Add(this.listProdutos);
             this.painelConsultaCardapio.Controls.Add(this.label4);
             this.painelConsultaCardapio.Controls.Add(this.label3);
-            this.painelConsultaCardapio.Controls.Add(this.btnNovoCardapio);
-            this.painelConsultaCardapio.Controls.Add(this.btnPesquisarCardapio);
+            this.painelConsultaCardapio.Controls.Add(this.btnNovo);
+            this.painelConsultaCardapio.Controls.Add(this.btnPesquisar);
             this.painelConsultaCardapio.Controls.Add(this.label2);
             this.painelConsultaCardapio.Location = new System.Drawing.Point(12, 37);
             this.painelConsultaCardapio.Name = "painelConsultaCardapio";
             this.painelConsultaCardapio.Size = new System.Drawing.Size(776, 402);
             this.painelConsultaCardapio.TabIndex = 3;
             // 
+            // cmbTipoPesquisa
+            // 
+            this.cmbTipoPesquisa.FormattingEnabled = true;
+            this.cmbTipoPesquisa.Location = new System.Drawing.Point(541, 25);
+            this.cmbTipoPesquisa.Name = "cmbTipoPesquisa";
+            this.cmbTipoPesquisa.Size = new System.Drawing.Size(166, 21);
+            this.cmbTipoPesquisa.TabIndex = 15;
+            this.cmbTipoPesquisa.Text = "Descrição";
+            // 
+            // txtDescricao
+            // 
+            this.txtDescricao.Location = new System.Drawing.Point(6, 25);
+            this.txtDescricao.Name = "txtDescricao";
+            this.txtDescricao.Size = new System.Drawing.Size(403, 20);
+            this.txtDescricao.TabIndex = 14;
+            // 
+            // cmbStatusPesquisa
+            // 
+            this.cmbStatusPesquisa.FormattingEnabled = true;
+            this.cmbStatusPesquisa.Items.AddRange(new object[] {
+            "Ativo",
+            "Inativo"});
+            this.cmbStatusPesquisa.Location = new System.Drawing.Point(420, 25);
+            this.cmbStatusPesquisa.Name = "cmbStatusPesquisa";
+            this.cmbStatusPesquisa.Size = new System.Drawing.Size(113, 21);
+            this.cmbStatusPesquisa.TabIndex = 12;
+            this.cmbStatusPesquisa.Text = "Ativo";
+            // 
+            // listProdutos
+            // 
+            this.listProdutos.HideSelection = false;
+            this.listProdutos.Location = new System.Drawing.Point(3, 62);
+            this.listProdutos.Name = "listProdutos";
+            this.listProdutos.Size = new System.Drawing.Size(770, 335);
+            this.listProdutos.TabIndex = 8;
+            this.listProdutos.UseCompatibleStateImageBehavior = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(538, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(50, 13);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "Filtrar por";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(420, 12);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(37, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Status";
+            // 
+            // btnNovo
+            // 
+            this.btnNovo.FlatAppearance.BorderSize = 0;
+            this.btnNovo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNovo.Image = global::ExpressDelivery.Properties.Resources.add1;
+            this.btnNovo.Location = new System.Drawing.Point(749, 19);
+            this.btnNovo.Name = "btnNovo";
+            this.btnNovo.Size = new System.Drawing.Size(24, 24);
+            this.btnNovo.TabIndex = 2;
+            this.btnNovo.UseVisualStyleBackColor = true;
+            this.btnNovo.Click += new System.EventHandler(this.btnNovo_Click);
+            // 
+            // btnPesquisar
+            // 
+            this.btnPesquisar.FlatAppearance.BorderSize = 0;
+            this.btnPesquisar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPesquisar.Image = global::ExpressDelivery.Properties.Resources.search_list_black;
+            this.btnPesquisar.Location = new System.Drawing.Point(713, 16);
+            this.btnPesquisar.Name = "btnPesquisar";
+            this.btnPesquisar.Size = new System.Drawing.Size(30, 30);
+            this.btnPesquisar.TabIndex = 1;
+            this.btnPesquisar.UseVisualStyleBackColor = true;
+            this.btnPesquisar.Click += new System.EventHandler(this.btnPesquisar_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Descrição";
+            // 
             // panelDetalheCardapio
             // 
-            this.panelDetalheCardapio.Controls.Add(this.txtLocalizacaoProduto);
-            this.panelDetalheCardapio.Controls.Add(this.txtMargemLucroProduto);
-            this.panelDetalheCardapio.Controls.Add(this.txtObservacaoProduto);
+            this.panelDetalheCardapio.Controls.Add(this.txtLocalizacao);
+            this.panelDetalheCardapio.Controls.Add(this.txtMargemLucro);
+            this.panelDetalheCardapio.Controls.Add(this.txtObservacao);
             this.panelDetalheCardapio.Controls.Add(this.label13);
             this.panelDetalheCardapio.Controls.Add(this.label11);
-            this.panelDetalheCardapio.Controls.Add(this.txtCodBarrasProduto);
+            this.panelDetalheCardapio.Controls.Add(this.txtCodBarras);
             this.panelDetalheCardapio.Controls.Add(this.label8);
-            this.panelDetalheCardapio.Controls.Add(this.txtPrecoCompraProduto);
+            this.panelDetalheCardapio.Controls.Add(this.txtPrecoCompra);
             this.panelDetalheCardapio.Controls.Add(this.label12);
-            this.panelDetalheCardapio.Controls.Add(this.txtPrecoVendaProduto);
+            this.panelDetalheCardapio.Controls.Add(this.txtPrecoVenda);
             this.panelDetalheCardapio.Controls.Add(this.label9);
             this.panelDetalheCardapio.Controls.Add(this.label10);
-            this.panelDetalheCardapio.Controls.Add(this.txtCategoriaProduto);
+            this.panelDetalheCardapio.Controls.Add(this.txtCategoria);
             this.panelDetalheCardapio.Controls.Add(this.label7);
-            this.panelDetalheCardapio.Controls.Add(this.txtNomeProduto);
+            this.panelDetalheCardapio.Controls.Add(this.txtNome);
             this.panelDetalheCardapio.Controls.Add(this.label6);
             this.panelDetalheCardapio.Controls.Add(this.btnVoltarProduto);
             this.panelDetalheCardapio.Controls.Add(this.btnNovoProduto);
@@ -123,33 +210,33 @@ namespace ExpressDelivery
             this.panelDetalheCardapio.Controls.Add(this.label5);
             this.panelDetalheCardapio.Controls.Add(this.radioProdutoInativo);
             this.panelDetalheCardapio.Controls.Add(this.radioProdutoAtivo);
-            this.panelDetalheCardapio.Location = new System.Drawing.Point(0, 0);
+            this.panelDetalheCardapio.Location = new System.Drawing.Point(12, 36);
             this.panelDetalheCardapio.Name = "panelDetalheCardapio";
             this.panelDetalheCardapio.Size = new System.Drawing.Size(776, 402);
             this.panelDetalheCardapio.TabIndex = 4;
             this.panelDetalheCardapio.Visible = false;
             // 
-            // txtLocalizacaoProduto
+            // txtLocalizacao
             // 
-            this.txtLocalizacaoProduto.Location = new System.Drawing.Point(445, 125);
-            this.txtLocalizacaoProduto.Name = "txtLocalizacaoProduto";
-            this.txtLocalizacaoProduto.Size = new System.Drawing.Size(328, 20);
-            this.txtLocalizacaoProduto.TabIndex = 52;
+            this.txtLocalizacao.Location = new System.Drawing.Point(445, 125);
+            this.txtLocalizacao.Name = "txtLocalizacao";
+            this.txtLocalizacao.Size = new System.Drawing.Size(328, 20);
+            this.txtLocalizacao.TabIndex = 52;
             // 
-            // txtMargemLucroProduto
+            // txtMargemLucro
             // 
-            this.txtMargemLucroProduto.Location = new System.Drawing.Point(341, 161);
-            this.txtMargemLucroProduto.Name = "txtMargemLucroProduto";
-            this.txtMargemLucroProduto.Size = new System.Drawing.Size(177, 20);
-            this.txtMargemLucroProduto.TabIndex = 51;
+            this.txtMargemLucro.Location = new System.Drawing.Point(341, 161);
+            this.txtMargemLucro.Name = "txtMargemLucro";
+            this.txtMargemLucro.Size = new System.Drawing.Size(177, 20);
+            this.txtMargemLucro.TabIndex = 51;
             // 
-            // txtObservacaoProduto
+            // txtObservacao
             // 
-            this.txtObservacaoProduto.Location = new System.Drawing.Point(3, 228);
-            this.txtObservacaoProduto.Multiline = true;
-            this.txtObservacaoProduto.Name = "txtObservacaoProduto";
-            this.txtObservacaoProduto.Size = new System.Drawing.Size(770, 95);
-            this.txtObservacaoProduto.TabIndex = 50;
+            this.txtObservacao.Location = new System.Drawing.Point(3, 228);
+            this.txtObservacao.Multiline = true;
+            this.txtObservacao.Name = "txtObservacao";
+            this.txtObservacao.Size = new System.Drawing.Size(770, 95);
+            this.txtObservacao.TabIndex = 50;
             // 
             // label13
             // 
@@ -169,12 +256,12 @@ namespace ExpressDelivery
             this.label11.TabIndex = 48;
             this.label11.Text = "Localização";
             // 
-            // txtCodBarrasProduto
+            // txtCodBarras
             // 
-            this.txtCodBarrasProduto.Location = new System.Drawing.Point(86, 51);
-            this.txtCodBarrasProduto.Name = "txtCodBarrasProduto";
-            this.txtCodBarrasProduto.Size = new System.Drawing.Size(138, 20);
-            this.txtCodBarrasProduto.TabIndex = 47;
+            this.txtCodBarras.Location = new System.Drawing.Point(86, 51);
+            this.txtCodBarras.Name = "txtCodBarras";
+            this.txtCodBarras.Size = new System.Drawing.Size(138, 20);
+            this.txtCodBarras.TabIndex = 47;
             // 
             // label8
             // 
@@ -185,12 +272,12 @@ namespace ExpressDelivery
             this.label8.TabIndex = 46;
             this.label8.Text = "Código Barras*";
             // 
-            // txtPrecoCompraProduto
+            // txtPrecoCompra
             // 
-            this.txtPrecoCompraProduto.Location = new System.Drawing.Point(86, 161);
-            this.txtPrecoCompraProduto.Name = "txtPrecoCompraProduto";
-            this.txtPrecoCompraProduto.Size = new System.Drawing.Size(168, 20);
-            this.txtPrecoCompraProduto.TabIndex = 45;
+            this.txtPrecoCompra.Location = new System.Drawing.Point(86, 161);
+            this.txtPrecoCompra.Name = "txtPrecoCompra";
+            this.txtPrecoCompra.Size = new System.Drawing.Size(168, 20);
+            this.txtPrecoCompra.TabIndex = 45;
             // 
             // label12
             // 
@@ -201,12 +288,12 @@ namespace ExpressDelivery
             this.label12.TabIndex = 44;
             this.label12.Text = "Preço Compra*";
             // 
-            // txtPrecoVendaProduto
+            // txtPrecoVenda
             // 
-            this.txtPrecoVendaProduto.Location = new System.Drawing.Point(599, 161);
-            this.txtPrecoVendaProduto.Name = "txtPrecoVendaProduto";
-            this.txtPrecoVendaProduto.Size = new System.Drawing.Size(174, 20);
-            this.txtPrecoVendaProduto.TabIndex = 43;
+            this.txtPrecoVenda.Location = new System.Drawing.Point(599, 161);
+            this.txtPrecoVenda.Name = "txtPrecoVenda";
+            this.txtPrecoVenda.Size = new System.Drawing.Size(174, 20);
+            this.txtPrecoVenda.TabIndex = 43;
             // 
             // label9
             // 
@@ -226,12 +313,12 @@ namespace ExpressDelivery
             this.label10.TabIndex = 40;
             this.label10.Text = "Margem Lucro";
             // 
-            // txtCategoriaProduto
+            // txtCategoria
             // 
-            this.txtCategoriaProduto.Location = new System.Drawing.Point(86, 125);
-            this.txtCategoriaProduto.Name = "txtCategoriaProduto";
-            this.txtCategoriaProduto.Size = new System.Drawing.Size(283, 20);
-            this.txtCategoriaProduto.TabIndex = 38;
+            this.txtCategoria.Location = new System.Drawing.Point(86, 125);
+            this.txtCategoria.Name = "txtCategoria";
+            this.txtCategoria.Size = new System.Drawing.Size(283, 20);
+            this.txtCategoria.TabIndex = 38;
             // 
             // label7
             // 
@@ -242,12 +329,12 @@ namespace ExpressDelivery
             this.label7.TabIndex = 37;
             this.label7.Text = "Categoria*";
             // 
-            // txtNomeProduto
+            // txtNome
             // 
-            this.txtNomeProduto.Location = new System.Drawing.Point(86, 90);
-            this.txtNomeProduto.Name = "txtNomeProduto";
-            this.txtNomeProduto.Size = new System.Drawing.Size(687, 20);
-            this.txtNomeProduto.TabIndex = 36;
+            this.txtNome.Location = new System.Drawing.Point(86, 90);
+            this.txtNome.Name = "txtNome";
+            this.txtNome.Size = new System.Drawing.Size(687, 20);
+            this.txtNome.TabIndex = 36;
             // 
             // label6
             // 
@@ -266,6 +353,7 @@ namespace ExpressDelivery
             this.btnVoltarProduto.TabIndex = 34;
             this.btnVoltarProduto.Text = "Cancelar";
             this.btnVoltarProduto.UseVisualStyleBackColor = true;
+            this.btnVoltarProduto.Click += new System.EventHandler(this.btnVoltarProduto_Click);
             // 
             // btnNovoProduto
             // 
@@ -275,6 +363,7 @@ namespace ExpressDelivery
             this.btnNovoProduto.TabIndex = 33;
             this.btnNovoProduto.Text = "Novo";
             this.btnNovoProduto.UseVisualStyleBackColor = true;
+            this.btnNovoProduto.Click += new System.EventHandler(this.btnNovoProduto_Click);
             // 
             // btnSalvarProduto
             // 
@@ -298,9 +387,9 @@ namespace ExpressDelivery
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(5, 15);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 13);
+            this.label5.Size = new System.Drawing.Size(58, 13);
             this.label5.TabIndex = 7;
-            this.label5.Text = "ID Cliente";
+            this.label5.Text = "ID Produto";
             // 
             // radioProdutoInativo
             // 
@@ -324,97 +413,14 @@ namespace ExpressDelivery
             this.radioProdutoAtivo.Text = "Ativo";
             this.radioProdutoAtivo.UseVisualStyleBackColor = true;
             // 
-            // listViewCardapio
-            // 
-            this.listViewCardapio.Location = new System.Drawing.Point(3, 62);
-            this.listViewCardapio.Name = "listViewCardapio";
-            this.listViewCardapio.Size = new System.Drawing.Size(770, 335);
-            this.listViewCardapio.TabIndex = 8;
-            this.listViewCardapio.UseCompatibleStateImageBehavior = false;
-            // 
-            // cmbTipoPesquisaCardapio
-            // 
-            this.cmbTipoPesquisaCardapio.FormattingEnabled = true;
-            this.cmbTipoPesquisaCardapio.Items.AddRange(new object[] {"Nome", "ID Cliente"});
-            this.cmbTipoPesquisaCardapio.Location = new System.Drawing.Point(538, 25);
-            this.cmbTipoPesquisaCardapio.Name = "cmbTipoPesquisaCardapio";
-            this.cmbTipoPesquisaCardapio.Size = new System.Drawing.Size(169, 21);
-            this.cmbTipoPesquisaCardapio.TabIndex = 7;
-            this.cmbTipoPesquisaCardapio.Text = "Nome";
-            // 
-            // cmbStatusPesquisaCardapio
-            // 
-            this.cmbStatusPesquisaCardapio.FormattingEnabled = true;
-            this.cmbStatusPesquisaCardapio.Items.AddRange(new object[] {"Ativo", "Inativo"});
-            this.cmbStatusPesquisaCardapio.Location = new System.Drawing.Point(420, 25);
-            this.cmbStatusPesquisaCardapio.Name = "cmbStatusPesquisaCardapio";
-            this.cmbStatusPesquisaCardapio.Size = new System.Drawing.Size(112, 21);
-            this.cmbStatusPesquisaCardapio.TabIndex = 6;
-            this.cmbStatusPesquisaCardapio.Text = "Ativo";
-            // 
-            // txtDescricaoCardapio
-            // 
-            this.txtDescricaoCardapio.Location = new System.Drawing.Point(3, 25);
-            this.txtDescricaoCardapio.Name = "txtDescricaoCardapio";
-            this.txtDescricaoCardapio.Size = new System.Drawing.Size(411, 20);
-            this.txtDescricaoCardapio.TabIndex = 5;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(538, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(50, 13);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "Filtrar por";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(420, 12);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(37, 13);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Status";
-            // 
-            // btnNovoCardapio
-            // 
-            this.btnNovoCardapio.FlatAppearance.BorderSize = 0;
-            this.btnNovoCardapio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNovoCardapio.Image = global::ExpressDelivery.Properties.Resources.add1;
-            this.btnNovoCardapio.Location = new System.Drawing.Point(749, 19);
-            this.btnNovoCardapio.Name = "btnNovoCardapio";
-            this.btnNovoCardapio.Size = new System.Drawing.Size(24, 24);
-            this.btnNovoCardapio.TabIndex = 2;
-            this.btnNovoCardapio.UseVisualStyleBackColor = true;
-            // 
-            // btnPesquisarCardapio
-            // 
-            this.btnPesquisarCardapio.FlatAppearance.BorderSize = 0;
-            this.btnPesquisarCardapio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPesquisarCardapio.Image = global::ExpressDelivery.Properties.Resources.search_list_black;
-            this.btnPesquisarCardapio.Location = new System.Drawing.Point(713, 16);
-            this.btnPesquisarCardapio.Name = "btnPesquisarCardapio";
-            this.btnPesquisarCardapio.Size = new System.Drawing.Size(30, 30);
-            this.btnPesquisarCardapio.TabIndex = 1;
-            this.btnPesquisarCardapio.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Descrição";
-            // 
             // FormCardapio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.painelConsultaCardapio);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.painelConsultaCardapio);
+            this.Controls.Add(this.panelDetalheCardapio);
             this.Name = "FormCardapio";
             this.Text = "FormCardapio";
             this.painelConsultaCardapio.ResumeLayout(false);
@@ -423,34 +429,28 @@ namespace ExpressDelivery
             this.panelDetalheCardapio.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
-
-        private System.Windows.Forms.TextBox txtMargemLucroProduto;
-        private System.Windows.Forms.TextBox txtLocalizacaoProduto;
-
-        private System.Windows.Forms.TextBox txtPrecoVendaProdut;
-        private System.Windows.Forms.TextBox txtMargemLucroProdut;
-
-        private System.Windows.Forms.TextBox txtPrecoCompraProduto;
-
-        private System.Windows.Forms.TextBox txtCodBarrasProduto;
-
-        private System.Windows.Forms.TextBox txtCodBarrasProdut;
-
-        private System.Windows.Forms.TextBox txtObservacaoProduto;
-
+        private System.Windows.Forms.ComboBox cmbStatusPesquisa;
+        private System.Windows.Forms.Button btnNovo;
+        private System.Windows.Forms.ListView listProdutos;
+        private System.Windows.Forms.Button btnPesquisar;
+        private System.Windows.Forms.TextBox txtMargemLucro;
+        private System.Windows.Forms.TextBox txtLocalizacao;
+        private System.Windows.Forms.TextBox txtPrecoCompra;
+        private System.Windows.Forms.TextBox txtCodBarras;
+        private System.Windows.Forms.TextBox txtObservacao;
         private System.Windows.Forms.Label label13;
-
-        private System.Windows.Forms.TextBox txtPrecoVendaProduto;
+        private System.Windows.Forms.TextBox txtPrecoVenda;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox txtCategoriaProduto;
+        private System.Windows.Forms.TextBox txtCategoria;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox txtNomeProduto;
+        private System.Windows.Forms.TextBox txtNome;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Panel panelDetalheCardapio;
         private System.Windows.Forms.TextBox txtIdProduto;
@@ -459,12 +459,6 @@ namespace ExpressDelivery
         private System.Windows.Forms.Button btnNovoProduto;
         private System.Windows.Forms.Button btnSalvarProduto;
         private System.Windows.Forms.Button btnVoltarProduto;
-        private System.Windows.Forms.ListView listViewCardapio;
-        private System.Windows.Forms.TextBox txtDescricaoCardapio;
-        private System.Windows.Forms.ComboBox cmbTipoPesquisaCardapio;
-        private System.Windows.Forms.Button btnPesquisarCardapio;
-        private System.Windows.Forms.Button btnNovoCardapio;
-        private System.Windows.Forms.ComboBox cmbStatusPesquisaCardapio;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
@@ -472,5 +466,8 @@ namespace ExpressDelivery
         private System.Windows.Forms.Label label1;
 
         #endregion
+
+        private System.Windows.Forms.TextBox txtDescricao;
+        private System.Windows.Forms.ComboBox cmbTipoPesquisa;
     }
 }
