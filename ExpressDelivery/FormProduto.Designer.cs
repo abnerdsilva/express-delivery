@@ -43,6 +43,8 @@ namespace ExpressDelivery
             this.btnPesquisar = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.panelDetalheCardapio = new System.Windows.Forms.Panel();
+            this.cmbUnMedida = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.txtLocalizacao = new System.Windows.Forms.TextBox();
             this.txtMargemLucro = new System.Windows.Forms.TextBox();
             this.txtObservacao = new System.Windows.Forms.TextBox();
@@ -74,7 +76,7 @@ namespace ExpressDelivery
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 33);
@@ -116,9 +118,7 @@ namespace ExpressDelivery
             // cmbStatusPesquisa
             // 
             this.cmbStatusPesquisa.FormattingEnabled = true;
-            this.cmbStatusPesquisa.Items.AddRange(new object[] {
-            "Ativo",
-            "Inativo"});
+            this.cmbStatusPesquisa.Items.AddRange(new object[] {"Ativo", "Inativo"});
             this.cmbStatusPesquisa.Location = new System.Drawing.Point(420, 25);
             this.cmbStatusPesquisa.Name = "cmbStatusPesquisa";
             this.cmbStatusPesquisa.Size = new System.Drawing.Size(113, 21);
@@ -133,6 +133,7 @@ namespace ExpressDelivery
             this.listProdutos.Size = new System.Drawing.Size(770, 335);
             this.listProdutos.TabIndex = 8;
             this.listProdutos.UseCompatibleStateImageBehavior = false;
+            this.listProdutos.DoubleClick += new System.EventHandler(this.listProdutos_DoubleClick);
             // 
             // label4
             // 
@@ -187,6 +188,8 @@ namespace ExpressDelivery
             // 
             // panelDetalheCardapio
             // 
+            this.panelDetalheCardapio.Controls.Add(this.cmbUnMedida);
+            this.panelDetalheCardapio.Controls.Add(this.label14);
             this.panelDetalheCardapio.Controls.Add(this.txtLocalizacao);
             this.panelDetalheCardapio.Controls.Add(this.txtMargemLucro);
             this.panelDetalheCardapio.Controls.Add(this.txtObservacao);
@@ -215,6 +218,25 @@ namespace ExpressDelivery
             this.panelDetalheCardapio.Size = new System.Drawing.Size(776, 402);
             this.panelDetalheCardapio.TabIndex = 4;
             this.panelDetalheCardapio.Visible = false;
+            // 
+            // cmbUnMedida
+            // 
+            this.cmbUnMedida.FormattingEnabled = true;
+            this.cmbUnMedida.Items.AddRange(new object[] {"UN", "KG"});
+            this.cmbUnMedida.Location = new System.Drawing.Point(637, 90);
+            this.cmbUnMedida.Name = "cmbUnMedida";
+            this.cmbUnMedida.Size = new System.Drawing.Size(136, 21);
+            this.cmbUnMedida.TabIndex = 54;
+            this.cmbUnMedida.Text = "UN";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(566, 93);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(65, 13);
+            this.label14.TabIndex = 53;
+            this.label14.Text = "UN Medida*";
             // 
             // txtLocalizacao
             // 
@@ -333,7 +355,7 @@ namespace ExpressDelivery
             // 
             this.txtNome.Location = new System.Drawing.Point(86, 90);
             this.txtNome.Name = "txtNome";
-            this.txtNome.Size = new System.Drawing.Size(687, 20);
+            this.txtNome.Size = new System.Drawing.Size(474, 20);
             this.txtNome.TabIndex = 36;
             // 
             // label6
@@ -373,6 +395,7 @@ namespace ExpressDelivery
             this.btnSalvarProduto.TabIndex = 32;
             this.btnSalvarProduto.Text = "Salvar";
             this.btnSalvarProduto.UseVisualStyleBackColor = true;
+            this.btnSalvarProduto.Click += new System.EventHandler(this.btnSalvarProduto_Click);
             // 
             // txtIdProduto
             // 
@@ -429,8 +452,10 @@ namespace ExpressDelivery
             this.panelDetalheCardapio.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
+
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.ComboBox cmbUnMedida;
         private System.Windows.Forms.ComboBox cmbStatusPesquisa;
         private System.Windows.Forms.Button btnNovo;
         private System.Windows.Forms.ListView listProdutos;

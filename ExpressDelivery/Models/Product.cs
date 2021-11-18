@@ -12,5 +12,6 @@ namespace ExpressDelivery.Models
         public double PrecoVenda { get; set; }
         public double MargemLucro { get; set; }
         public string UnMedida { get; set; }
+        public string Observacao { get; set; }
     }
 }

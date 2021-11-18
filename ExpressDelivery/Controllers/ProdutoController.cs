@@ -30,5 +30,16 @@ namespace ExpressDelivery.Controllers
             MessageError = _produtoRepository.Message;
             return products;
         }
+        
+        public int LastProductId()
+        {
+            return _produtoRepository.LastProductId();
+        }
+        
+        public void Save(Product product, string type)
+        {
+            _produtoRepository.Save(product, type);
+            MessageError = _produtoRepository.Message;
+        }
     }
 }
