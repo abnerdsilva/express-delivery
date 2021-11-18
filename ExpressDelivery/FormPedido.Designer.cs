@@ -31,40 +31,44 @@ namespace ExpressDelivery
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelOrder = new System.Windows.Forms.Panel();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.btnVisualizaPedidos = new System.Windows.Forms.Button();
+            this.lblNrPedido = new System.Windows.Forms.Label();
+            this.btnCancelar = new System.Windows.Forms.Button();
+            this.btnExcluirPedido = new System.Windows.Forms.Button();
+            this.cmbDescricaoProduto = new System.Windows.Forms.ComboBox();
+            this.btnConfirmarPedido = new System.Windows.Forms.Button();
+            this.cmbFormaPagamento = new System.Windows.Forms.ComboBox();
             this.label21 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
-            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.txtVrTroco = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
-            this.textBox13 = new System.Windows.Forms.TextBox();
+            this.txtVrTrocoPara = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
-            this.textBox11 = new System.Windows.Forms.TextBox();
+            this.txtVrTotalPedido = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.textBox10 = new System.Windows.Forms.TextBox();
+            this.txtVrTaxaEntrega = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.txtVrTotalItens = new System.Windows.Forms.TextBox();
+            this.listProdutos = new System.Windows.Forms.ListView();
+            this.txtObservacaoProduto = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txtValorUnit = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtCodBarras = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtQtde = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
+            this.lblDataHora = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panelClient = new System.Windows.Forms.Panel();
             this.label20 = new System.Windows.Forms.Label();
             this.txtTaxaEntrega = new System.Windows.Forms.TextBox();
             this.cmbBairro = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.btnSalvarCliente = new System.Windows.Forms.Button();
+            this.txtObservacaoCliente = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.txtNome = new System.Windows.Forms.TextBox();
@@ -75,12 +79,13 @@ namespace ExpressDelivery
             this.label7 = new System.Windows.Forms.Label();
             this.txtNumero = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtEndereco = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtDDD = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtIdCliente = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.timerDataHora = new System.Windows.Forms.Timer(this.components);
             this.panelOrder.SuspendLayout();
             this.panelClient.SuspendLayout();
             this.SuspendLayout();
@@ -88,64 +93,105 @@ namespace ExpressDelivery
             // panelOrder
             // 
             this.panelOrder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelOrder.Controls.Add(this.button3);
-            this.panelOrder.Controls.Add(this.button2);
-            this.panelOrder.Controls.Add(this.comboBox1);
+            this.panelOrder.Controls.Add(this.btnVisualizaPedidos);
+            this.panelOrder.Controls.Add(this.lblNrPedido);
+            this.panelOrder.Controls.Add(this.btnCancelar);
+            this.panelOrder.Controls.Add(this.btnExcluirPedido);
+            this.panelOrder.Controls.Add(this.cmbDescricaoProduto);
+            this.panelOrder.Controls.Add(this.btnConfirmarPedido);
+            this.panelOrder.Controls.Add(this.cmbFormaPagamento);
             this.panelOrder.Controls.Add(this.label21);
             this.panelOrder.Controls.Add(this.label22);
-            this.panelOrder.Controls.Add(this.textBox12);
+            this.panelOrder.Controls.Add(this.txtVrTroco);
             this.panelOrder.Controls.Add(this.label23);
-            this.panelOrder.Controls.Add(this.textBox13);
+            this.panelOrder.Controls.Add(this.txtVrTrocoPara);
             this.panelOrder.Controls.Add(this.label19);
-            this.panelOrder.Controls.Add(this.textBox11);
+            this.panelOrder.Controls.Add(this.txtVrTotalPedido);
             this.panelOrder.Controls.Add(this.label17);
-            this.panelOrder.Controls.Add(this.textBox10);
+            this.panelOrder.Controls.Add(this.txtVrTaxaEntrega);
             this.panelOrder.Controls.Add(this.label18);
-            this.panelOrder.Controls.Add(this.textBox9);
-            this.panelOrder.Controls.Add(this.listView1);
-            this.panelOrder.Controls.Add(this.textBox6);
+            this.panelOrder.Controls.Add(this.txtVrTotalItens);
+            this.panelOrder.Controls.Add(this.listProdutos);
+            this.panelOrder.Controls.Add(this.txtObservacaoProduto);
             this.panelOrder.Controls.Add(this.label16);
-            this.panelOrder.Controls.Add(this.textBox5);
             this.panelOrder.Controls.Add(this.label15);
-            this.panelOrder.Controls.Add(this.textBox4);
+            this.panelOrder.Controls.Add(this.txtValorUnit);
             this.panelOrder.Controls.Add(this.label14);
-            this.panelOrder.Controls.Add(this.textBox2);
+            this.panelOrder.Controls.Add(this.txtCodBarras);
             this.panelOrder.Controls.Add(this.label13);
-            this.panelOrder.Controls.Add(this.textBox1);
+            this.panelOrder.Controls.Add(this.txtQtde);
             this.panelOrder.Controls.Add(this.label12);
-            this.panelOrder.Controls.Add(this.label11);
+            this.panelOrder.Controls.Add(this.lblDataHora);
             this.panelOrder.Controls.Add(this.label1);
+            this.panelOrder.Enabled = false;
             this.panelOrder.Location = new System.Drawing.Point(2, 3);
             this.panelOrder.Name = "panelOrder";
             this.panelOrder.Size = new System.Drawing.Size(547, 443);
             this.panelOrder.TabIndex = 2;
             // 
-            // button3
+            // btnVisualizaPedidos
             // 
-            this.button3.Location = new System.Drawing.Point(288, 400);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(151, 34);
-            this.button3.TabIndex = 28;
-            this.button3.Text = "Confirmar Pedido";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnVisualizaPedidos.Location = new System.Drawing.Point(283, 400);
+            this.btnVisualizaPedidos.Name = "btnVisualizaPedidos";
+            this.btnVisualizaPedidos.Size = new System.Drawing.Size(110, 34);
+            this.btnVisualizaPedidos.TabIndex = 33;
+            this.btnVisualizaPedidos.Text = "Pedidos";
+            this.btnVisualizaPedidos.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // lblNrPedido
             // 
-            this.button2.Location = new System.Drawing.Point(83, 404);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(151, 30);
-            this.button2.TabIndex = 27;
-            this.button2.Text = "Cancelar";
-            this.button2.UseVisualStyleBackColor = true;
+            this.lblNrPedido.AutoSize = true;
+            this.lblNrPedido.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.lblNrPedido.Location = new System.Drawing.Point(70, 6);
+            this.lblNrPedido.Name = "lblNrPedido";
+            this.lblNrPedido.Size = new System.Drawing.Size(16, 16);
+            this.lblNrPedido.TabIndex = 32;
+            this.lblNrPedido.Text = "0";
             // 
-            // comboBox1
+            // btnCancelar
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {"Dinheiro", "Cartão"});
-            this.comboBox1.Location = new System.Drawing.Point(375, 371);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(160, 21);
-            this.comboBox1.TabIndex = 26;
+            this.btnCancelar.Location = new System.Drawing.Point(19, 400);
+            this.btnCancelar.Name = "btnCancelar";
+            this.btnCancelar.Size = new System.Drawing.Size(110, 34);
+            this.btnCancelar.TabIndex = 31;
+            this.btnCancelar.Text = "Cancelar";
+            this.btnCancelar.UseVisualStyleBackColor = true;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            // 
+            // btnExcluirPedido
+            // 
+            this.btnExcluirPedido.Location = new System.Drawing.Point(151, 400);
+            this.btnExcluirPedido.Name = "btnExcluirPedido";
+            this.btnExcluirPedido.Size = new System.Drawing.Size(110, 34);
+            this.btnExcluirPedido.TabIndex = 30;
+            this.btnExcluirPedido.Text = "Excluir Pedido";
+            this.btnExcluirPedido.UseVisualStyleBackColor = true;
+            // 
+            // cmbDescricaoProduto
+            // 
+            this.cmbDescricaoProduto.FormattingEnabled = true;
+            this.cmbDescricaoProduto.Location = new System.Drawing.Point(9, 100);
+            this.cmbDescricaoProduto.Name = "cmbDescricaoProduto";
+            this.cmbDescricaoProduto.Size = new System.Drawing.Size(526, 21);
+            this.cmbDescricaoProduto.TabIndex = 14;
+            // 
+            // btnConfirmarPedido
+            // 
+            this.btnConfirmarPedido.Location = new System.Drawing.Point(415, 400);
+            this.btnConfirmarPedido.Name = "btnConfirmarPedido";
+            this.btnConfirmarPedido.Size = new System.Drawing.Size(110, 34);
+            this.btnConfirmarPedido.TabIndex = 17;
+            this.btnConfirmarPedido.Text = "Confirmar Pedido";
+            this.btnConfirmarPedido.UseVisualStyleBackColor = true;
+            // 
+            // cmbFormaPagamento
+            // 
+            this.cmbFormaPagamento.FormattingEnabled = true;
+            this.cmbFormaPagamento.Items.AddRange(new object[] {"Dinheiro", "Cartão"});
+            this.cmbFormaPagamento.Location = new System.Drawing.Point(375, 371);
+            this.cmbFormaPagamento.Name = "cmbFormaPagamento";
+            this.cmbFormaPagamento.Size = new System.Drawing.Size(160, 21);
+            this.cmbFormaPagamento.TabIndex = 16;
             // 
             // label21
             // 
@@ -165,12 +211,14 @@ namespace ExpressDelivery
             this.label22.Text = "Troco";
             this.label22.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // textBox12
+            // txtVrTroco
             // 
-            this.textBox12.Location = new System.Drawing.Point(194, 371);
-            this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(160, 20);
-            this.textBox12.TabIndex = 22;
+            this.txtVrTroco.Enabled = false;
+            this.txtVrTroco.Location = new System.Drawing.Point(194, 371);
+            this.txtVrTroco.Name = "txtVrTroco";
+            this.txtVrTroco.Size = new System.Drawing.Size(160, 20);
+            this.txtVrTroco.TabIndex = 22;
+            this.txtVrTroco.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label23
             // 
@@ -181,12 +229,14 @@ namespace ExpressDelivery
             this.label23.Text = "Troco para";
             this.label23.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // textBox13
+            // txtVrTrocoPara
             // 
-            this.textBox13.Location = new System.Drawing.Point(9, 371);
-            this.textBox13.Name = "textBox13";
-            this.textBox13.Size = new System.Drawing.Size(160, 20);
-            this.textBox13.TabIndex = 20;
+            this.txtVrTrocoPara.Enabled = false;
+            this.txtVrTrocoPara.Location = new System.Drawing.Point(9, 371);
+            this.txtVrTrocoPara.Name = "txtVrTrocoPara";
+            this.txtVrTrocoPara.Size = new System.Drawing.Size(160, 20);
+            this.txtVrTrocoPara.TabIndex = 20;
+            this.txtVrTrocoPara.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label19
             // 
@@ -197,12 +247,14 @@ namespace ExpressDelivery
             this.label19.Text = "Total Pedido";
             this.label19.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // textBox11
+            // txtVrTotalPedido
             // 
-            this.textBox11.Location = new System.Drawing.Point(375, 327);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(160, 20);
-            this.textBox11.TabIndex = 18;
+            this.txtVrTotalPedido.Enabled = false;
+            this.txtVrTotalPedido.Location = new System.Drawing.Point(375, 327);
+            this.txtVrTotalPedido.Name = "txtVrTotalPedido";
+            this.txtVrTotalPedido.Size = new System.Drawing.Size(160, 20);
+            this.txtVrTotalPedido.TabIndex = 18;
+            this.txtVrTotalPedido.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label17
             // 
@@ -213,12 +265,14 @@ namespace ExpressDelivery
             this.label17.Text = "Taxa Entrega";
             this.label17.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // textBox10
+            // txtVrTaxaEntrega
             // 
-            this.textBox10.Location = new System.Drawing.Point(194, 327);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(160, 20);
-            this.textBox10.TabIndex = 16;
+            this.txtVrTaxaEntrega.Enabled = false;
+            this.txtVrTaxaEntrega.Location = new System.Drawing.Point(194, 327);
+            this.txtVrTaxaEntrega.Name = "txtVrTaxaEntrega";
+            this.txtVrTaxaEntrega.Size = new System.Drawing.Size(160, 20);
+            this.txtVrTaxaEntrega.TabIndex = 16;
+            this.txtVrTaxaEntrega.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label18
             // 
@@ -229,27 +283,29 @@ namespace ExpressDelivery
             this.label18.Text = "Total itens";
             this.label18.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // textBox9
+            // txtVrTotalItens
             // 
-            this.textBox9.Location = new System.Drawing.Point(9, 327);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(160, 20);
-            this.textBox9.TabIndex = 14;
+            this.txtVrTotalItens.Enabled = false;
+            this.txtVrTotalItens.Location = new System.Drawing.Point(9, 327);
+            this.txtVrTotalItens.Name = "txtVrTotalItens";
+            this.txtVrTotalItens.Size = new System.Drawing.Size(160, 20);
+            this.txtVrTotalItens.TabIndex = 14;
+            this.txtVrTotalItens.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // listView1
+            // listProdutos
             // 
-            this.listView1.Location = new System.Drawing.Point(9, 166);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(526, 138);
-            this.listView1.TabIndex = 12;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listProdutos.Location = new System.Drawing.Point(9, 166);
+            this.listProdutos.Name = "listProdutos";
+            this.listProdutos.Size = new System.Drawing.Size(526, 138);
+            this.listProdutos.TabIndex = 12;
+            this.listProdutos.UseCompatibleStateImageBehavior = false;
             // 
-            // textBox6
+            // txtObservacaoProduto
             // 
-            this.textBox6.Location = new System.Drawing.Point(9, 140);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(526, 20);
-            this.textBox6.TabIndex = 11;
+            this.txtObservacaoProduto.Location = new System.Drawing.Point(9, 140);
+            this.txtObservacaoProduto.Name = "txtObservacaoProduto";
+            this.txtObservacaoProduto.Size = new System.Drawing.Size(526, 20);
+            this.txtObservacaoProduto.TabIndex = 15;
             // 
             // label16
             // 
@@ -260,13 +316,6 @@ namespace ExpressDelivery
             this.label16.TabIndex = 10;
             this.label16.Text = "Observação";
             // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(9, 101);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(526, 20);
-            this.textBox5.TabIndex = 9;
-            // 
             // label15
             // 
             this.label15.AutoSize = true;
@@ -276,12 +325,14 @@ namespace ExpressDelivery
             this.label15.TabIndex = 8;
             this.label15.Text = "Descrição do Produto";
             // 
-            // textBox4
+            // txtValorUnit
             // 
-            this.textBox4.Location = new System.Drawing.Point(375, 53);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(160, 20);
-            this.textBox4.TabIndex = 7;
+            this.txtValorUnit.Enabled = false;
+            this.txtValorUnit.Location = new System.Drawing.Point(375, 53);
+            this.txtValorUnit.Name = "txtValorUnit";
+            this.txtValorUnit.Size = new System.Drawing.Size(160, 20);
+            this.txtValorUnit.TabIndex = 7;
+            this.txtValorUnit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label14
             // 
@@ -292,12 +343,13 @@ namespace ExpressDelivery
             this.label14.Text = "Valor Unitário";
             this.label14.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // textBox2
+            // txtCodBarras
             // 
-            this.textBox2.Location = new System.Drawing.Point(175, 53);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(194, 20);
-            this.textBox2.TabIndex = 5;
+            this.txtCodBarras.Location = new System.Drawing.Point(175, 53);
+            this.txtCodBarras.Name = "txtCodBarras";
+            this.txtCodBarras.Size = new System.Drawing.Size(194, 20);
+            this.txtCodBarras.TabIndex = 13;
+            this.txtCodBarras.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label13
             // 
@@ -308,12 +360,14 @@ namespace ExpressDelivery
             this.label13.Text = "Código";
             this.label13.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // textBox1
+            // txtQtde
             // 
-            this.textBox1.Location = new System.Drawing.Point(9, 53);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(160, 20);
-            this.textBox1.TabIndex = 3;
+            this.txtQtde.Enabled = false;
+            this.txtQtde.Location = new System.Drawing.Point(9, 53);
+            this.txtQtde.Name = "txtQtde";
+            this.txtQtde.Size = new System.Drawing.Size(160, 20);
+            this.txtQtde.TabIndex = 3;
+            this.txtQtde.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label12
             // 
@@ -324,15 +378,15 @@ namespace ExpressDelivery
             this.label12.Text = "Quantidade";
             this.label12.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label11
+            // lblDataHora
             // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.label11.Location = new System.Drawing.Point(400, 7);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(142, 16);
-            this.label11.TabIndex = 1;
-            this.label11.Text = "10/11/2021 22:00:00";
+            this.lblDataHora.AutoSize = true;
+            this.lblDataHora.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.lblDataHora.Location = new System.Drawing.Point(400, 7);
+            this.lblDataHora.Name = "lblDataHora";
+            this.lblDataHora.Size = new System.Drawing.Size(142, 16);
+            this.lblDataHora.TabIndex = 1;
+            this.lblDataHora.Text = "10/11/2021 22:00:00";
             // 
             // label1
             // 
@@ -350,8 +404,8 @@ namespace ExpressDelivery
             this.panelClient.Controls.Add(this.label20);
             this.panelClient.Controls.Add(this.txtTaxaEntrega);
             this.panelClient.Controls.Add(this.cmbBairro);
-            this.panelClient.Controls.Add(this.button1);
-            this.panelClient.Controls.Add(this.textBox8);
+            this.panelClient.Controls.Add(this.btnSalvarCliente);
+            this.panelClient.Controls.Add(this.txtObservacaoCliente);
             this.panelClient.Controls.Add(this.label10);
             this.panelClient.Controls.Add(this.label9);
             this.panelClient.Controls.Add(this.txtNome);
@@ -362,7 +416,7 @@ namespace ExpressDelivery
             this.panelClient.Controls.Add(this.label7);
             this.panelClient.Controls.Add(this.txtNumero);
             this.panelClient.Controls.Add(this.label6);
-            this.panelClient.Controls.Add(this.textBox3);
+            this.panelClient.Controls.Add(this.txtEndereco);
             this.panelClient.Controls.Add(this.label5);
             this.panelClient.Controls.Add(this.txtDDD);
             this.panelClient.Controls.Add(this.label3);
@@ -389,6 +443,7 @@ namespace ExpressDelivery
             this.txtTaxaEntrega.Name = "txtTaxaEntrega";
             this.txtTaxaEntrega.Size = new System.Drawing.Size(72, 20);
             this.txtTaxaEntrega.TabIndex = 22;
+            this.txtTaxaEntrega.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // cmbBairro
             // 
@@ -396,25 +451,28 @@ namespace ExpressDelivery
             this.cmbBairro.Location = new System.Drawing.Point(13, 247);
             this.cmbBairro.Name = "cmbBairro";
             this.cmbBairro.Size = new System.Drawing.Size(132, 21);
-            this.cmbBairro.TabIndex = 21;
+            this.cmbBairro.TabIndex = 9;
+            this.cmbBairro.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbBairro_KeyPress);
             // 
-            // button1
+            // btnSalvarCliente
             // 
-            this.button1.FlatAppearance.BorderSize = 10;
-            this.button1.Location = new System.Drawing.Point(13, 400);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(210, 34);
-            this.button1.TabIndex = 20;
-            this.button1.Text = "Salvar cliente";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSalvarCliente.FlatAppearance.BorderSize = 10;
+            this.btnSalvarCliente.Location = new System.Drawing.Point(13, 400);
+            this.btnSalvarCliente.Name = "btnSalvarCliente";
+            this.btnSalvarCliente.Size = new System.Drawing.Size(210, 34);
+            this.btnSalvarCliente.TabIndex = 12;
+            this.btnSalvarCliente.Text = "Salvar cliente";
+            this.btnSalvarCliente.UseVisualStyleBackColor = true;
+            this.btnSalvarCliente.Click += new System.EventHandler(this.btnSalvarCliente_Click);
             // 
-            // textBox8
+            // txtObservacaoCliente
             // 
-            this.textBox8.Location = new System.Drawing.Point(13, 295);
-            this.textBox8.Multiline = true;
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(211, 62);
-            this.textBox8.TabIndex = 19;
+            this.txtObservacaoCliente.Location = new System.Drawing.Point(13, 295);
+            this.txtObservacaoCliente.Multiline = true;
+            this.txtObservacaoCliente.Name = "txtObservacaoCliente";
+            this.txtObservacaoCliente.Size = new System.Drawing.Size(211, 62);
+            this.txtObservacaoCliente.TabIndex = 10;
+            this.txtObservacaoCliente.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtObservacaoCliente_KeyPress);
             // 
             // label10
             // 
@@ -439,7 +497,8 @@ namespace ExpressDelivery
             this.txtNome.Location = new System.Drawing.Point(12, 101);
             this.txtNome.Name = "txtNome";
             this.txtNome.Size = new System.Drawing.Size(211, 20);
-            this.txtNome.TabIndex = 15;
+            this.txtNome.TabIndex = 5;
+            this.txtNome.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNome_KeyPress);
             // 
             // label4
             // 
@@ -464,14 +523,18 @@ namespace ExpressDelivery
             this.txtTelefone.Location = new System.Drawing.Point(69, 53);
             this.txtTelefone.Name = "txtTelefone";
             this.txtTelefone.Size = new System.Drawing.Size(154, 20);
-            this.txtTelefone.TabIndex = 12;
+            this.txtTelefone.TabIndex = 4;
+            this.txtTelefone.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtTelefone.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtTelefone_KeyPress);
             // 
             // txtCEP
             // 
             this.txtCEP.Location = new System.Drawing.Point(12, 149);
             this.txtCEP.Name = "txtCEP";
             this.txtCEP.Size = new System.Drawing.Size(98, 20);
-            this.txtCEP.TabIndex = 11;
+            this.txtCEP.TabIndex = 6;
+            this.txtCEP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtCEP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCEP_KeyPress);
             // 
             // label7
             // 
@@ -487,7 +550,9 @@ namespace ExpressDelivery
             this.txtNumero.Location = new System.Drawing.Point(116, 149);
             this.txtNumero.Name = "txtNumero";
             this.txtNumero.Size = new System.Drawing.Size(107, 20);
-            this.txtNumero.TabIndex = 9;
+            this.txtNumero.TabIndex = 7;
+            this.txtNumero.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtNumero.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumero_KeyPress);
             // 
             // label6
             // 
@@ -498,12 +563,13 @@ namespace ExpressDelivery
             this.label6.TabIndex = 8;
             this.label6.Text = "Número";
             // 
-            // textBox3
+            // txtEndereco
             // 
-            this.textBox3.Location = new System.Drawing.Point(12, 197);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(211, 20);
-            this.textBox3.TabIndex = 7;
+            this.txtEndereco.Location = new System.Drawing.Point(12, 197);
+            this.txtEndereco.Name = "txtEndereco";
+            this.txtEndereco.Size = new System.Drawing.Size(211, 20);
+            this.txtEndereco.TabIndex = 8;
+            this.txtEndereco.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtEndereco_KeyPress);
             // 
             // label5
             // 
@@ -520,6 +586,8 @@ namespace ExpressDelivery
             this.txtDDD.Name = "txtDDD";
             this.txtDDD.Size = new System.Drawing.Size(51, 20);
             this.txtDDD.TabIndex = 3;
+            this.txtDDD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtDDD.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtDDD_KeyPress);
             // 
             // label3
             // 
@@ -537,6 +605,7 @@ namespace ExpressDelivery
             this.txtIdCliente.Name = "txtIdCliente";
             this.txtIdCliente.Size = new System.Drawing.Size(72, 20);
             this.txtIdCliente.TabIndex = 1;
+            this.txtIdCliente.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label2
             // 
@@ -547,6 +616,11 @@ namespace ExpressDelivery
             this.label2.TabIndex = 0;
             this.label2.Text = "ID Cliente";
             // 
+            // timerDataHora
+            // 
+            this.timerDataHora.Enabled = true;
+            this.timerDataHora.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // FormPedido
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -556,6 +630,7 @@ namespace ExpressDelivery
             this.Controls.Add(this.panelOrder);
             this.Name = "FormPedido";
             this.Text = "FormPedido";
+            this.Load += new System.EventHandler(this.FormPedido_Load);
             this.panelOrder.ResumeLayout(false);
             this.panelOrder.PerformLayout();
             this.panelClient.ResumeLayout(false);
@@ -563,73 +638,71 @@ namespace ExpressDelivery
             this.ResumeLayout(false);
         }
 
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnVisualizaPedidos;
 
+        private System.Windows.Forms.Timer timerDataHora;
+
+        private System.Windows.Forms.Label lblDataHora;
+
+        private System.Windows.Forms.Timer timer1;
+
+        private System.Windows.Forms.Button btnSalvarCliente;
+
+        private System.Windows.Forms.Button btnSalvar;
+
+        private System.Windows.Forms.ListView listProdutos;
+
+        private System.Windows.Forms.Label lblNrPedido;
+        private System.Windows.Forms.Button btnExcluirPedido;
+        private System.Windows.Forms.Button btnCancelar;
+        private System.Windows.Forms.Button btnConfirmarPedido;
+        private System.Windows.Forms.ComboBox cmbFormaPagamento;
+        private System.Windows.Forms.TextBox txtVrTroco;
+        private System.Windows.Forms.TextBox txtVrTrocoPara;
+        private System.Windows.Forms.TextBox txtVrTaxaEntrega;
+        private System.Windows.Forms.TextBox txtVrTotalPedido;
+        private System.Windows.Forms.TextBox txtVrTotalItens;
+        private System.Windows.Forms.TextBox txtObservacaoCliente;
+        private System.Windows.Forms.TextBox txtObservacaoProduto;
+        private System.Windows.Forms.ComboBox cmbDescricaoProduto;
+        private System.Windows.Forms.TextBox txtCodBarras;
+        private System.Windows.Forms.TextBox txtValorUnit;
+        private System.Windows.Forms.TextBox txtQtde;
+        private System.Windows.Forms.TextBox txtEndereco;
         private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.TextBox textBox13;
-        private System.Windows.Forms.ComboBox comboBox1;
-
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.TextBox textBox9;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.TextBox textBox10;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.TextBox textBox11;
         private System.Windows.Forms.TextBox txtTaxaEntrega;
         private System.Windows.Forms.ComboBox cmbBairro;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.TextBox textBox12;
-
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
-
         private System.Windows.Forms.Label label11;
-
         private System.Windows.Forms.Label label1;
-
         private System.Windows.Forms.TextBox txtTelefone;
-
         private System.Windows.Forms.TextBox txtNome;
-
         private System.Windows.Forms.TextBox txtCEP;
-
         private System.Windows.Forms.TextBox txtNumero;
-
         private System.Windows.Forms.TextBox txtDDD;
-
-        private System.Windows.Forms.TextBox txtDD;
-
         private System.Windows.Forms.Button button1;
-
         private System.Windows.Forms.Panel panelOrder;
         private System.Windows.Forms.Panel panelClient;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtIdCliente;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.Label label10;
-
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
 
         #endregion
     }
