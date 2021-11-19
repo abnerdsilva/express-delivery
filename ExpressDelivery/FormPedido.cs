@@ -1,5 +1,7 @@
 using System;
 using System.Windows.Forms;
+using ExpressDelivery.Controllers;
+using ExpressDelivery.Models;
 
 namespace ExpressDelivery
 {
@@ -9,6 +11,10 @@ namespace ExpressDelivery
         {
             InitializeComponent();
         }
+        
+        private readonly ClientController _clientController = new ClientController();
+
+        private Client _clientSelected = new Client();
 
         private void FormPedido_Load(object sender, EventArgs e)
         {
@@ -33,6 +39,8 @@ namespace ExpressDelivery
             cmbBairro.Text = "";
             txtObservacaoCliente.Text = "";
             txtTaxaEntrega.Text = "0.00";
+
+            _clientSelected = null;
         }
 
         private void ClearOrder()
@@ -98,6 +106,7 @@ namespace ExpressDelivery
                     break;
                 case (char) Keys.Back:
                 case (char) Keys.Tab:
+                case (char) Keys.Space:
                 case (char) Keys.Delete:
                     break;
                 default:
@@ -112,15 +121,33 @@ namespace ExpressDelivery
             {
                 case (char) Keys.Back:
                 case (char) Keys.Tab:
+                case (char) Keys.Space:
                 case (char) Keys.Delete:
                     break;
                 case (char) Keys.Enter:
-                    txtNome.Focus();
+                    LoadClientByPhone();
                     break;
                 default:
                     VeriricaTeclaDigitadaNumero(e);
                     break;
             }
+        }
+
+        private void LoadClientByPhone()
+        {
+            _clientSelected = _clientController.LoadByPhone(txtTelefone.Text);
+            if (_clientSelected != null)
+            {
+                txtIdCliente.Text = _clientSelected.Id.ToString();
+                txtNome.Text = _clientSelected.Nome;
+                txtEndereco.Text = _clientSelected.Endereco;
+                cmbBairro.Text = _clientSelected.Bairro;
+                txtObservacaoCliente.Text = _clientSelected.Observacao;
+                txtCEP.Text = _clientSelected.CEP;
+                txtNumero.Text = _clientSelected.Numero.ToString();
+            }
+            
+            txtNome.Focus();
         }
 
         private void txtNome_KeyPress(object sender, KeyPressEventArgs e)
@@ -137,6 +164,7 @@ namespace ExpressDelivery
                     break;
                 case (char) Keys.Back:
                 case (char) Keys.Tab:
+                case (char) Keys.Space:
                 case (char) Keys.Delete:
                     break;
                 default:
@@ -154,6 +182,7 @@ namespace ExpressDelivery
                     break;
                 case (char) Keys.Back:
                 case (char) Keys.Tab:
+                case (char) Keys.Space:
                 case (char) Keys.Delete:
                     break;
                 default:
@@ -180,6 +209,50 @@ namespace ExpressDelivery
         private void btnSalvarCliente_Click(object sender, EventArgs e)
         {
             if(!VerificaCamposObrigatorios()) return;
+
+            var clientId = 0;
+            var city = "";
+            var state = "";
+            var email = "";
+            var cpf = new Random().Next().ToString();
+            var rg = "";
+            var status = 1;
+            
+            if (_clientSelected != null)
+            {
+                clientId = _clientSelected.Id;
+                city = _clientSelected.Cidade;
+                state = _clientSelected.Estado;
+                email = _clientSelected.Email;
+                cpf = _clientSelected.CPF;
+                rg = _clientSelected.RG;
+                status = _clientSelected.Status;
+            }
+
+            var client = new Client
+            {
+                Id = clientId,
+                Nome = txtNome.Text,
+                Telefone = txtTelefone.Text,
+                Endereco = txtEndereco.Text,
+                Numero = Convert.ToInt16(txtNumero.Text),
+                Bairro = cmbBairro.Text,
+                Cidade = city,
+                Estado = state,
+                CEP = txtCEP.Text,
+                Email = email,
+                Status = status,
+                CPF = cpf,
+                RG = rg,
+                Observacao = txtObservacaoCliente.Text
+            };
+
+            _clientController.Save(client, client.Id == 0 ? "new" : "edit");
+            if (!_clientController.MessageError.Equals(""))
+            {
+                MessageBox.Show(_clientController.MessageError, @"Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             
             panelClient.Enabled = false;
             panelOrder.Enabled = true;
@@ -221,6 +294,11 @@ namespace ExpressDelivery
             }
 
             return true;
+        }
+
+        private void btnCancelarCliente_Click(object sender, EventArgs e)
+        {
+            ClearClient();
         }
     }
 }

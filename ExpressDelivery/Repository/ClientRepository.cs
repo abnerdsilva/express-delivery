@@ -154,7 +154,56 @@ namespace ExpressDelivery.Repository
 
             return clients;
         }
-            
+
+        public Client LoadByPhone(string phone)
+        {
+            var client = new Client();
+
+            _cmd.CommandText = $"SELECT * FROM TB_CLIENTE WHERE TELEFONE='{phone}';";
+
+            try
+            {
+                _cmd.Connection = _con.Connect();
+                _dr = _cmd.ExecuteReader();
+
+                while (_dr.Read())
+                {
+                    client.Id = Convert.ToInt16(_dr["COD_CLIENTE"]);
+                    client.Nome = _dr["NOME"].ToString();
+                    client.Telefone = _dr["TELEFONE"].ToString();
+                    client.Endereco = _dr["LOGRADOURO"].ToString();
+                    client.Numero = Convert.ToInt16(_dr["NUMERO"]);
+                    client.Bairro = _dr["BAIRRO"].ToString();
+                    client.Cidade = _dr["CIDADE"].ToString();
+                    client.Estado = _dr["ESTADO"].ToString();
+                    client.CEP = _dr["CEP"].ToString();
+                    client.Email = _dr["EMAIL"].ToString();
+                    client.Status = Convert.ToInt16(_dr["STATUS_CLIENTE"]);
+                    client.CPF = _dr["CPF"].ToString();
+                    client.RG = _dr["RG"].ToString();
+                    client.Observacao = _dr["OBSERVACAO"].ToString();
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                throw;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                throw;
+            }
+            finally
+            {
+                _con.Disconnect();
+            }
+
+            return client;
+        }
+
         public int LastClientId()
         {
             _cmd.CommandText = $"SELECT MAX(COD_CLIENTE) AS LAST_ID FROM TB_CLIENTE;";
@@ -197,9 +246,9 @@ namespace ExpressDelivery.Repository
             {
                 _cmd.CommandText =
                     $"INSERT INTO TB_CLIENTE (NOME, TELEFONE, CPF, LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP," +
-                    $" STATUS_CLIENTE, RG, EMAIL, OBSERVACA) VALUES ('{client.Nome}', '{client.Telefone}', '{client.CPF}'," +
+                    $" STATUS_CLIENTE, RG, EMAIL, OBSERVACAO) VALUES ('{client.Nome}', '{client.Telefone}', '{client.CPF}'," +
                     $" '{client.Endereco}', {client.Numero}, '{client.Bairro}', '{client.Cidade}', '{client.Estado}'," +
-                    $" '{client.CEP}', {client.Status}, {client.RG}, {client.Email}, {client.Observacao});";
+                    $" '{client.CEP}', {client.Status}, '{client.RG}', '{client.Email}', '{client.Observacao}');";
             }
             else
             {

@@ -64,6 +64,7 @@ namespace ExpressDelivery
             this.lblDataHora = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panelClient = new System.Windows.Forms.Panel();
+            this.btnCancelarCliente = new System.Windows.Forms.Button();
             this.label20 = new System.Windows.Forms.Label();
             this.txtTaxaEntrega = new System.Windows.Forms.TextBox();
             this.cmbBairro = new System.Windows.Forms.ComboBox();
@@ -401,6 +402,7 @@ namespace ExpressDelivery
             // panelClient
             // 
             this.panelClient.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelClient.Controls.Add(this.btnCancelarCliente);
             this.panelClient.Controls.Add(this.label20);
             this.panelClient.Controls.Add(this.txtTaxaEntrega);
             this.panelClient.Controls.Add(this.cmbBairro);
@@ -426,6 +428,17 @@ namespace ExpressDelivery
             this.panelClient.Name = "panelClient";
             this.panelClient.Size = new System.Drawing.Size(240, 443);
             this.panelClient.TabIndex = 3;
+            // 
+            // btnCancelarCliente
+            // 
+            this.btnCancelarCliente.FlatAppearance.BorderSize = 10;
+            this.btnCancelarCliente.Location = new System.Drawing.Point(11, 400);
+            this.btnCancelarCliente.Name = "btnCancelarCliente";
+            this.btnCancelarCliente.Size = new System.Drawing.Size(99, 34);
+            this.btnCancelarCliente.TabIndex = 24;
+            this.btnCancelarCliente.Text = "Cancelar";
+            this.btnCancelarCliente.UseVisualStyleBackColor = true;
+            this.btnCancelarCliente.Click += new System.EventHandler(this.btnCancelarCliente_Click);
             // 
             // label20
             // 
@@ -457,9 +470,9 @@ namespace ExpressDelivery
             // btnSalvarCliente
             // 
             this.btnSalvarCliente.FlatAppearance.BorderSize = 10;
-            this.btnSalvarCliente.Location = new System.Drawing.Point(13, 400);
+            this.btnSalvarCliente.Location = new System.Drawing.Point(124, 400);
             this.btnSalvarCliente.Name = "btnSalvarCliente";
-            this.btnSalvarCliente.Size = new System.Drawing.Size(210, 34);
+            this.btnSalvarCliente.Size = new System.Drawing.Size(99, 34);
             this.btnSalvarCliente.TabIndex = 12;
             this.btnSalvarCliente.Text = "Salvar cliente";
             this.btnSalvarCliente.UseVisualStyleBackColor = true;
@@ -637,6 +650,8 @@ namespace ExpressDelivery
             this.panelClient.PerformLayout();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button btnCancelarCliente;
 
         private System.Windows.Forms.Button btnVisualizaPedidos;
 
