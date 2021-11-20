@@ -149,6 +149,12 @@ namespace ExpressDelivery
             if (!txtIdProduto.Text.Equals("0"))
                 idProduct = Convert.ToInt16(txtIdProduto.Text);
 
+            if (txtCodBarras.Text.Equals(""))
+            {
+                MessageBox.Show(@"O campo códico de barras é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
             if (txtNome.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo nome é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
