@@ -217,7 +217,8 @@ namespace ExpressDelivery.Repository
 
                 while (_dr.Read())
                 {
-                    lastId = Convert.ToInt16(_dr["LAST_ID"]);
+                    if (_dr["LAST_ID"] != DBNull.Value)
+                        lastId = Convert.ToInt16(_dr["LAST_ID"]);
                 }
             }
             catch (SqlException e)
