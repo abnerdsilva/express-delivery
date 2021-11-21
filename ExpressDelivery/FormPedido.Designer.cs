@@ -175,15 +175,17 @@ namespace ExpressDelivery
             this.cmbDescricaoProduto.Name = "cmbDescricaoProduto";
             this.cmbDescricaoProduto.Size = new System.Drawing.Size(526, 21);
             this.cmbDescricaoProduto.TabIndex = 14;
+            this.cmbDescricaoProduto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbDescricaoProduto_KeyPress);
             // 
             // btnConfirmarPedido
             // 
             this.btnConfirmarPedido.Location = new System.Drawing.Point(415, 400);
             this.btnConfirmarPedido.Name = "btnConfirmarPedido";
             this.btnConfirmarPedido.Size = new System.Drawing.Size(110, 34);
-            this.btnConfirmarPedido.TabIndex = 17;
+            this.btnConfirmarPedido.TabIndex = 18;
             this.btnConfirmarPedido.Text = "Confirmar Pedido";
             this.btnConfirmarPedido.UseVisualStyleBackColor = true;
+            this.btnConfirmarPedido.Click += new System.EventHandler(this.btnConfirmarPedido_Click);
             // 
             // cmbFormaPagamento
             // 
@@ -192,7 +194,7 @@ namespace ExpressDelivery
             this.cmbFormaPagamento.Location = new System.Drawing.Point(375, 371);
             this.cmbFormaPagamento.Name = "cmbFormaPagamento";
             this.cmbFormaPagamento.Size = new System.Drawing.Size(160, 21);
-            this.cmbFormaPagamento.TabIndex = 16;
+            this.cmbFormaPagamento.TabIndex = 17;
             // 
             // label21
             // 
@@ -238,6 +240,7 @@ namespace ExpressDelivery
             this.txtVrTrocoPara.Size = new System.Drawing.Size(160, 20);
             this.txtVrTrocoPara.TabIndex = 20;
             this.txtVrTrocoPara.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtVrTrocoPara.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtVrTrocoPara_KeyPress);
             // 
             // label19
             // 
@@ -307,6 +310,7 @@ namespace ExpressDelivery
             this.txtObservacaoProduto.Name = "txtObservacaoProduto";
             this.txtObservacaoProduto.Size = new System.Drawing.Size(526, 20);
             this.txtObservacaoProduto.TabIndex = 15;
+            this.txtObservacaoProduto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtObservacaoProduto_KeyPress);
             // 
             // label16
             // 
@@ -351,6 +355,7 @@ namespace ExpressDelivery
             this.txtCodBarras.Size = new System.Drawing.Size(194, 20);
             this.txtCodBarras.TabIndex = 13;
             this.txtCodBarras.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtCodBarras.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCodBarras_KeyPress);
             // 
             // label13
             // 
@@ -363,12 +368,12 @@ namespace ExpressDelivery
             // 
             // txtQtde
             // 
-            this.txtQtde.Enabled = false;
             this.txtQtde.Location = new System.Drawing.Point(9, 53);
             this.txtQtde.Name = "txtQtde";
             this.txtQtde.Size = new System.Drawing.Size(160, 20);
-            this.txtQtde.TabIndex = 3;
+            this.txtQtde.TabIndex = 16;
             this.txtQtde.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtQtde.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtQtde_KeyPress);
             // 
             // label12
             // 
