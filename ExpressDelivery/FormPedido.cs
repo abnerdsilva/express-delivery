@@ -132,7 +132,7 @@ namespace ExpressDelivery
 
         private void LoadClientByPhone()
         {
-            _clientSelected = _clientController.LoadByPhone(txtTelefone.Text);
+            _clientSelected = _clientController.LoadByPhone(txtTelefone.Text.Replace("\r", "").Replace("\n", ""));
             if (_clientSelected != null)
             {
                 txtIdCliente.Text = _clientSelected.Id.ToString();
@@ -516,6 +516,7 @@ namespace ExpressDelivery
 
             var orderId = Convert.ToInt16(lblNrPedido.Text);
             var vrTroco = Convert.ToDouble(txtVrTroco.Text);
+            var vrTaxa = Convert.ToDouble(txtVrTaxaEntrega.Text);
 
             var order = new Pedido
             {
@@ -534,6 +535,7 @@ namespace ExpressDelivery
                 TipoPedido = "ENTREGA",
                 VrTotal = vrTotal,
                 VrTroco = vrTroco,
+                VrTaxa = vrTaxa,
                 Itens = _pedidoItens
             };
 
