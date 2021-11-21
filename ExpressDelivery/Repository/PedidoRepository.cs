@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Globalization;
-using System.Windows.Forms;
 using ExpressDelivery.Models;
 using Microsoft.Data.SqlClient;
 
@@ -14,6 +14,7 @@ namespace ExpressDelivery.Repository
 
         private readonly SqlCommand _cmd = new SqlCommand();
         private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
+        private readonly ConnectionDbRepository _con2 = new ConnectionDbRepository();
         private SqlDataReader _dr;
         private SqlDataReader _dr2;
 
@@ -30,7 +31,7 @@ namespace ExpressDelivery.Repository
 
                 while (_dr.Read())
                 {
-                    if(_dr["LAST_ID"] != DBNull.Value)
+                    if (_dr["LAST_ID"] != DBNull.Value)
                         lastId = Convert.ToInt16(_dr["LAST_ID"]);
                 }
             }
@@ -54,11 +55,311 @@ namespace ExpressDelivery.Repository
             return lastId;
         }
 
+        public List<Pedido> LoadAll()
+        {
+            var pedidos = new List<Pedido>();
+            var pedidoItens = new List<PedidoItem>();
+
+            try
+            {
+                var today = DateTime.Today.ToString("yyyy-MM-dd");
+                var tomorrow = DateTime.Today.AddDays(1).ToString("yyyy-MM-dd");
+                _cmd.CommandText =
+                    $"SELECT TB_PEDIDO_ITEM.* FROM TB_PEDIDO_ITEM INNER JOIN TB_PEDIDO TP on TP.COD_PEDIDO = TB_PEDIDO_ITEM.COD_PEDIDO WHERE DATA_PEDIDO BETWEEN '{today}' AND '{tomorrow}';";
+                _cmd.Connection = _con.Connect();
+                _dr = _cmd.ExecuteReader();
+
+                var idPedido = 0;
+                while (_dr.Read())
+                {
+                    var item = new PedidoItem
+                    {
+                        Id = Convert.ToInt16(_dr["COD_PEDIDO_ITEM"]),
+                        CodPedido = Convert.ToInt16(_dr["COD_PEDIDO"]),
+                        CodProduto = Convert.ToInt16(_dr["COD_PRODUTO"]),
+                        Observacao = _dr["OBSERVACAO"].ToString(),
+                        VrTotal = Convert.ToDouble(_dr["VR_TOTAL"]),
+                        VrUnitario = Convert.ToDouble(_dr["VR_UNITARIO"]),
+                        Quantidade = Convert.ToInt16(_dr["QUANTIDADE"]),
+                    };
+
+                    idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
+
+                    pedidoItens.Add(item);
+
+                    /* ---------- */
+
+                    _cmd.CommandText =
+                        $"SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE COD_PEDIDO={idPedido};";
+                    _cmd.Connection = _con2.Connect();
+                    _dr2 = _cmd.ExecuteReader();
+
+                    while (_dr2.Read())
+                    {
+                        var dataPedido = DateTime.Parse(_dr2["DATA_PEDIDO"].ToString(), CultureInfo.CurrentCulture);
+                        var dataAtualizacao = _dr2["DATA_ATUALIZACAO"] == DBNull.Value
+                            ? DateTime.Today
+                            : DateTime.Parse(_dr2["DATA_ATUALIZACAO"].ToString(), CultureInfo.CurrentCulture);
+                        var dataEntrega = _dr2["DATA_ENTREGA"] == DBNull.Value
+                            ? DateTime.Today
+                            : DateTime.Parse(_dr2["DATA_ENTREGA"].ToString(), CultureInfo.CurrentCulture);
+
+                        var pedido = new Pedido
+                        {
+                            Id = Convert.ToInt16(_dr2["COD_PEDIDO"]),
+                            CodCliente = Convert.ToInt16(_dr2["COD_CLIENTE"]),
+                            Nome = _dr2["NOME"].ToString(),
+                            Origem = _dr2["ORIGEM"].ToString(),
+                            TipoPedido = _dr2["TIPO_PEDIDO"].ToString(),
+                            Logradouro = _dr2["LOGRADOURO"].ToString(),
+                            Numero = Convert.ToInt16(_dr2["NUMERO"]),
+                            Bairro = _dr2["BAIRRO"].ToString(),
+                            Cidade = _dr2["CIDADE"].ToString(),
+                            Estado = _dr2["ESTADO"].ToString(),
+                            CEP = _dr2["CEP"].ToString(),
+                            StatusPedido = _dr2["STATUS_PEDIDO"].ToString(),
+                            DataPedido = dataPedido,
+                            DataAtualizacao = dataAtualizacao,
+                            DataEntrega = dataEntrega,
+                            Observacao = _dr2["OBSERVACAO"].ToString(),
+                            VrTaxa = Convert.ToDouble(_dr2["VR_TAXA"]),
+                            VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
+                            VrTroco = Convert.ToDouble(_dr2["VR_TROCO"]),
+                            Itens = pedidoItens,
+                        };
+
+                        pedidos.Add(pedido);
+                    }
+
+                    _con2.Disconnect();
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                return null;
+            }
+            finally
+            {
+                _con.Disconnect();
+            }
+
+            return pedidos;
+        }
+
+        public List<Pedido> LoadByCode(int code, string status)
+        {
+            var pedidos = new List<Pedido>();
+            var pedidoItens = new List<PedidoItem>();
+
+            try
+            {
+                if (status.Equals("TODOS"))
+                    _cmd.CommandText = $"SELECT * FROM TB_PEDIDO_ITEM WHERE COD_PEDIDO={code};";
+                else
+                    _cmd.CommandText =
+                        $"SELECT TPI.* FROM TB_PEDIDO INNER JOIN TB_PEDIDO_ITEM TPI on TB_PEDIDO.COD_PEDIDO = TPI.COD_PEDIDO WHERE TB_PEDIDO.COD_PEDIDO={code} AND STATUS_PEDIDO='{status}';";
+
+                _cmd.Connection = _con.Connect();
+                _dr = _cmd.ExecuteReader();
+
+                var idPedido = 0;
+                while (_dr.Read())
+                {
+                    var item = new PedidoItem
+                    {
+                        Id = Convert.ToInt16(_dr["COD_PEDIDO_ITEM"]),
+                        CodPedido = Convert.ToInt16(_dr["COD_PEDIDO"]),
+                        CodProduto = Convert.ToInt16(_dr["COD_PRODUTO"]),
+                        Observacao = _dr["OBSERVACAO"].ToString(),
+                        VrTotal = Convert.ToDouble(_dr["VR_TOTAL"]),
+                        VrUnitario = Convert.ToDouble(_dr["VR_UNITARIO"]),
+                        Quantidade = Convert.ToInt16(_dr["QUANTIDADE"]),
+                    };
+
+                    idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
+
+                    pedidoItens.Add(item);
+
+                    /* ---------- */
+
+                    _cmd.CommandText =
+                        $"SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE COD_PEDIDO={idPedido};";
+                    _cmd.Connection = _con2.Connect();
+                    _dr2 = _cmd.ExecuteReader();
+
+                    while (_dr2.Read())
+                    {
+                        var dataPedido = DateTime.Parse(_dr2["DATA_PEDIDO"].ToString(), CultureInfo.CurrentCulture);
+                        var dataAtualizacao = _dr2["DATA_ATUALIZACAO"] == DBNull.Value
+                            ? DateTime.Today
+                            : DateTime.Parse(_dr2["DATA_ATUALIZACAO"].ToString(), CultureInfo.CurrentCulture);
+                        var dataEntrega = _dr2["DATA_ENTREGA"] == DBNull.Value
+                            ? DateTime.Today
+                            : DateTime.Parse(_dr2["DATA_ENTREGA"].ToString(), CultureInfo.CurrentCulture);
+
+                        var pedido = new Pedido
+                        {
+                            Id = Convert.ToInt16(_dr2["COD_PEDIDO"]),
+                            CodCliente = Convert.ToInt16(_dr2["COD_CLIENTE"]),
+                            Nome = _dr2["NOME"].ToString(),
+                            Origem = _dr2["ORIGEM"].ToString(),
+                            TipoPedido = _dr2["TIPO_PEDIDO"].ToString(),
+                            Logradouro = _dr2["LOGRADOURO"].ToString(),
+                            Numero = Convert.ToInt16(_dr2["NUMERO"]),
+                            Bairro = _dr2["BAIRRO"].ToString(),
+                            Cidade = _dr2["CIDADE"].ToString(),
+                            Estado = _dr2["ESTADO"].ToString(),
+                            CEP = _dr2["CEP"].ToString(),
+                            StatusPedido = _dr2["STATUS_PEDIDO"].ToString(),
+                            DataPedido = dataPedido,
+                            DataAtualizacao = dataAtualizacao,
+                            DataEntrega = dataEntrega,
+                            Observacao = _dr2["OBSERVACAO"].ToString(),
+                            VrTaxa = Convert.ToDouble(_dr2["VR_TAXA"]),
+                            VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
+                            VrTroco = Convert.ToDouble(_dr2["VR_TROCO"]),
+                            Itens = pedidoItens,
+                        };
+
+                        pedidos.Add(pedido);
+                    }
+
+                    _con2.Disconnect();
+                    // _dr.Close();
+                    // continue;
+                    break;
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                return null;
+            }
+            finally
+            {
+                _con.Disconnect();
+            }
+
+            return pedidos;
+        }
+
+        public List<Pedido> LoadByDate(string inicio, string fim)
+        {
+            var pedidos = new List<Pedido>();
+            var pedidoItens = new List<PedidoItem>();
+
+            try
+            {
+                _cmd.CommandText =
+                    $"SELECT TB_PEDIDO_ITEM.* FROM TB_PEDIDO_ITEM INNER JOIN TB_PEDIDO TP on TP.COD_PEDIDO = TB_PEDIDO_ITEM.COD_PEDIDO WHERE DATA_PEDIDO BETWEEN '{inicio}' AND '{fim} 23:59:59';";
+                _cmd.Connection = _con.Connect();
+                _dr = _cmd.ExecuteReader();
+
+                var idPedido = 0;
+                while (_dr.Read())
+                {
+                    var item = new PedidoItem
+                    {
+                        Id = Convert.ToInt16(_dr["COD_PEDIDO_ITEM"]),
+                        CodPedido = Convert.ToInt16(_dr["COD_PEDIDO"]),
+                        CodProduto = Convert.ToInt16(_dr["COD_PRODUTO"]),
+                        Observacao = _dr["OBSERVACAO"].ToString(),
+                        VrTotal = Convert.ToDouble(_dr["VR_TOTAL"]),
+                        VrUnitario = Convert.ToDouble(_dr["VR_UNITARIO"]),
+                        Quantidade = Convert.ToInt16(_dr["QUANTIDADE"]),
+                    };
+
+                    idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
+
+                    pedidoItens.Add(item);
+
+                    /* ---------- */
+
+                    _cmd.CommandText =
+                        $"SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE COD_PEDIDO={idPedido};";
+                    _cmd.Connection = _con2.Connect();
+                    _dr2 = _cmd.ExecuteReader();
+
+                    while (_dr2.Read())
+                    {
+                        var dataPedido = DateTime.Parse(_dr2["DATA_PEDIDO"].ToString(), CultureInfo.CurrentCulture);
+                        var dataAtualizacao = _dr2["DATA_ATUALIZACAO"] == DBNull.Value
+                            ? DateTime.Today
+                            : DateTime.Parse(_dr2["DATA_ATUALIZACAO"].ToString(), CultureInfo.CurrentCulture);
+                        var dataEntrega = _dr2["DATA_ENTREGA"] == DBNull.Value
+                            ? DateTime.Today
+                            : DateTime.Parse(_dr2["DATA_ENTREGA"].ToString(), CultureInfo.CurrentCulture);
+
+                        var pedido = new Pedido
+                        {
+                            Id = Convert.ToInt16(_dr2["COD_PEDIDO"]),
+                            CodCliente = Convert.ToInt16(_dr2["COD_CLIENTE"]),
+                            Nome = _dr2["NOME"].ToString(),
+                            Origem = _dr2["ORIGEM"].ToString(),
+                            TipoPedido = _dr2["TIPO_PEDIDO"].ToString(),
+                            Logradouro = _dr2["LOGRADOURO"].ToString(),
+                            Numero = Convert.ToInt16(_dr2["NUMERO"]),
+                            Bairro = _dr2["BAIRRO"].ToString(),
+                            Cidade = _dr2["CIDADE"].ToString(),
+                            Estado = _dr2["ESTADO"].ToString(),
+                            CEP = _dr2["CEP"].ToString(),
+                            StatusPedido = _dr2["STATUS_PEDIDO"].ToString(),
+                            DataPedido = dataPedido,
+                            DataAtualizacao = dataAtualizacao,
+                            DataEntrega = dataEntrega,
+                            Observacao = _dr2["OBSERVACAO"].ToString(),
+                            VrTaxa = Convert.ToDouble(_dr2["VR_TAXA"]),
+                            VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
+                            VrTroco = Convert.ToDouble(_dr2["VR_TROCO"]),
+                            Itens = pedidoItens,
+                        };
+
+                        pedidos.Add(pedido);
+                    }
+
+                    _con2.Disconnect();
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                return null;
+            }
+            finally
+            {
+                _con.Disconnect();
+            }
+
+            return pedidos;
+        }
+
         public int SaveOrder(Pedido order, string type)
         {
             var nextOrderId = 0;
             var connectionString = ConfigurationManager.ConnectionStrings["DatabaseConnectionString"].ConnectionString;
-            
+
             using (SqlConnection oConnection = new SqlConnection(connectionString))
             {
                 oConnection.Open();

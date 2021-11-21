@@ -568,5 +568,14 @@ namespace ExpressDelivery
                 cmbFormaPagamento.Focus();
             }
         }
+
+        private void btnVisualizaPedidos_Click(object sender, EventArgs e)
+        {
+            using (var formPedidos = new FormPedidos())
+            {
+                if (formPedidos.ShowDialog() == DialogResult.OK)
+                    MessageBox.Show("sdf");
+            }
+        }
     }
 }

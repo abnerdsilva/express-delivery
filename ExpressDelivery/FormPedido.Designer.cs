@@ -101,7 +101,6 @@ namespace ExpressDelivery
             this.panelOrder.Controls.Add(this.textBox1);
             this.panelOrder.Controls.Add(this.label24);
             this.panelOrder.Controls.Add(this.label11);
-            this.panelOrder.Controls.Add(this.btnVisualizaPedidos);
             this.panelOrder.Controls.Add(this.btnCancelar);
             this.panelOrder.Controls.Add(this.btnExcluirPedido);
             this.panelOrder.Controls.Add(this.cmbDescricaoProduto);
@@ -163,12 +162,13 @@ namespace ExpressDelivery
             // 
             // btnVisualizaPedidos
             // 
-            this.btnVisualizaPedidos.Location = new System.Drawing.Point(307, 535);
+            this.btnVisualizaPedidos.Location = new System.Drawing.Point(561, 644);
             this.btnVisualizaPedidos.Name = "btnVisualizaPedidos";
-            this.btnVisualizaPedidos.Size = new System.Drawing.Size(110, 34);
+            this.btnVisualizaPedidos.Size = new System.Drawing.Size(222, 34);
             this.btnVisualizaPedidos.TabIndex = 33;
-            this.btnVisualizaPedidos.Text = "Pedidos";
+            this.btnVisualizaPedidos.Text = "VisualizarPedidos";
             this.btnVisualizaPedidos.UseVisualStyleBackColor = true;
+            this.btnVisualizaPedidos.Click += new System.EventHandler(this.btnVisualizaPedidos_Click);
             // 
             // btnCancelar
             // 
@@ -176,7 +176,7 @@ namespace ExpressDelivery
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(110, 34);
             this.btnCancelar.TabIndex = 31;
-            this.btnCancelar.Text = "Cancelar";
+            this.btnCancelar.Text = "Cancelar Pedido";
             this.btnCancelar.UseVisualStyleBackColor = true;
             this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
             // 
@@ -202,9 +202,9 @@ namespace ExpressDelivery
             // 
             // btnConfirmarPedido
             // 
-            this.btnConfirmarPedido.Location = new System.Drawing.Point(423, 535);
+            this.btnConfirmarPedido.Location = new System.Drawing.Point(307, 535);
             this.btnConfirmarPedido.Name = "btnConfirmarPedido";
-            this.btnConfirmarPedido.Size = new System.Drawing.Size(110, 34);
+            this.btnConfirmarPedido.Size = new System.Drawing.Size(226, 34);
             this.btnConfirmarPedido.TabIndex = 18;
             this.btnConfirmarPedido.Text = "Confirmar Pedido";
             this.btnConfirmarPedido.UseVisualStyleBackColor = true;
@@ -765,6 +765,7 @@ namespace ExpressDelivery
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panelClient);
             this.Controls.Add(this.panelOrder);
+            this.Controls.Add(this.btnVisualizaPedidos);
             this.Name = "FormPedido";
             this.Text = "FormPedido";
             this.Load += new System.EventHandler(this.FormPedido_Load);
