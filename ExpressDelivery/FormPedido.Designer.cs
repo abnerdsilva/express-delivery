@@ -33,10 +33,9 @@ namespace ExpressDelivery
         {
             this.components = new System.ComponentModel.Container();
             this.panelOrder = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtObservacaoPedido = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.btnVisualizaPedidos = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
             this.btnExcluirPedido = new System.Windows.Forms.Button();
             this.cmbDescricaoProduto = new System.Windows.Forms.ComboBox();
@@ -63,6 +62,7 @@ namespace ExpressDelivery
             this.label13 = new System.Windows.Forms.Label();
             this.txtQtde = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.btnVisualizaPedidos = new System.Windows.Forms.Button();
             this.lblNrPedido = new System.Windows.Forms.Label();
             this.lblDataHora = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -98,7 +98,7 @@ namespace ExpressDelivery
             // 
             // panelOrder
             // 
-            this.panelOrder.Controls.Add(this.textBox1);
+            this.panelOrder.Controls.Add(this.txtObservacaoPedido);
             this.panelOrder.Controls.Add(this.label24);
             this.panelOrder.Controls.Add(this.label11);
             this.panelOrder.Controls.Add(this.btnCancelar);
@@ -133,13 +133,13 @@ namespace ExpressDelivery
             this.panelOrder.Size = new System.Drawing.Size(547, 620);
             this.panelOrder.TabIndex = 2;
             // 
-            // textBox1
+            // txtObservacaoPedido
             // 
-            this.textBox1.Location = new System.Drawing.Point(9, 530);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(268, 87);
-            this.textBox1.TabIndex = 36;
+            this.txtObservacaoPedido.Location = new System.Drawing.Point(9, 530);
+            this.txtObservacaoPedido.Multiline = true;
+            this.txtObservacaoPedido.Name = "txtObservacaoPedido";
+            this.txtObservacaoPedido.Size = new System.Drawing.Size(268, 87);
+            this.txtObservacaoPedido.TabIndex = 36;
             // 
             // label24
             // 
@@ -159,16 +159,6 @@ namespace ExpressDelivery
             this.label11.Size = new System.Drawing.Size(40, 17);
             this.label11.TabIndex = 34;
             this.label11.Text = "Itens";
-            // 
-            // btnVisualizaPedidos
-            // 
-            this.btnVisualizaPedidos.Location = new System.Drawing.Point(561, 644);
-            this.btnVisualizaPedidos.Name = "btnVisualizaPedidos";
-            this.btnVisualizaPedidos.Size = new System.Drawing.Size(222, 34);
-            this.btnVisualizaPedidos.TabIndex = 33;
-            this.btnVisualizaPedidos.Text = "VisualizarPedidos";
-            this.btnVisualizaPedidos.UseVisualStyleBackColor = true;
-            this.btnVisualizaPedidos.Click += new System.EventHandler(this.btnVisualizaPedidos_Click);
             // 
             // btnCancelar
             // 
@@ -445,6 +435,16 @@ namespace ExpressDelivery
             this.label12.TabIndex = 2;
             this.label12.Text = "Quantidade";
             this.label12.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // btnVisualizaPedidos
+            // 
+            this.btnVisualizaPedidos.Location = new System.Drawing.Point(561, 644);
+            this.btnVisualizaPedidos.Name = "btnVisualizaPedidos";
+            this.btnVisualizaPedidos.Size = new System.Drawing.Size(222, 34);
+            this.btnVisualizaPedidos.TabIndex = 33;
+            this.btnVisualizaPedidos.Text = "VisualizarPedidos";
+            this.btnVisualizaPedidos.UseVisualStyleBackColor = true;
+            this.btnVisualizaPedidos.Click += new System.EventHandler(this.btnVisualizaPedidos_Click);
             // 
             // lblNrPedido
             // 
@@ -777,6 +777,8 @@ namespace ExpressDelivery
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.TextBox txtObservacaoPedido;
 
         private System.Windows.Forms.TextBox textBox1;
 

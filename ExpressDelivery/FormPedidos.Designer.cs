@@ -48,13 +48,12 @@ namespace ExpressDelivery
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listPedidos = new System.Windows.Forms.ListView();
             this.label6 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
-            this.listView2 = new System.Windows.Forms.ListView();
+            this.listDetalhePedido = new System.Windows.Forms.ListView();
             this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -238,13 +237,15 @@ namespace ExpressDelivery
             this.label3.TabIndex = 0;
             this.label3.Text = "Data Pedido";
             // 
-            // listView1
+            // listPedidos
             // 
-            this.listView1.Location = new System.Drawing.Point(12, 208);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(768, 304);
-            this.listView1.TabIndex = 4;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listPedidos.Location = new System.Drawing.Point(12, 208);
+            this.listPedidos.Name = "listPedidos";
+            this.listPedidos.Size = new System.Drawing.Size(768, 304);
+            this.listPedidos.TabIndex = 4;
+            this.listPedidos.UseCompatibleStateImageBehavior = false;
+            this.listPedidos.SelectedIndexChanged += new System.EventHandler(this.listPedidos_SelectedIndexChanged);
+            this.listPedidos.DoubleClick += new System.EventHandler(this.listPedidos_DoubleClick);
             // 
             // label6
             // 
@@ -275,13 +276,13 @@ namespace ExpressDelivery
             this.label7.TabIndex = 8;
             this.label7.Text = "Buscar por: ";
             // 
-            // listView2
+            // listDetalhePedido
             // 
-            this.listView2.Location = new System.Drawing.Point(12, 544);
-            this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(396, 134);
-            this.listView2.TabIndex = 9;
-            this.listView2.UseCompatibleStateImageBehavior = false;
+            this.listDetalhePedido.Location = new System.Drawing.Point(12, 544);
+            this.listDetalhePedido.Name = "listDetalhePedido";
+            this.listDetalhePedido.Size = new System.Drawing.Size(768, 134);
+            this.listDetalhePedido.TabIndex = 9;
+            this.listDetalhePedido.UseCompatibleStateImageBehavior = false;
             // 
             // label9
             // 
@@ -294,27 +295,17 @@ namespace ExpressDelivery
             this.label9.Text = "Itens";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(443, 531);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(80, 13);
-            this.label10.TabIndex = 11;
-            this.label10.Text = "Dados entrega:";
-            // 
             // FormPedidos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(792, 690);
-            this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.listView2);
+            this.Controls.Add(this.listDetalhePedido);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.listPedidos);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -334,15 +325,15 @@ namespace ExpressDelivery
             this.PerformLayout();
         }
 
+        private System.Windows.Forms.ListView listDetalhePedido;
+
+        private System.Windows.Forms.ListView listPedidos;
+
         private System.Windows.Forms.Button btnBuscarTodosDoDia;
 
         private System.Windows.Forms.Button btnBuscaDataPedido;
 
-        private System.Windows.Forms.Button btnBuscaDataPedid;
-
         private System.Windows.Forms.Button btnBuscaCodigoPedido;
-
-        private System.Windows.Forms.Button btnBuscaCodigoPedid;
 
         private System.Windows.Forms.ComboBox cmbStatusPedidoData;
 
@@ -351,46 +342,22 @@ namespace ExpressDelivery
 
         private System.Windows.Forms.DateTimePicker dtInicio;
 
-        private System.Windows.Forms.DateTimePicker dtInicios;
-
-        private System.Windows.Forms.ComboBox cmbStatusCodigo;
-
-        private System.Windows.Forms.ComboBox cmbStatusPedidos;
-
         private System.Windows.Forms.TextBox txtCodigoPedido;
 
-        private System.Windows.Forms.TextBox txtCodigoPedido2;
-
-        private System.Windows.Forms.Label label10;
-
-        private System.Windows.Forms.ListView listView2;
         private System.Windows.Forms.Label label9;
 
-        private System.Windows.Forms.ComboBox comboBox2;
-
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ComboBox comboBox1;
-
-        private System.Windows.Forms.DateTimePicker dateTimePicker2;
-
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
 
         private System.Windows.Forms.Label label7;
 
         private System.Windows.Forms.Panel panel4;
 
-        private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Label label6;
 
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button2;
 
         private System.Windows.Forms.Label label3;
-
-        private System.Windows.Forms.Button button1;
-
-        private System.Windows.Forms.TextBox textBox1;
 
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel2;

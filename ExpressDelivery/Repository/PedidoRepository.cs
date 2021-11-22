@@ -58,78 +58,81 @@ namespace ExpressDelivery.Repository
         public List<Pedido> LoadAll()
         {
             var pedidos = new List<Pedido>();
-            var pedidoItens = new List<PedidoItem>();
 
             try
             {
                 var today = DateTime.Today.ToString("yyyy-MM-dd");
                 var tomorrow = DateTime.Today.AddDays(1).ToString("yyyy-MM-dd");
                 _cmd.CommandText =
-                    $"SELECT TB_PEDIDO_ITEM.* FROM TB_PEDIDO_ITEM INNER JOIN TB_PEDIDO TP on TP.COD_PEDIDO = TB_PEDIDO_ITEM.COD_PEDIDO WHERE DATA_PEDIDO BETWEEN '{today}' AND '{tomorrow}';";
+                    $"SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE DATA_PEDIDO BETWEEN '{today}' AND '{tomorrow}';";
                 _cmd.Connection = _con.Connect();
                 _dr = _cmd.ExecuteReader();
 
-                var idPedido = 0;
                 while (_dr.Read())
                 {
-                    var item = new PedidoItem
-                    {
-                        Id = Convert.ToInt16(_dr["COD_PEDIDO_ITEM"]),
-                        CodPedido = Convert.ToInt16(_dr["COD_PEDIDO"]),
-                        CodProduto = Convert.ToInt16(_dr["COD_PRODUTO"]),
-                        Observacao = _dr["OBSERVACAO"].ToString(),
-                        VrTotal = Convert.ToDouble(_dr["VR_TOTAL"]),
-                        VrUnitario = Convert.ToDouble(_dr["VR_UNITARIO"]),
-                        Quantidade = Convert.ToInt16(_dr["QUANTIDADE"]),
-                    };
+                    var idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
 
-                    idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
+                    var pedidoItens = new List<PedidoItem>();
+                    var pedido = new Pedido();
 
-                    pedidoItens.Add(item);
+                    var dataPedido = DateTime.Parse(_dr["DATA_PEDIDO"].ToString(), CultureInfo.CurrentCulture);
+                    var dataAtualizacao = _dr["DATA_ATUALIZACAO"] == DBNull.Value
+                        ? DateTime.Today
+                        : DateTime.Parse(_dr["DATA_ATUALIZACAO"].ToString(), CultureInfo.CurrentCulture);
+                    var dataEntrega = _dr["DATA_ENTREGA"] == DBNull.Value
+                        ? DateTime.Today
+                        : DateTime.Parse(_dr["DATA_ENTREGA"].ToString(), CultureInfo.CurrentCulture);
 
-                    /* ---------- */
+                    // -----------------------
 
                     _cmd.CommandText =
-                        $"SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE COD_PEDIDO={idPedido};";
+                        $"SELECT TB_PEDIDO_ITEM.*, NOME FROM TB_PEDIDO_ITEM INNER JOIN TB_PRODUTO TP on TP.COD_PRODUTO = TB_PEDIDO_ITEM.COD_PRODUTO WHERE COD_PEDIDO={idPedido};";
                     _cmd.Connection = _con2.Connect();
                     _dr2 = _cmd.ExecuteReader();
 
                     while (_dr2.Read())
                     {
-                        var dataPedido = DateTime.Parse(_dr2["DATA_PEDIDO"].ToString(), CultureInfo.CurrentCulture);
-                        var dataAtualizacao = _dr2["DATA_ATUALIZACAO"] == DBNull.Value
-                            ? DateTime.Today
-                            : DateTime.Parse(_dr2["DATA_ATUALIZACAO"].ToString(), CultureInfo.CurrentCulture);
-                        var dataEntrega = _dr2["DATA_ENTREGA"] == DBNull.Value
-                            ? DateTime.Today
-                            : DateTime.Parse(_dr2["DATA_ENTREGA"].ToString(), CultureInfo.CurrentCulture);
-
-                        var pedido = new Pedido
+                        var item = new PedidoItem
                         {
-                            Id = Convert.ToInt16(_dr2["COD_PEDIDO"]),
-                            CodCliente = Convert.ToInt16(_dr2["COD_CLIENTE"]),
+                            Id = Convert.ToInt16(_dr2["COD_PEDIDO_ITEM"]),
+                            CodPedido = Convert.ToInt16(_dr2["COD_PEDIDO"]),
+                            CodProduto = Convert.ToInt16(_dr2["COD_PRODUTO"]),
                             Nome = _dr2["NOME"].ToString(),
-                            Origem = _dr2["ORIGEM"].ToString(),
-                            TipoPedido = _dr2["TIPO_PEDIDO"].ToString(),
-                            Logradouro = _dr2["LOGRADOURO"].ToString(),
-                            Numero = Convert.ToInt16(_dr2["NUMERO"]),
-                            Bairro = _dr2["BAIRRO"].ToString(),
-                            Cidade = _dr2["CIDADE"].ToString(),
-                            Estado = _dr2["ESTADO"].ToString(),
-                            CEP = _dr2["CEP"].ToString(),
-                            StatusPedido = _dr2["STATUS_PEDIDO"].ToString(),
-                            DataPedido = dataPedido,
-                            DataAtualizacao = dataAtualizacao,
-                            DataEntrega = dataEntrega,
                             Observacao = _dr2["OBSERVACAO"].ToString(),
-                            VrTaxa = Convert.ToDouble(_dr2["VR_TAXA"]),
                             VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
-                            VrTroco = Convert.ToDouble(_dr2["VR_TROCO"]),
-                            Itens = pedidoItens,
+                            VrUnitario = Convert.ToDouble(_dr2["VR_UNITARIO"]),
+                            Quantidade = Convert.ToInt16(_dr2["QUANTIDADE"]),
                         };
 
-                        pedidos.Add(pedido);
+                        pedidoItens.Add(item);
                     }
+
+                    pedido = new Pedido
+                    {
+                        Id = Convert.ToInt16(_dr["COD_PEDIDO"]),
+                        CodCliente = Convert.ToInt16(_dr["COD_CLIENTE"]),
+                        Nome = _dr["NOME"].ToString(),
+                        Origem = _dr["ORIGEM"].ToString(),
+                        TipoPedido = _dr["TIPO_PEDIDO"].ToString(),
+                        Logradouro = _dr["LOGRADOURO"].ToString(),
+                        Numero = Convert.ToInt16(_dr["NUMERO"]),
+                        Bairro = _dr["BAIRRO"].ToString(),
+                        Cidade = _dr["CIDADE"].ToString(),
+                        Estado = _dr["ESTADO"].ToString(),
+                        CEP = _dr["CEP"].ToString(),
+                        StatusPedido = _dr["STATUS_PEDIDO"].ToString(),
+                        DataPedido = dataPedido,
+                        DataAtualizacao = dataAtualizacao,
+                        DataEntrega = dataEntrega,
+                        Observacao = _dr["OBSERVACAO"].ToString(),
+                        FormaPagamento = _dr["FORMA_PAGAMENTO"].ToString(),
+                        VrTaxa = Convert.ToDouble(_dr["VR_TAXA"]),
+                        VrTotal = Convert.ToDouble(_dr["VR_TOTAL"]),
+                        VrTroco = Convert.ToDouble(_dr["VR_TROCO"]),
+                    };
+
+                    pedido.Itens = pedidoItens;
+                    pedidos.Add(pedido);
 
                     _con2.Disconnect();
                 }
@@ -157,7 +160,6 @@ namespace ExpressDelivery.Repository
         public List<Pedido> LoadByCode(int code, string status)
         {
             var pedidos = new List<Pedido>();
-            var pedidoItens = new List<PedidoItem>();
 
             try
             {
@@ -170,71 +172,72 @@ namespace ExpressDelivery.Repository
                 _cmd.Connection = _con.Connect();
                 _dr = _cmd.ExecuteReader();
 
-                var idPedido = 0;
                 while (_dr.Read())
                 {
-                    var item = new PedidoItem
-                    {
-                        Id = Convert.ToInt16(_dr["COD_PEDIDO_ITEM"]),
-                        CodPedido = Convert.ToInt16(_dr["COD_PEDIDO"]),
-                        CodProduto = Convert.ToInt16(_dr["COD_PRODUTO"]),
-                        Observacao = _dr["OBSERVACAO"].ToString(),
-                        VrTotal = Convert.ToDouble(_dr["VR_TOTAL"]),
-                        VrUnitario = Convert.ToDouble(_dr["VR_UNITARIO"]),
-                        Quantidade = Convert.ToInt16(_dr["QUANTIDADE"]),
-                    };
+                    var idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
 
-                    idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
+                    var pedidoItens = new List<PedidoItem>();
+                    var pedido = new Pedido();
 
-                    pedidoItens.Add(item);
+                    var dataPedido = DateTime.Parse(_dr["DATA_PEDIDO"].ToString(), CultureInfo.CurrentCulture);
+                    var dataAtualizacao = _dr["DATA_ATUALIZACAO"] == DBNull.Value
+                        ? DateTime.Today
+                        : DateTime.Parse(_dr["DATA_ATUALIZACAO"].ToString(), CultureInfo.CurrentCulture);
+                    var dataEntrega = _dr["DATA_ENTREGA"] == DBNull.Value
+                        ? DateTime.Today
+                        : DateTime.Parse(_dr["DATA_ENTREGA"].ToString(), CultureInfo.CurrentCulture);
 
-                    /* ---------- */
+                    // -----------------------
 
                     _cmd.CommandText =
-                        $"SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE COD_PEDIDO={idPedido};";
+                        $"SELECT TB_PEDIDO_ITEM.*, NOME FROM TB_PEDIDO_ITEM INNER JOIN TB_PRODUTO TP on TP.COD_PRODUTO = TB_PEDIDO_ITEM.COD_PRODUTO WHERE COD_PEDIDO={idPedido};";
                     _cmd.Connection = _con2.Connect();
                     _dr2 = _cmd.ExecuteReader();
 
                     while (_dr2.Read())
                     {
-                        var dataPedido = DateTime.Parse(_dr2["DATA_PEDIDO"].ToString(), CultureInfo.CurrentCulture);
-                        var dataAtualizacao = _dr2["DATA_ATUALIZACAO"] == DBNull.Value
-                            ? DateTime.Today
-                            : DateTime.Parse(_dr2["DATA_ATUALIZACAO"].ToString(), CultureInfo.CurrentCulture);
-                        var dataEntrega = _dr2["DATA_ENTREGA"] == DBNull.Value
-                            ? DateTime.Today
-                            : DateTime.Parse(_dr2["DATA_ENTREGA"].ToString(), CultureInfo.CurrentCulture);
-
-                        var pedido = new Pedido
+                        var item = new PedidoItem
                         {
-                            Id = Convert.ToInt16(_dr2["COD_PEDIDO"]),
-                            CodCliente = Convert.ToInt16(_dr2["COD_CLIENTE"]),
+                            Id = Convert.ToInt16(_dr2["COD_PEDIDO_ITEM"]),
+                            CodPedido = Convert.ToInt16(_dr2["COD_PEDIDO"]),
+                            CodProduto = Convert.ToInt16(_dr2["COD_PRODUTO"]),
                             Nome = _dr2["NOME"].ToString(),
-                            Origem = _dr2["ORIGEM"].ToString(),
-                            TipoPedido = _dr2["TIPO_PEDIDO"].ToString(),
-                            Logradouro = _dr2["LOGRADOURO"].ToString(),
-                            Numero = Convert.ToInt16(_dr2["NUMERO"]),
-                            Bairro = _dr2["BAIRRO"].ToString(),
-                            Cidade = _dr2["CIDADE"].ToString(),
-                            Estado = _dr2["ESTADO"].ToString(),
-                            CEP = _dr2["CEP"].ToString(),
-                            StatusPedido = _dr2["STATUS_PEDIDO"].ToString(),
-                            DataPedido = dataPedido,
-                            DataAtualizacao = dataAtualizacao,
-                            DataEntrega = dataEntrega,
                             Observacao = _dr2["OBSERVACAO"].ToString(),
-                            VrTaxa = Convert.ToDouble(_dr2["VR_TAXA"]),
                             VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
-                            VrTroco = Convert.ToDouble(_dr2["VR_TROCO"]),
-                            Itens = pedidoItens,
+                            VrUnitario = Convert.ToDouble(_dr2["VR_UNITARIO"]),
+                            Quantidade = Convert.ToInt16(_dr2["QUANTIDADE"]),
                         };
 
-                        pedidos.Add(pedido);
+                        pedidoItens.Add(item);
                     }
 
+                    pedido = new Pedido
+                    {
+                        Id = Convert.ToInt16(_dr["COD_PEDIDO"]),
+                        CodCliente = Convert.ToInt16(_dr["COD_CLIENTE"]),
+                        Nome = _dr["NOME"].ToString(),
+                        Origem = _dr["ORIGEM"].ToString(),
+                        TipoPedido = _dr["TIPO_PEDIDO"].ToString(),
+                        Logradouro = _dr["LOGRADOURO"].ToString(),
+                        Numero = Convert.ToInt16(_dr["NUMERO"]),
+                        Bairro = _dr["BAIRRO"].ToString(),
+                        Cidade = _dr["CIDADE"].ToString(),
+                        Estado = _dr["ESTADO"].ToString(),
+                        CEP = _dr["CEP"].ToString(),
+                        StatusPedido = _dr["STATUS_PEDIDO"].ToString(),
+                        DataPedido = dataPedido,
+                        DataAtualizacao = dataAtualizacao,
+                        DataEntrega = dataEntrega,
+                        Observacao = _dr["OBSERVACAO"].ToString(),
+                        VrTaxa = Convert.ToDouble(_dr["VR_TAXA"]),
+                        VrTotal = Convert.ToDouble(_dr["VR_TOTAL"]),
+                        VrTroco = Convert.ToDouble(_dr["VR_TROCO"]),
+                    };
+
+                    pedido.Itens = pedidoItens;
+                    pedidos.Add(pedido);
+
                     _con2.Disconnect();
-                    // _dr.Close();
-                    // continue;
                     break;
                 }
             }
@@ -261,76 +264,78 @@ namespace ExpressDelivery.Repository
         public List<Pedido> LoadByDate(string inicio, string fim)
         {
             var pedidos = new List<Pedido>();
-            var pedidoItens = new List<PedidoItem>();
 
             try
             {
                 _cmd.CommandText =
-                    $"SELECT TB_PEDIDO_ITEM.* FROM TB_PEDIDO_ITEM INNER JOIN TB_PEDIDO TP on TP.COD_PEDIDO = TB_PEDIDO_ITEM.COD_PEDIDO WHERE DATA_PEDIDO BETWEEN '{inicio}' AND '{fim} 23:59:59';";
+                    $"SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE DATA_PEDIDO BETWEEN '{inicio}' AND '{fim} 23:59:59';";
                 _cmd.Connection = _con.Connect();
                 _dr = _cmd.ExecuteReader();
 
-                var idPedido = 0;
                 while (_dr.Read())
                 {
-                    var item = new PedidoItem
-                    {
-                        Id = Convert.ToInt16(_dr["COD_PEDIDO_ITEM"]),
-                        CodPedido = Convert.ToInt16(_dr["COD_PEDIDO"]),
-                        CodProduto = Convert.ToInt16(_dr["COD_PRODUTO"]),
-                        Observacao = _dr["OBSERVACAO"].ToString(),
-                        VrTotal = Convert.ToDouble(_dr["VR_TOTAL"]),
-                        VrUnitario = Convert.ToDouble(_dr["VR_UNITARIO"]),
-                        Quantidade = Convert.ToInt16(_dr["QUANTIDADE"]),
-                    };
+                    var idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
 
-                    idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
+                    var pedidoItens = new List<PedidoItem>();
+                    var pedido = new Pedido();
 
-                    pedidoItens.Add(item);
+                    var dataPedido = DateTime.Parse(_dr["DATA_PEDIDO"].ToString(), CultureInfo.CurrentCulture);
+                    var dataAtualizacao = _dr["DATA_ATUALIZACAO"] == DBNull.Value
+                        ? DateTime.Today
+                        : DateTime.Parse(_dr["DATA_ATUALIZACAO"].ToString(), CultureInfo.CurrentCulture);
+                    var dataEntrega = _dr["DATA_ENTREGA"] == DBNull.Value
+                        ? DateTime.Today
+                        : DateTime.Parse(_dr["DATA_ENTREGA"].ToString(), CultureInfo.CurrentCulture);
 
-                    /* ---------- */
+                    // -----------------------
 
                     _cmd.CommandText =
-                        $"SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE COD_PEDIDO={idPedido};";
+                        $"SELECT TB_PEDIDO_ITEM.*, NOME FROM TB_PEDIDO_ITEM INNER JOIN TB_PRODUTO TP on TP.COD_PRODUTO = TB_PEDIDO_ITEM.COD_PRODUTO WHERE COD_PEDIDO={idPedido};";
                     _cmd.Connection = _con2.Connect();
                     _dr2 = _cmd.ExecuteReader();
 
                     while (_dr2.Read())
                     {
-                        var dataPedido = DateTime.Parse(_dr2["DATA_PEDIDO"].ToString(), CultureInfo.CurrentCulture);
-                        var dataAtualizacao = _dr2["DATA_ATUALIZACAO"] == DBNull.Value
-                            ? DateTime.Today
-                            : DateTime.Parse(_dr2["DATA_ATUALIZACAO"].ToString(), CultureInfo.CurrentCulture);
-                        var dataEntrega = _dr2["DATA_ENTREGA"] == DBNull.Value
-                            ? DateTime.Today
-                            : DateTime.Parse(_dr2["DATA_ENTREGA"].ToString(), CultureInfo.CurrentCulture);
-
-                        var pedido = new Pedido
+                        var item = new PedidoItem
                         {
-                            Id = Convert.ToInt16(_dr2["COD_PEDIDO"]),
-                            CodCliente = Convert.ToInt16(_dr2["COD_CLIENTE"]),
+                            Id = Convert.ToInt16(_dr2["COD_PEDIDO_ITEM"]),
+                            CodPedido = Convert.ToInt16(_dr2["COD_PEDIDO"]),
+                            CodProduto = Convert.ToInt16(_dr2["COD_PRODUTO"]),
                             Nome = _dr2["NOME"].ToString(),
-                            Origem = _dr2["ORIGEM"].ToString(),
-                            TipoPedido = _dr2["TIPO_PEDIDO"].ToString(),
-                            Logradouro = _dr2["LOGRADOURO"].ToString(),
-                            Numero = Convert.ToInt16(_dr2["NUMERO"]),
-                            Bairro = _dr2["BAIRRO"].ToString(),
-                            Cidade = _dr2["CIDADE"].ToString(),
-                            Estado = _dr2["ESTADO"].ToString(),
-                            CEP = _dr2["CEP"].ToString(),
-                            StatusPedido = _dr2["STATUS_PEDIDO"].ToString(),
-                            DataPedido = dataPedido,
-                            DataAtualizacao = dataAtualizacao,
-                            DataEntrega = dataEntrega,
                             Observacao = _dr2["OBSERVACAO"].ToString(),
-                            VrTaxa = Convert.ToDouble(_dr2["VR_TAXA"]),
                             VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
-                            VrTroco = Convert.ToDouble(_dr2["VR_TROCO"]),
-                            Itens = pedidoItens,
+                            VrUnitario = Convert.ToDouble(_dr2["VR_UNITARIO"]),
+                            Quantidade = Convert.ToInt16(_dr2["QUANTIDADE"]),
                         };
 
-                        pedidos.Add(pedido);
+                        pedidoItens.Add(item);
                     }
+
+                    pedido = new Pedido
+                    {
+                        Id = Convert.ToInt16(_dr["COD_PEDIDO"]),
+                        CodCliente = Convert.ToInt16(_dr["COD_CLIENTE"]),
+                        Nome = _dr["NOME"].ToString(),
+                        Origem = _dr["ORIGEM"].ToString(),
+                        TipoPedido = _dr["TIPO_PEDIDO"].ToString(),
+                        Logradouro = _dr["LOGRADOURO"].ToString(),
+                        Numero = Convert.ToInt16(_dr["NUMERO"]),
+                        Bairro = _dr["BAIRRO"].ToString(),
+                        Cidade = _dr["CIDADE"].ToString(),
+                        Estado = _dr["ESTADO"].ToString(),
+                        CEP = _dr["CEP"].ToString(),
+                        StatusPedido = _dr["STATUS_PEDIDO"].ToString(),
+                        DataPedido = dataPedido,
+                        DataAtualizacao = dataAtualizacao,
+                        DataEntrega = dataEntrega,
+                        Observacao = _dr["OBSERVACAO"].ToString(),
+                        VrTaxa = Convert.ToDouble(_dr["VR_TAXA"]),
+                        VrTotal = Convert.ToDouble(_dr["VR_TOTAL"]),
+                        VrTroco = Convert.ToDouble(_dr["VR_TROCO"]),
+                    };
+
+                    pedido.Itens = pedidoItens;
+                    pedidos.Add(pedido);
 
                     _con2.Disconnect();
                 }
@@ -379,32 +384,36 @@ namespace ExpressDelivery.Repository
                             {
                                 oCommand.CommandText =
                                     $"INSERT INTO TB_PEDIDO (COD_CLIENTE, STATUS_PEDIDO, DATA_PEDIDO, VR_TOTAL, VR_TAXA, VR_TROCO," +
-                                    $" LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP, TIPO_PEDIDO, ORIGEM, OBSERVACAO)" +
-                                    $" VALUES ({order.CodCliente}, '{order.StatusPedido}', '{order.DataPedido:yyyy-MM-dd HH:mm:ss}'," +
+                                    $" LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP, TIPO_PEDIDO, ORIGEM, OBSERVACAO," +
+                                    $" FORMA_PAGAMENTO) VALUES ({order.CodCliente}, '{order.StatusPedido}', '{order.DataPedido:yyyy-MM-dd HH:mm:ss}'," +
                                     $" {order.VrTotal.ToString(nfi)}, {order.VrTaxa.ToString(nfi)}, {order.VrTroco.ToString(nfi)}, '{order.Logradouro}'," +
                                     $" {order.Numero}, '{order.Bairro}', '{order.Cidade}', '{order.Estado}', '{order.CEP}'," +
-                                    $" '{order.TipoPedido}', '{order.Origem}', '{order.Observacao}');";
+                                    $" '{order.TipoPedido}', '{order.Origem}', '{order.Observacao}', '{order.FormaPagamento}');";
                             }
                             else
                             {
                                 oCommand.CommandText =
                                     $"UPDATE TB_PEDIDO SET COD_CLIENTE={order.CodCliente}, STATUS_PEDIDO='{order.StatusPedido}'," +
-                                    $" DATA_PEDIDO='{order.DataPedido}', LOGRADOURO='{order.Logradouro}', NUMERO='{order.Numero}'," +
+                                    $" LOGRADOURO='{order.Logradouro}', NUMERO='{order.Numero}', FORMA_PAGAMENTO='{order.FormaPagamento}'," +
                                     $" BAIRRO='{order.Bairro}', CIDADE='{order.Cidade}', ESTADO='{order.Estado}', CEP='{order.CEP}'," +
                                     $" VR_TOTAL='{order.VrTotal.ToString(nfi)}', VR_TAXA='{order.VrTaxa.ToString(nfi)}'," +
                                     $" VR_TROCO='{order.VrTroco}', TIPO_PEDIDO='{order.TipoPedido}', ORIGEM='{order.Origem}'," +
-                                    $" DATA_ATUALIZACAO='{order.DataAtualizacao:yyyy-MM-dd HH:mm:ss}', OBSERVACAO='{order.Observacao}'" +
+                                    $" DATA_ATUALIZACAO='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', OBSERVACAO='{order.Observacao}'" +
                                     $" WHERE COD_PEDIDO={order.Id};";
                             }
 
                             if (oCommand.ExecuteNonQuery() != 1)
                                 throw new InvalidProgramException();
 
-                            oCommand.CommandText = "SELECT * FROM TB_PEDIDO";
-
-                            _dr2 = oCommand.ExecuteReader();
-                            while (_dr2.Read())
-                                nextOrderId = Convert.ToInt16(_dr2["COD_PEDIDO"]);
+                            if (type == "new")
+                            {
+                                oCommand.CommandText = "SELECT * FROM TB_PEDIDO";
+                                _dr2 = oCommand.ExecuteReader();
+                                while (_dr2.Read())
+                                    nextOrderId = Convert.ToInt16(_dr2["COD_PEDIDO"]);
+                            }
+                            else
+                                nextOrderId = order.Id;
                         }
                         catch (SqlException e)
                         {
@@ -432,24 +441,16 @@ namespace ExpressDelivery.Repository
                         {
                             foreach (var item in order.Itens)
                             {
-                                if (type == "new")
+                                if (item.StatusEditar != 2)
                                 {
                                     oCommand.CommandText =
                                         $"INSERT INTO TB_PEDIDO_ITEM (COD_PEDIDO, COD_PRODUTO, QUANTIDADE, VR_UNITARIO, VR_TOTAL, OBSERVACAO)" +
                                         $" VALUES ({nextOrderId}, {item.CodProduto}, {item.Quantidade}, {item.VrUnitario.ToString(nfi)}," +
                                         $" {item.VrTotal.ToString(nfi)}, '{item.Observacao}');";
+                                    
+                                    if (oCommand.ExecuteNonQuery() != 1)
+                                        throw new InvalidProgramException();
                                 }
-                                else
-                                {
-                                    oCommand.CommandText =
-                                        $"UPDATE TB_PEDIDO SET COD_PEDIDO={item.CodPedido}, COD_PRODUTO={item.CodProduto}," +
-                                        $" QUANTIDADE={item.Quantidade}, VR_UNITARIO={item.VrUnitario.ToString(nfi)}," +
-                                        $" VR_TOTAL={item.VrTotal.ToString(nfi)}, OBSERVACAO='{item.Observacao}'" +
-                                        $" WHERE COD_PEDIDO={item.Id};";
-                                }
-
-                                if (oCommand.ExecuteNonQuery() != 1)
-                                    throw new InvalidProgramException();
                             }
                         }
                         catch (SqlException e)

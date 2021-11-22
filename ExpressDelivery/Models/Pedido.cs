@@ -24,6 +24,7 @@ namespace ExpressDelivery.Models
         public string TipoPedido { get; set; }
         public string Origem { get; set; }
         public string Observacao { get; set; }
+        public string FormaPagamento { get; set; }
         public List<PedidoItem> Itens { get; set; }
     }
 
@@ -32,9 +33,11 @@ namespace ExpressDelivery.Models
         public int Id { get; set; }
         public int CodPedido { get; set; }
         public int CodProduto { get; set; }
+        public string Nome { get; set; }
         public double Quantidade { get; set; }
         public double VrUnitario { get; set; }
         public double VrTotal { get; set; }
         public string Observacao { get; set; }
+        public int StatusEditar { get; set; }
     }
 }

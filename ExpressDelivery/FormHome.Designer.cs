@@ -207,6 +207,7 @@ namespace ExpressDelivery
             this.ClientSize = new System.Drawing.Size(1008, 729);
             this.Controls.Add(this.panelHomeBody);
             this.Controls.Add(this.panelSideMenu);
+            this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "FormHome";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

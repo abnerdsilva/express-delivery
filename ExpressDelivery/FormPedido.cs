@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using ExpressDelivery.Controllers;
 using ExpressDelivery.Models;
@@ -73,6 +75,7 @@ namespace ExpressDelivery
             _clientSelected = null;
             _vrTotalPedido = 0.0;
             lblNrPedido.Text = "0";
+            txtObservacaoPedido.Text = "";
 
             txtTelefone.Focus();
         }
@@ -286,7 +289,7 @@ namespace ExpressDelivery
             listProdutos.LabelEdit = true;
 
             listProdutos.Columns.Add("ID", 70, HorizontalAlignment.Center);
-            listProdutos.Columns.Add("Descrição", 230, HorizontalAlignment.Left);
+            listProdutos.Columns.Add("Descrição", 210, HorizontalAlignment.Left);
             listProdutos.Columns.Add("Unidade", 50, HorizontalAlignment.Center);
             listProdutos.Columns.Add("Qtde", 50, HorizontalAlignment.Center);
             listProdutos.Columns.Add("VrUnitario", 60, HorizontalAlignment.Right);
@@ -377,6 +380,7 @@ namespace ExpressDelivery
                         MessageBox.Show(@"Informe apenas números.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         e.Handled = true;
                     }
+
                     break;
             }
         }
@@ -438,7 +442,9 @@ namespace ExpressDelivery
                 return;
             }
 
-            var lastOrderId = _pedidoController.LoadLastOrderId();
+            var orderId = _pedidoController.LoadLastOrderId() + 1;
+            if (!lblNrPedido.Text.Equals("0"))
+                orderId = Convert.ToInt16(lblNrPedido.Text);
 
             var qtde = Convert.ToInt16(txtQtde.Text);
             var vrTotalItem = _productSelected.PrecoVenda * qtde;
@@ -458,7 +464,7 @@ namespace ExpressDelivery
                 Quantidade = qtde,
                 Observacao = txtObservacaoProduto.Text,
                 VrTotal = vrTotalItem,
-                CodPedido = lastOrderId + 1,
+                CodPedido = orderId,
             };
 
             _pedidoItens.Add(item);
@@ -517,6 +523,7 @@ namespace ExpressDelivery
             var orderId = Convert.ToInt16(lblNrPedido.Text);
             var vrTroco = Convert.ToDouble(txtVrTroco.Text);
             var vrTaxa = Convert.ToDouble(txtVrTaxaEntrega.Text);
+            var formaPagamento = cmbFormaPagamento.Text;
 
             var order = new Pedido
             {
@@ -526,7 +533,7 @@ namespace ExpressDelivery
                 Estado = _clientSelected.Estado,
                 Logradouro = _clientSelected.Endereco,
                 Numero = _clientSelected.Numero,
-                Observacao = _clientSelected.Observacao,
+                Observacao = txtObservacaoPedido.Text,
                 Origem = "LOCAL",
                 CodCliente = _clientSelected.Id,
                 DataEntrega = DateTime.Now,
@@ -536,7 +543,9 @@ namespace ExpressDelivery
                 VrTotal = vrTotal,
                 VrTroco = vrTroco,
                 VrTaxa = vrTaxa,
-                Itens = _pedidoItens
+                Itens = _pedidoItens,
+                CEP = _clientSelected.CEP,
+                FormaPagamento = formaPagamento,
             };
 
             var resp = _pedidoController.SaveOrder(order, orderId == 0 ? "new" : "edit");
@@ -573,9 +582,105 @@ namespace ExpressDelivery
         {
             using (var formPedidos = new FormPedidos())
             {
-                if (formPedidos.ShowDialog() == DialogResult.OK)
-                    MessageBox.Show("sdf");
+                formPedidos.ShowDialog();
+                if(formPedidos.PedidoSelecionado != null)
+                    CarregaPedidoSelecionado(formPedidos.PedidoSelecionado);
             }
+        }
+
+        private void CarregaPedidoSelecionado(Pedido pedido)
+        {
+            InicializaPedido();
+            
+            // Carrega dados pedido
+            panelOrder.Enabled = true;
+            txtQtde.Text = "1";
+            txtQtde.Enabled = false;
+            txtCodBarras.Text = "";
+            txtValorUnit.Text = "0.00";
+            txtObservacaoProduto.Text = "";
+            txtObservacaoProduto.Enabled = false;
+            
+            lblNrPedido.Text = pedido.Id.ToString();
+            txtVrTotalItens.Text = pedido.VrTaxa.ToString("0.00");
+            txtVrTroco.Text = pedido.VrTroco.ToString("0.00");
+            txtVrTaxaEntrega.Text = pedido.VrTaxa.ToString("0.00");
+            txtVrTotalPedido.Text = pedido.VrTotal.ToString("0.00");
+            txtVrTrocoPara.Text = "";
+            txtVrTrocoPara.Enabled = true;
+            cmbFormaPagamento.Text = pedido.FormaPagamento;
+            txtObservacaoPedido.Text = pedido.Observacao;
+
+            _vrTotalPedido = pedido.VrTaxa + pedido.VrTotal;
+
+            _products = _produtoController.LoadAll();
+            foreach (var item in pedido.Itens)
+            {
+                CarregaItensPedidoSelecionado(item);
+            }
+
+            // Carrega dados cliente
+            panelClient.Enabled = false;
+            
+            var cliente = _clientController.LoadById(pedido.CodCliente.ToString()).First();
+            _clientSelected = new Client
+            {
+                Id = pedido.CodCliente,
+                Nome = pedido.Nome,
+                Telefone = cliente.Telefone,
+                Endereco = pedido.Logradouro,
+                Bairro = pedido.Bairro,
+                Cidade = cliente.Cidade,
+                Email = cliente.Email,
+                Estado = cliente.Estado,
+                Numero = pedido.Numero,
+                Observacao = pedido.Observacao,
+                Status = cliente.Status,
+                RG = cliente.RG,
+                CEP = pedido.CEP,
+                CPF = cliente.CPF,
+            };
+
+            txtNome.Text = _clientSelected.Nome;
+            txtTelefone.Text = _clientSelected.Telefone;
+            txtDDD.Text = "19";
+            txtNumero.Text = pedido.Numero.ToString();
+            cmbBairro.Text = pedido.Bairro;
+            txtCEP.Text = pedido.CEP;
+            txtEndereco.Text = pedido.Logradouro;
+            txtObservacaoCliente.Text = pedido.Observacao;
+            txtIdCliente.Text = cliente.Id.ToString();
+        }
+
+        private void CarregaItensPedidoSelecionado(PedidoItem pedidoItem)
+        {
+            _productSelected = _products.Find(product => product.Descricao.Equals(pedidoItem.Nome));
+            
+            var vrTotalItem = pedidoItem.VrUnitario * pedidoItem.Quantidade;
+
+            ListViewItem items = new ListViewItem(_productSelected.Id.ToString());
+            // items.SubItems.Add(_productSelected.Id.ToString());
+            items.SubItems.Add(_productSelected.Descricao);
+            items.SubItems.Add(_productSelected.UnMedida);
+            items.SubItems.Add(pedidoItem.Quantidade.ToString("0"));
+            items.SubItems.Add(pedidoItem.VrUnitario.ToString("0.00"));
+            items.SubItems.Add(vrTotalItem.ToString("0.00"));
+
+            var item = new PedidoItem
+            {
+                CodProduto = _productSelected.Id,
+                VrUnitario = _productSelected.PrecoVenda,
+                Quantidade = pedidoItem.Quantidade,
+                Observacao = txtObservacaoProduto.Text,
+                VrTotal = vrTotalItem,
+                CodPedido = pedidoItem.CodPedido,
+                StatusEditar = 2
+            };
+
+            _pedidoItens.Add(item);
+
+            items.BackColor = Color.Brown;
+            listProdutos.Items.Add(items);
         }
     }
 }
