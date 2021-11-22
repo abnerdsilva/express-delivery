@@ -1,50 +1,31 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using ExpressDelivery.Models;
 
 namespace ExpressDelivery
 {
     public partial class FormHome : Form
     {
-        public FormHome()
+        private Usuario _usuario;
+        
+        public FormHome(Usuario usuario)
         {
             InitializeComponent();
 
             CustomizeDesign();
             
-            AbrirFormularios<FormDashboard>();
+            _usuario = usuario;
         }
 
         private void CustomizeDesign()
         {
-            panelCadastros.Visible = false;
-        }
-
-        private void HideSubMenu()
-        {
-            if (panelCadastros.Visible)
-                panelCadastros.Visible = false;
-        }
-
-        private void ShowSubMenu(Panel subMenu)
-        {
-            if (subMenu.Visible == false)
-            {
-                HideSubMenu();
-                subMenu.Visible = true;
-            }
-            else
-                subMenu.Visible = false;
+            // panelCadastros.Visible = false;
         }
 
         private void btnSair_Click(object sender, System.EventArgs e)
         {
             Close();
-        }
-
-        private void btnCadastro_Click(object sender, System.EventArgs e)
-        {
-            ShowSubMenu(panelCadastros);
         }
 
         private void AbrirFormularios<MiForm>() where MiForm : Form, new()
@@ -61,7 +42,7 @@ namespace ExpressDelivery
 
                 panelHomeBody.Controls.Add(formulario);
                 panelHomeBody.Tag = formulario;
-                
+
                 formulario.Show();
                 formulario.BringToFront();
             }
@@ -73,32 +54,44 @@ namespace ExpressDelivery
 
         private void btnFormDashbord_Click(object sender, EventArgs e)
         {
-            HideSubMenu();
             AbrirFormularios<FormDashboard>();
         }
 
         private void btnFormCardapio_Click(object sender, EventArgs e)
         {
-            HideSubMenu();
             AbrirFormularios<FormCardapio>();
         }
 
         private void btnFormClientes_Click(object sender, EventArgs e)
         {
-            HideSubMenu();
             AbrirFormularios<FormClientes>();
         }
 
         private void btnFormUsuarios_Click(object sender, EventArgs e)
         {
-            HideSubMenu();
             AbrirFormularios<FormUsuarios>();
         }
 
         private void btnFormPedido_Click(object sender, EventArgs e)
         {
-            HideSubMenu();
             AbrirFormularios<FormPedido>();
+        }
+
+        private void FormHome_Load(object sender, EventArgs e)
+        {
+            if (_usuario.TipoUsuario.Equals("COMUM"))
+            {
+                // btnCadastro.Visible = false;
+                btnFormDashbord.Visible = false;
+                btnFormCardapio.Visible = false;
+                btnFormUsuarios.Visible = false;
+                btnFormClientes.Visible = false;
+                // panelCadastros.Visible = false;
+
+                AbrirFormularios<FormPedido>();
+            }
+            else
+                AbrirFormularios<FormDashboard>();
         }
     }
 }

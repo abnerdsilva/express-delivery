@@ -1,4 +1,5 @@
 using System;
+using ExpressDelivery.Models;
 using Microsoft.Data.SqlClient;
 
 namespace ExpressDelivery.Repository
@@ -12,9 +13,11 @@ namespace ExpressDelivery.Repository
         private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
         private SqlDataReader _dr;
         
-        public bool VerificaLogin(string login, string password)
+        public Usuario VerificaLogin(string login, string password)
         {
-            _cmd.CommandText = $"SELECT * FROM TB_USUARIOS WHERE LOGIN_USER = @LOGIN_USER AND PASS = @PASS;";
+            var usuario = new Usuario();
+            
+            _cmd.CommandText = $"SELECT * FROM TB_USUARIO WHERE USUARIO = @LOGIN_USER AND SENHA = @PASS;";
             _cmd.Parameters.AddWithValue("@LOGIN_USER", login);
             _cmd.Parameters.AddWithValue("@PASS", password);
 
@@ -24,7 +27,18 @@ namespace ExpressDelivery.Repository
                 _dr = _cmd.ExecuteReader();
                 if (_dr.HasRows)
                 {
-                    Status = true;
+                    if (_dr.Read())
+                    {
+                        usuario = new Usuario
+                        {
+                            Id = Convert.ToInt16(_dr["ID_USER"]),
+                            Login = _dr["USUARIO"].ToString(),
+                            Senha = _dr["SENHA"].ToString(),
+                            TipoUsuario = _dr["TIPO_USUARIO"].ToString(),
+                        };
+
+                        Status = true;
+                    }
                 }
                 else
                 {
@@ -35,20 +49,20 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                throw;
+                return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                throw;
+                return null;
             }
             finally
             {
                 _con.Disconnect();
             }
             
-            return Status;
+            return usuario;
         }
     }
 }

@@ -10,25 +10,26 @@ namespace ExpressDelivery
         {
             InitializeComponent();
         }
+
         private void btnEntrar_Click(object sender, EventArgs e)
         {
             if (txtLoginUsuario.Text == "" || txtLoginSenha.Text == "")
             {
+                txtLoginSenha.Focus();
                 MessageBox.Show(@"Usuário e/ou senha inválido(s)", "Alerta!");
                 return;
             }
 
             LoginController controle = new LoginController();
-            controle.Acessar(txtLoginUsuario.Text, txtLoginSenha.Text);
-
-            if (!controle.Status)
+            var usuario = controle.Acessar(txtLoginUsuario.Text, txtLoginSenha.Text);
+            if (usuario == null)
             {
                 MessageBox.Show(controle.Message);
                 return;
             }
 
             Hide();
-            Form f = new FormHome();
+            Form f = new FormHome(usuario);
             f.Closed += (s, args) => Close();
             f.Show();
         }
@@ -36,6 +37,11 @@ namespace ExpressDelivery
         private void btnSair_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void txtLoginSenha_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char) Keys.Enter) btnEntrar.Focus();
         }
     }
 }

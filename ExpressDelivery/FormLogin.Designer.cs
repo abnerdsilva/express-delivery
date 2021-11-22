@@ -64,9 +64,10 @@ namespace ExpressDelivery
             // 
             // txtLoginUsuario
             // 
+            this.txtLoginUsuario.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtLoginUsuario.Location = new System.Drawing.Point(370, 70);
             this.txtLoginUsuario.Name = "txtLoginUsuario";
-            this.txtLoginUsuario.Size = new System.Drawing.Size(184, 20);
+            this.txtLoginUsuario.Size = new System.Drawing.Size(184, 22);
             this.txtLoginUsuario.TabIndex = 2;
             // 
             // label2
@@ -81,10 +82,13 @@ namespace ExpressDelivery
             // 
             // txtLoginSenha
             // 
+            this.txtLoginSenha.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtLoginSenha.Location = new System.Drawing.Point(370, 121);
             this.txtLoginSenha.Name = "txtLoginSenha";
-            this.txtLoginSenha.Size = new System.Drawing.Size(184, 20);
+            this.txtLoginSenha.Size = new System.Drawing.Size(184, 22);
             this.txtLoginSenha.TabIndex = 4;
+            this.txtLoginSenha.UseSystemPasswordChar = true;
+            this.txtLoginSenha.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtLoginSenha_KeyPress);
             // 
             // btnSair
             // 

@@ -32,19 +32,16 @@ namespace ExpressDelivery
         private void InitializeComponent()
         {
             this.panelSideMenu = new System.Windows.Forms.Panel();
-            this.btnSair = new System.Windows.Forms.Button();
-            this.btnFormPedido = new System.Windows.Forms.Button();
-            this.panelCadastros = new System.Windows.Forms.Panel();
             this.btnFormUsuarios = new System.Windows.Forms.Button();
+            this.btnSair = new System.Windows.Forms.Button();
             this.btnFormClientes = new System.Windows.Forms.Button();
+            this.btnFormPedido = new System.Windows.Forms.Button();
             this.btnFormCardapio = new System.Windows.Forms.Button();
-            this.btnCadastro = new System.Windows.Forms.Button();
             this.btnFormDashbord = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelHomeBody = new System.Windows.Forms.Panel();
             this.panelSideMenu.SuspendLayout();
-            this.panelCadastros.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -53,10 +50,11 @@ namespace ExpressDelivery
             // 
             this.panelSideMenu.AutoScroll = true;
             this.panelSideMenu.BackColor = System.Drawing.SystemColors.Desktop;
+            this.panelSideMenu.Controls.Add(this.btnFormUsuarios);
             this.panelSideMenu.Controls.Add(this.btnSair);
+            this.panelSideMenu.Controls.Add(this.btnFormClientes);
             this.panelSideMenu.Controls.Add(this.btnFormPedido);
-            this.panelSideMenu.Controls.Add(this.panelCadastros);
-            this.panelSideMenu.Controls.Add(this.btnCadastro);
+            this.panelSideMenu.Controls.Add(this.btnFormCardapio);
             this.panelSideMenu.Controls.Add(this.btnFormDashbord);
             this.panelSideMenu.Controls.Add(this.panel1);
             this.panelSideMenu.Dock = System.Windows.Forms.DockStyle.Left;
@@ -65,6 +63,20 @@ namespace ExpressDelivery
             this.panelSideMenu.Name = "panelSideMenu";
             this.panelSideMenu.Size = new System.Drawing.Size(200, 729);
             this.panelSideMenu.TabIndex = 0;
+            // 
+            // btnFormUsuarios
+            // 
+            this.btnFormUsuarios.BackColor = System.Drawing.Color.Silver;
+            this.btnFormUsuarios.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnFormUsuarios.FlatAppearance.BorderSize = 0;
+            this.btnFormUsuarios.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFormUsuarios.Location = new System.Drawing.Point(0, 280);
+            this.btnFormUsuarios.Name = "btnFormUsuarios";
+            this.btnFormUsuarios.Size = new System.Drawing.Size(200, 33);
+            this.btnFormUsuarios.TabIndex = 2;
+            this.btnFormUsuarios.Text = "Usuário";
+            this.btnFormUsuarios.UseVisualStyleBackColor = false;
+            this.btnFormUsuarios.Click += new System.EventHandler(this.btnFormUsuarios_Click);
             // 
             // btnSair
             // 
@@ -78,52 +90,13 @@ namespace ExpressDelivery
             this.btnSair.UseVisualStyleBackColor = true;
             this.btnSair.Click += new System.EventHandler(this.btnSair_Click);
             // 
-            // btnFormPedido
-            // 
-            this.btnFormPedido.BackColor = System.Drawing.Color.Silver;
-            this.btnFormPedido.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnFormPedido.FlatAppearance.BorderSize = 0;
-            this.btnFormPedido.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFormPedido.Location = new System.Drawing.Point(0, 326);
-            this.btnFormPedido.Name = "btnFormPedido";
-            this.btnFormPedido.Size = new System.Drawing.Size(200, 40);
-            this.btnFormPedido.TabIndex = 5;
-            this.btnFormPedido.Text = "Pedido";
-            this.btnFormPedido.UseVisualStyleBackColor = false;
-            this.btnFormPedido.Click += new System.EventHandler(this.btnFormPedido_Click);
-            // 
-            // panelCadastros
-            // 
-            this.panelCadastros.Controls.Add(this.btnFormUsuarios);
-            this.panelCadastros.Controls.Add(this.btnFormClientes);
-            this.panelCadastros.Controls.Add(this.btnFormCardapio);
-            this.panelCadastros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCadastros.Location = new System.Drawing.Point(0, 214);
-            this.panelCadastros.Name = "panelCadastros";
-            this.panelCadastros.Size = new System.Drawing.Size(200, 112);
-            this.panelCadastros.TabIndex = 4;
-            // 
-            // btnFormUsuarios
-            // 
-            this.btnFormUsuarios.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.btnFormUsuarios.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnFormUsuarios.FlatAppearance.BorderSize = 0;
-            this.btnFormUsuarios.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFormUsuarios.Location = new System.Drawing.Point(0, 66);
-            this.btnFormUsuarios.Name = "btnFormUsuarios";
-            this.btnFormUsuarios.Size = new System.Drawing.Size(200, 33);
-            this.btnFormUsuarios.TabIndex = 2;
-            this.btnFormUsuarios.Text = "Usuário";
-            this.btnFormUsuarios.UseVisualStyleBackColor = false;
-            this.btnFormUsuarios.Click += new System.EventHandler(this.btnFormUsuarios_Click);
-            // 
             // btnFormClientes
             // 
-            this.btnFormClientes.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnFormClientes.BackColor = System.Drawing.Color.Silver;
             this.btnFormClientes.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnFormClientes.FlatAppearance.BorderSize = 0;
             this.btnFormClientes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFormClientes.Location = new System.Drawing.Point(0, 33);
+            this.btnFormClientes.Location = new System.Drawing.Point(0, 247);
             this.btnFormClientes.Name = "btnFormClientes";
             this.btnFormClientes.Size = new System.Drawing.Size(200, 33);
             this.btnFormClientes.TabIndex = 1;
@@ -131,33 +104,33 @@ namespace ExpressDelivery
             this.btnFormClientes.UseVisualStyleBackColor = false;
             this.btnFormClientes.Click += new System.EventHandler(this.btnFormClientes_Click);
             // 
+            // btnFormPedido
+            // 
+            this.btnFormPedido.BackColor = System.Drawing.Color.Silver;
+            this.btnFormPedido.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnFormPedido.FlatAppearance.BorderSize = 0;
+            this.btnFormPedido.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFormPedido.Location = new System.Drawing.Point(0, 207);
+            this.btnFormPedido.Name = "btnFormPedido";
+            this.btnFormPedido.Size = new System.Drawing.Size(200, 40);
+            this.btnFormPedido.TabIndex = 5;
+            this.btnFormPedido.Text = "Pedido";
+            this.btnFormPedido.UseVisualStyleBackColor = false;
+            this.btnFormPedido.Click += new System.EventHandler(this.btnFormPedido_Click);
+            // 
             // btnFormCardapio
             // 
-            this.btnFormCardapio.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnFormCardapio.BackColor = System.Drawing.Color.Silver;
             this.btnFormCardapio.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnFormCardapio.FlatAppearance.BorderSize = 0;
             this.btnFormCardapio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFormCardapio.Location = new System.Drawing.Point(0, 0);
+            this.btnFormCardapio.Location = new System.Drawing.Point(0, 174);
             this.btnFormCardapio.Name = "btnFormCardapio";
             this.btnFormCardapio.Size = new System.Drawing.Size(200, 33);
             this.btnFormCardapio.TabIndex = 0;
             this.btnFormCardapio.Text = "Cardapio";
             this.btnFormCardapio.UseVisualStyleBackColor = false;
             this.btnFormCardapio.Click += new System.EventHandler(this.btnFormCardapio_Click);
-            // 
-            // btnCadastro
-            // 
-            this.btnCadastro.BackColor = System.Drawing.Color.Silver;
-            this.btnCadastro.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnCadastro.FlatAppearance.BorderSize = 0;
-            this.btnCadastro.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCadastro.Location = new System.Drawing.Point(0, 174);
-            this.btnCadastro.Name = "btnCadastro";
-            this.btnCadastro.Size = new System.Drawing.Size(200, 40);
-            this.btnCadastro.TabIndex = 3;
-            this.btnCadastro.Text = "Cadastro";
-            this.btnCadastro.UseVisualStyleBackColor = false;
-            this.btnCadastro.Click += new System.EventHandler(this.btnCadastro_Click);
             // 
             // btnFormDashbord
             // 
@@ -212,8 +185,8 @@ namespace ExpressDelivery
             this.Name = "FormHome";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sistema de Gerenciamento de Pedidos";
+            this.Load += new System.EventHandler(this.FormHome_Load);
             this.panelSideMenu.ResumeLayout(false);
-            this.panelCadastros.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -236,8 +209,6 @@ namespace ExpressDelivery
 
         private System.Windows.Forms.Panel panelSideMenu;
         private System.Windows.Forms.Button btnSair;
-        private System.Windows.Forms.Panel panelCadastros;
-        private System.Windows.Forms.Button btnCadastro;
         private System.Windows.Forms.Panel panel1;
     }
 }

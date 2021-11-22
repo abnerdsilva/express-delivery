@@ -1,3 +1,4 @@
+using ExpressDelivery.Models;
 using ExpressDelivery.Repository;
 
 namespace ExpressDelivery.Controllers
@@ -6,18 +7,19 @@ namespace ExpressDelivery.Controllers
     {
         public bool Status;
         public string Message = "";
-
-        public void Acessar(string login, string password)
+        
+        public Usuario Acessar(string login, string password)
         {
             LoginRepository loginDao = new LoginRepository();
-            Status = loginDao.VerificaLogin(login, password);
+            var usuario = loginDao.VerificaLogin(login, password);
             if (loginDao.Message.Equals("") && loginDao.Status)
             {
                 Status = true;
-                return;
+                return usuario;
             }
 
             Message = loginDao.Message;
+            return null;
         }
     }
 }

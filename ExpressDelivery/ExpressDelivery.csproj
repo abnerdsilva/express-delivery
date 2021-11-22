@@ -158,6 +158,7 @@
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Usuario.cs" />
     <Compile Include="Repository\ClientRepository.cs" />
     <Compile Include="Repository\ConexaoDBRepository.cs" />
     <Compile Include="Repository\LoginRepository.cs" />
