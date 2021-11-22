@@ -13,27 +13,37 @@ namespace ExpressDelivery.Controllers
 
         public List<Client> LoadAll()
         {
-            return _clientRepository.LoadAll();
+            var resp = _clientRepository.LoadAll();
+            MessageError = _clientRepository.Message;
+            return resp;
         }
 
         public List<Client> LoadByName(string name)
         {
-            return _clientRepository.LoadByName(name);
+            var resp = _clientRepository.LoadByName(name);
+            MessageError = _clientRepository.Message;
+            return resp;
         }
 
         public List<Client> LoadById(string id)
         {
-            return _clientRepository.LoadById(id);
+            var resp = _clientRepository.LoadById(id);
+            MessageError = _clientRepository.Message;
+            return resp;
         }
 
         public Client LoadByPhone(string phone)
         {
-            return _clientRepository.LoadByPhone(phone);
+            var resp = _clientRepository.LoadByPhone(phone);
+            MessageError = _clientRepository.Message;
+            return resp;
         }
 
         public int LastClientId()
         {
-            return _clientRepository.LastClientId();
+            var resp = _clientRepository.LastClientId();
+            MessageError = _clientRepository.Message;
+            return resp;
         }
 
         public int Save(Client client, string type)

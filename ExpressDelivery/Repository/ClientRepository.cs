@@ -139,13 +139,13 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                throw;
+                return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                throw;
+                return null;
             }
             finally
             {
