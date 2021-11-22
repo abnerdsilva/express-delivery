@@ -44,5 +44,12 @@ namespace ExpressDelivery.Controllers
             MessageError = _pedidoRepository.Message;
             return resp;
         }
+        
+        public int UpdateOrder(string status, int id)
+        {
+            var resp = _pedidoRepository.UpdateOrder(status, id);
+            MessageError = _pedidoRepository.Message;
+            return resp;
+        }
     }
 }

@@ -54,6 +54,8 @@ namespace ExpressDelivery
             this.label7 = new System.Windows.Forms.Label();
             this.listDetalhePedido = new System.Windows.Forms.ListView();
             this.label9 = new System.Windows.Forms.Label();
+            this.btnCancelaPedido = new System.Windows.Forms.Button();
+            this.btnBaixarPedido = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -295,11 +297,35 @@ namespace ExpressDelivery
             this.label9.Text = "Itens";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // btnCancelaPedido
+            // 
+            this.btnCancelaPedido.Location = new System.Drawing.Point(665, 518);
+            this.btnCancelaPedido.Name = "btnCancelaPedido";
+            this.btnCancelaPedido.Size = new System.Drawing.Size(115, 23);
+            this.btnCancelaPedido.TabIndex = 11;
+            this.btnCancelaPedido.Text = "Cancelar Pedido";
+            this.btnCancelaPedido.UseVisualStyleBackColor = true;
+            this.btnCancelaPedido.Visible = false;
+            this.btnCancelaPedido.Click += new System.EventHandler(this.btnCancelaPedido_Click);
+            // 
+            // btnBaixarPedido
+            // 
+            this.btnBaixarPedido.Location = new System.Drawing.Point(544, 518);
+            this.btnBaixarPedido.Name = "btnBaixarPedido";
+            this.btnBaixarPedido.Size = new System.Drawing.Size(115, 23);
+            this.btnBaixarPedido.TabIndex = 12;
+            this.btnBaixarPedido.Text = "Baixar Pedido";
+            this.btnBaixarPedido.UseVisualStyleBackColor = true;
+            this.btnBaixarPedido.Visible = false;
+            this.btnBaixarPedido.Click += new System.EventHandler(this.btnBaixarPedido_Click);
+            // 
             // FormPedidos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(792, 690);
+            this.Controls.Add(this.btnBaixarPedido);
+            this.Controls.Add(this.btnCancelaPedido);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.listDetalhePedido);
             this.Controls.Add(this.label7);
@@ -324,6 +350,10 @@ namespace ExpressDelivery
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.Button btnCancelaPedido;
+
+        private System.Windows.Forms.Button btnBaixarPedido;
 
         private System.Windows.Forms.ListView listDetalhePedido;
 

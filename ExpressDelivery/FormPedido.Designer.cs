@@ -166,7 +166,7 @@ namespace ExpressDelivery
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(110, 34);
             this.btnCancelar.TabIndex = 31;
-            this.btnCancelar.Text = "Cancelar Pedido";
+            this.btnCancelar.Text = "Voltar";
             this.btnCancelar.UseVisualStyleBackColor = true;
             this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
             // 
@@ -176,7 +176,7 @@ namespace ExpressDelivery
             this.btnExcluirPedido.Name = "btnExcluirPedido";
             this.btnExcluirPedido.Size = new System.Drawing.Size(110, 34);
             this.btnExcluirPedido.TabIndex = 30;
-            this.btnExcluirPedido.Text = "Excluir Pedido";
+            this.btnExcluirPedido.Text = "Excluir Item";
             this.btnExcluirPedido.UseVisualStyleBackColor = true;
             // 
             // cmbDescricaoProduto

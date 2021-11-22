@@ -164,17 +164,18 @@ namespace ExpressDelivery.Repository
             try
             {
                 if (status.Equals("TODOS"))
-                    _cmd.CommandText = $"SELECT * FROM TB_PEDIDO_ITEM WHERE COD_PEDIDO={code};";
+                    _cmd.CommandText =
+                        $"SELECT * FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE TB_PEDIDO.COD_PEDIDO={code};";
                 else
                     _cmd.CommandText =
-                        $"SELECT TPI.* FROM TB_PEDIDO INNER JOIN TB_PEDIDO_ITEM TPI on TB_PEDIDO.COD_PEDIDO = TPI.COD_PEDIDO WHERE TB_PEDIDO.COD_PEDIDO={code} AND STATUS_PEDIDO='{status}';";
+                        $"SELECT * FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE TB_PEDIDO.COD_PEDIDO={code} AND STATUS_PEDIDO='{status}';";
 
                 _cmd.Connection = _con.Connect();
                 _dr = _cmd.ExecuteReader();
 
                 while (_dr.Read())
                 {
-                    var idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
+                    var idPedido = code;
 
                     var pedidoItens = new List<PedidoItem>();
                     var pedido = new Pedido();
@@ -447,7 +448,7 @@ namespace ExpressDelivery.Repository
                                         $"INSERT INTO TB_PEDIDO_ITEM (COD_PEDIDO, COD_PRODUTO, QUANTIDADE, VR_UNITARIO, VR_TOTAL, OBSERVACAO)" +
                                         $" VALUES ({nextOrderId}, {item.CodProduto}, {item.Quantidade}, {item.VrUnitario.ToString(nfi)}," +
                                         $" {item.VrTotal.ToString(nfi)}, '{item.Observacao}');";
-                                    
+
                                     if (oCommand.ExecuteNonQuery() != 1)
                                         throw new InvalidProgramException();
                                 }
@@ -475,6 +476,35 @@ namespace ExpressDelivery.Repository
             }
 
             return nextOrderId;
+        }
+
+        public int UpdateOrder(string status, int id)
+        {
+            var value = 0;
+            try
+            {
+                _cmd.CommandText = $"UPDATE TB_PEDIDO SET STATUS_PEDIDO='{status}' WHERE COD_PEDIDO={id};";
+                _cmd.Connection = _con.Connect();
+                value = _cmd.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                return -1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                return -1;
+            }
+            finally
+            {
+                _con.Disconnect();
+            }
+
+            return value;
         }
     }
 }

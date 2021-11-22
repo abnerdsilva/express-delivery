@@ -10,11 +10,12 @@ namespace ExpressDelivery
 {
     public partial class FormPedidos : Form
     {
-        // private readonly ClientController _clientController = new ClientController();
-        // private readonly ProdutoController _produtoController = new ProdutoController();
         private readonly PedidoController _pedidoController = new PedidoController();
 
         private List<Pedido> _pedidos = new List<Pedido>();
+        private string _localBusca;
+        private int _idPedidoSelecionado;
+        private string _statusPedidoSelecionado = "FECHADO";
 
         public FormPedidos()
         {
@@ -27,12 +28,11 @@ namespace ExpressDelivery
         {
             listPedidos.Clear();
             listPedidos.Clear();
+            dtInicio.Value = DateTime.Today;
+            dtFim.Value = DateTime.Today;
+            _localBusca = "GERAL";
 
-            _pedidos = _pedidoController.LoadAll();
-            if (!_pedidoController.MessageError.Equals(""))
-                MessageBox.Show(_pedidoController.MessageError);
-            else if (_pedidos != null)
-                CarregaListaPedidos();
+            CarregaDadosPedidos();
         }
 
         private void CarregaListaPedidos()
@@ -58,12 +58,23 @@ namespace ExpressDelivery
                 items.SubItems.Add(pedido.StatusPedido);
                 items.SubItems.Add((pedido.VrTotal + pedido.VrTaxa).ToString("0.00"));
 
-                if (pedido.StatusPedido == "FECHADO")
+                if (pedido.StatusPedido == "CANCELADO")
+                    items.ForeColor = Color.Red;
+                if (pedido.StatusPedido == "BAIXADO")
                     items.ForeColor = Color.Green;
-                if (pedido.StatusPedido == "CONCLUIDO")
-                    items.ForeColor = Color.Blue;
 
                 listPedidos.Items.Add(items);
+            }
+            
+            if (_statusPedidoSelecionado.Equals("ABERTO"))
+            {
+                btnBaixarPedido.Visible = true;
+                btnCancelaPedido.Visible = true;
+            }
+            else
+            {
+                btnBaixarPedido.Visible = false;
+                btnCancelaPedido.Visible = false;
             }
         }
 
@@ -78,33 +89,41 @@ namespace ExpressDelivery
 
             listPedidos.Clear();
             listPedidos.Clear();
+            _localBusca = "CODIGO";
 
-            _pedidos = _pedidoController.LoadByCode(Convert.ToInt16(txtCodigoPedido.Text), cmbStatusPedidoCodigo.Text);
-            if (!_pedidoController.MessageError.Equals(""))
-                MessageBox.Show(_pedidoController.MessageError);
-            else if (_pedidos != null)
-                CarregaListaPedidos();
+            CarregaDadosPedidos();
         }
 
         private void btnBuscaDataPedido_Click(object sender, EventArgs e)
         {
             listPedidos.Clear();
             _pedidos.Clear();
+            _localBusca = "DATA";
 
-            _pedidos = _pedidoController.LoadByDate(dtInicio.Value.ToString("yyyy-MM-dd"),
-                dtFim.Value.ToString("yyyy-MM-dd"));
-            if (!_pedidoController.MessageError.Equals(""))
-                MessageBox.Show(_pedidoController.MessageError);
-            else if (_pedidos != null)
-                CarregaListaPedidos();
+            CarregaDadosPedidos();
         }
 
         private void btnBuscarTodosDoDia_Click(object sender, EventArgs e)
         {
             listPedidos.Clear();
             _pedidos.Clear();
+            _localBusca = "GERAL";
 
-            _pedidos = _pedidoController.LoadAll();
+            CarregaDadosPedidos();
+        }
+
+        private void CarregaDadosPedidos()
+        {
+            _pedidos?.Clear();
+
+            if (_localBusca.Equals("DATA"))
+                _pedidos = _pedidoController.LoadByDate(dtInicio.Value.ToString("yyyy-MM-dd"),
+                    dtFim.Value.ToString("yyyy-MM-dd"));
+            else if (_localBusca.Equals("CODIGO"))
+                _pedidos = _pedidoController.LoadByCode(Convert.ToInt16(txtCodigoPedido.Text), cmbStatusPedidoCodigo.Text);
+            else
+                _pedidos = _pedidoController.LoadAll();
+            
             if (!_pedidoController.MessageError.Equals(""))
                 MessageBox.Show(_pedidoController.MessageError);
             else if (_pedidos != null)
@@ -117,7 +136,8 @@ namespace ExpressDelivery
             {
                 if (listPedidos.SelectedItems.Count > 0)
                 {
-                    var index = listPedidos.SelectedItems[0].SubItems[0].Text;
+                    _idPedidoSelecionado = Convert.ToInt16(listPedidos.SelectedItems[0].SubItems[0].Text);
+                    _statusPedidoSelecionado = listPedidos.SelectedItems[0].SubItems[4].Text;
 
                     listDetalhePedido.Clear();
                     listDetalhePedido.View = View.Details;
@@ -132,7 +152,7 @@ namespace ExpressDelivery
                     listDetalhePedido.Columns.Add("Vr Total", 70, HorizontalAlignment.Right);
                     listDetalhePedido.Columns.Add("Observação", 250, HorizontalAlignment.Left);
 
-                    var pedido = _pedidos.Single(pedido1 => pedido1.Id.Equals(Convert.ToInt16(index)));
+                    var pedido = _pedidos.Single(pedido1 => pedido1.Id.Equals(_idPedidoSelecionado));
                     foreach (var item in pedido.Itens)
                     {
                         var items = new ListViewItem(item.CodProduto.ToString());
@@ -150,14 +170,64 @@ namespace ExpressDelivery
             {
                 MessageBox.Show(exception.Message);
             }
+            
+            if (_statusPedidoSelecionado.Equals("ABERTO"))
+            {
+                btnBaixarPedido.Visible = true;
+                btnCancelaPedido.Visible = true;
+            }
+            else
+            {
+                btnBaixarPedido.Visible = false;
+                btnCancelaPedido.Visible = false;
+            }
         }
 
         private void listPedidos_DoubleClick(object sender, EventArgs e)
         {
             var index = listPedidos.SelectedItems[0].SubItems[0].Text;
             PedidoSelecionado = _pedidos.Single(pedido1 => pedido1.Id.Equals(Convert.ToInt16(index)));
-            this.Dispose();
-            // Close();
+            Dispose();
+        }
+
+        private void btnBaixarPedido_Click(object sender, EventArgs e)
+        {
+            var atualizado = _pedidoController.UpdateOrder("BAIXADO", _idPedidoSelecionado);
+            if (!_pedidoController.MessageError.Equals(""))
+                MessageBox.Show(_pedidoController.MessageError, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (atualizado > 0)
+            {
+                if (_localBusca.Equals("DATA"))
+                    CarregaDadosPedidos();
+                else if (_localBusca.Equals("CODIGO"))
+                    CarregaDadosPedidos();
+                else
+                    CarregaDadosPedidos();
+                
+                btnCancelaPedido.Visible = false;
+                btnBaixarPedido.Visible = false;
+                MessageBox.Show(@"Pedido baixado com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.None);
+            }
+        }
+
+        private void btnCancelaPedido_Click(object sender, EventArgs e)
+        {
+            var atualizado = _pedidoController.UpdateOrder("CANCELADO", _idPedidoSelecionado);
+            if (!_pedidoController.MessageError.Equals(""))
+                MessageBox.Show(_pedidoController.MessageError, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (atualizado > 0)
+            {
+                if (_localBusca.Equals("DATA"))
+                    CarregaDadosPedidos();
+                else if (_localBusca.Equals("CODIGO"))
+                    CarregaDadosPedidos();
+                else
+                    CarregaDadosPedidos();
+                
+                btnCancelaPedido.Visible = false;
+                btnBaixarPedido.Visible = false;
+                MessageBox.Show(@"Pedido cancelado com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.None);
+            }
         }
     }
 }
