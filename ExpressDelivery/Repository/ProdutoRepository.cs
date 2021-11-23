@@ -17,7 +17,7 @@ namespace ExpressDelivery.Repository
         {
             var products = new List<Product>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_PRODUTO;";
+            _cmd.CommandText = $"SELECT * FROM TB_PRODUTO WHERE STATUS_PRODUTO=1;";
 
             try
             {
@@ -126,6 +126,7 @@ namespace ExpressDelivery.Repository
                     var product = new Product
                     {
                         Id = Convert.ToInt16(_dr["COD_PRODUTO"]),
+                        Status = Convert.ToInt16(_dr["STATUS_PRODUTO"]),
                         Descricao = _dr["NOME"].ToString(),
                         PrecoCompra = Convert.ToDouble(_dr["VR_COMPRA"]),
                         UnMedida = _dr["UN_MEDIDA"].ToString(),
