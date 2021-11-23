@@ -16,7 +16,7 @@ namespace ExpressDelivery
             if (txtLoginUsuario.Text == "" || txtLoginSenha.Text == "")
             {
                 txtLoginSenha.Focus();
-                MessageBox.Show(@"Usuário e/ou senha inválido(s)", "Alerta!");
+                MessageBox.Show(@"Usuário e/ou senha inválido(s)", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -24,7 +24,7 @@ namespace ExpressDelivery
             var usuario = controle.Acessar(txtLoginUsuario.Text, txtLoginSenha.Text);
             if (usuario == null)
             {
-                MessageBox.Show(controle.Message);
+                MessageBox.Show(controle.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -42,6 +42,11 @@ namespace ExpressDelivery
         private void txtLoginSenha_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char) Keys.Enter) btnEntrar.Focus();
+        }
+
+        private void txtLoginUsuario_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char) Keys.Enter) txtLoginSenha.Focus();
         }
     }
 }

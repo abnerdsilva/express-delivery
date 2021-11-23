@@ -17,7 +17,7 @@ namespace ExpressDelivery.Repository
         {
             var usuario = new Usuario();
             
-            _cmd.CommandText = $"SELECT * FROM TB_USUARIO WHERE USUARIO = @LOGIN_USER AND SENHA = @PASS;";
+            _cmd.CommandText = $"SELECT * FROM TB_USUARIO WHERE USUARIO = @LOGIN_USER AND SENHA = @PASS AND STATUS_USUARIO=1;";
             _cmd.Parameters.AddWithValue("@LOGIN_USER", login);
             _cmd.Parameters.AddWithValue("@PASS", password);
 

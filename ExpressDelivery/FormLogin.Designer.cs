@@ -69,6 +69,7 @@ namespace ExpressDelivery
             this.txtLoginUsuario.Name = "txtLoginUsuario";
             this.txtLoginUsuario.Size = new System.Drawing.Size(184, 22);
             this.txtLoginUsuario.TabIndex = 2;
+            this.txtLoginUsuario.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtLoginUsuario_KeyPress);
             // 
             // label2
             // 
