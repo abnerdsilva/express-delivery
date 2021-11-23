@@ -43,7 +43,7 @@ namespace ExpressDelivery
             this.panelHomeBody = new System.Windows.Forms.Panel();
             this.panelSideMenu.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelSideMenu
@@ -58,7 +58,7 @@ namespace ExpressDelivery
             this.panelSideMenu.Controls.Add(this.btnFormDashbord);
             this.panelSideMenu.Controls.Add(this.panel1);
             this.panelSideMenu.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelSideMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panelSideMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.panelSideMenu.Location = new System.Drawing.Point(0, 0);
             this.panelSideMenu.Name = "panelSideMenu";
             this.panelSideMenu.Size = new System.Drawing.Size(200, 729);
@@ -167,6 +167,7 @@ namespace ExpressDelivery
             // 
             // panelHomeBody
             // 
+            this.panelHomeBody.BackColor = System.Drawing.SystemColors.Control;
             this.panelHomeBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelHomeBody.Location = new System.Drawing.Point(200, 0);
             this.panelHomeBody.Name = "panelHomeBody";
@@ -177,18 +178,20 @@ namespace ExpressDelivery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1008, 729);
             this.Controls.Add(this.panelHomeBody);
             this.Controls.Add(this.panelSideMenu);
+            this.Location = new System.Drawing.Point(15, 15);
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "FormHome";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Sistema de Gerenciamento de Pedidos";
+            this.Text = "ExpressDelivery - Sistema de Delivery";
             this.Load += new System.EventHandler(this.FormHome_Load);
             this.panelSideMenu.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
         }
 
