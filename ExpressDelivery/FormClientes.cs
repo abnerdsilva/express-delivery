@@ -160,12 +160,6 @@ namespace ExpressDelivery
                 return;
             }
             
-            if (txtCPF.Text.Equals(""))
-            {
-                MessageBox.Show(@"O campo CPF é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            
             if (txtCEP.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo cep é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -184,12 +178,6 @@ namespace ExpressDelivery
                 return;
             }
             
-            if (txtCidade.Text.Equals(""))
-            {
-                MessageBox.Show(@"O campo cidade é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            
             if (txtBairro.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo bairro é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -199,12 +187,6 @@ namespace ExpressDelivery
             if (txtTelefone.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo telefone é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            
-            if (cmbEstado.Text.Equals(""))
-            {
-                MessageBox.Show(@"O campo estado é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             

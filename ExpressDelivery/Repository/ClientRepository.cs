@@ -85,7 +85,8 @@ namespace ExpressDelivery.Repository
                         Id = Convert.ToInt16(_dr["COD_CLIENTE"]),
                         Nome = _dr["NOME"].ToString(),
                         Telefone = _dr["TELEFONE"].ToString(),
-                        Endereco = _dr["LOGRADOURO"].ToString()
+                        Endereco = _dr["LOGRADOURO"].ToString(),
+                        Status = Convert.ToInt16(_dr["STATUS_CLIENTE"]),
                     };
 
                     clients.Add(client);
@@ -95,13 +96,13 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                throw;
+                return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                throw;
+                return null;
             }
             finally
             {
@@ -115,7 +116,7 @@ namespace ExpressDelivery.Repository
         {
             List<Client> clients = new List<Client>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_CLIENTE WHERE COD_CLIENTE LIKE '%{id}%';";
+            _cmd.CommandText = $"SELECT * FROM TB_CLIENTE WHERE COD_CLIENTE={id};";
 
             try
             {
@@ -129,7 +130,8 @@ namespace ExpressDelivery.Repository
                         Id = Convert.ToInt16(_dr["COD_CLIENTE"]),
                         Nome = _dr["NOME"].ToString(),
                         Telefone = _dr["TELEFONE"].ToString(),
-                        Endereco = _dr["LOGRADOURO"].ToString()
+                        Endereco = _dr["LOGRADOURO"].ToString(),
+                        Status = Convert.ToInt16(_dr["STATUS_CLIENTE"]),
                     };
 
                     clients.Add(client);
