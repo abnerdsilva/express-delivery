@@ -32,6 +32,17 @@ namespace ExpressDelivery
             dtFim.Value = DateTime.Today;
             _localBusca = "GERAL";
 
+            cmbStatusPedidoData.Items.Clear();
+            cmbStatusPedidoCodigo.Items.Clear();
+            cmbStatusPedidoData.Items.Add("ABERTO");
+            cmbStatusPedidoData.Items.Add("BAIXADO");
+            cmbStatusPedidoData.Items.Add("CANCELADO");
+            cmbStatusPedidoData.Items.Add("TODOS");
+            cmbStatusPedidoCodigo.Items.Add("ABERTO");
+            cmbStatusPedidoCodigo.Items.Add("BAIXADO");
+            cmbStatusPedidoCodigo.Items.Add("CANCELADO");
+            cmbStatusPedidoCodigo.Items.Add("TODOS");
+
             CarregaDadosPedidos();
         }
 
@@ -114,11 +125,12 @@ namespace ExpressDelivery
 
         private void CarregaDadosPedidos()
         {
-            _pedidos?.Clear();
+            _pedidos.Clear();
+            listPedidos.Clear();
 
             if (_localBusca.Equals("DATA"))
                 _pedidos = _pedidoController.LoadByDate(dtInicio.Value.ToString("yyyy-MM-dd"),
-                    dtFim.Value.ToString("yyyy-MM-dd"));
+                    dtFim.Value.ToString("yyyy-MM-dd"), cmbStatusPedidoData.Text);
             else if (_localBusca.Equals("CODIGO"))
                 _pedidos = _pedidoController.LoadByCode(Convert.ToInt16(txtCodigoPedido.Text), cmbStatusPedidoCodigo.Text);
             else
@@ -187,6 +199,7 @@ namespace ExpressDelivery
         {
             var index = listPedidos.SelectedItems[0].SubItems[0].Text;
             PedidoSelecionado = _pedidos.Single(pedido1 => pedido1.Id.Equals(Convert.ToInt16(index)));
+            if (PedidoSelecionado.StatusPedido.Equals("BAIXADO") || PedidoSelecionado.StatusPedido.Equals("CANCELADO")) return;
             Dispose();
         }
 
@@ -197,12 +210,7 @@ namespace ExpressDelivery
                 MessageBox.Show(_pedidoController.MessageError, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else if (atualizado > 0)
             {
-                if (_localBusca.Equals("DATA"))
-                    CarregaDadosPedidos();
-                else if (_localBusca.Equals("CODIGO"))
-                    CarregaDadosPedidos();
-                else
-                    CarregaDadosPedidos();
+                CarregaDadosPedidos();
                 
                 btnCancelaPedido.Visible = false;
                 btnBaixarPedido.Visible = false;
@@ -217,12 +225,7 @@ namespace ExpressDelivery
                 MessageBox.Show(_pedidoController.MessageError, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else if (atualizado > 0)
             {
-                if (_localBusca.Equals("DATA"))
-                    CarregaDadosPedidos();
-                else if (_localBusca.Equals("CODIGO"))
-                    CarregaDadosPedidos();
-                else
-                    CarregaDadosPedidos();
+                CarregaDadosPedidos();
                 
                 btnCancelaPedido.Visible = false;
                 btnBaixarPedido.Visible = false;

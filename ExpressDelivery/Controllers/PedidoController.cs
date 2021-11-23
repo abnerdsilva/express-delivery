@@ -31,9 +31,9 @@ namespace ExpressDelivery.Controllers
             return resp;
         }
         
-        public List<Pedido> LoadByDate(string inicio, string fim)
+        public List<Pedido> LoadByDate(string inicio, string fim, string status)
         {
-            var resp = _pedidoRepository.LoadByDate(inicio, fim);
+            var resp = _pedidoRepository.LoadByDate(inicio, fim, status);
             MessageError = _pedidoRepository.Message;
             return resp;
         }

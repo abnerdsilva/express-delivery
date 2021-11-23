@@ -74,7 +74,7 @@ namespace ExpressDelivery
             // 
             // btnBuscarTodosDoDia
             // 
-            this.btnBuscarTodosDoDia.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.btnBuscarTodosDoDia.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBuscarTodosDoDia.Image = global::ExpressDelivery.Properties.Resources.search_list_black;
             this.btnBuscarTodosDoDia.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnBuscarTodosDoDia.Location = new System.Drawing.Point(640, 25);
@@ -89,7 +89,7 @@ namespace ExpressDelivery
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(218, 37);
@@ -112,7 +112,11 @@ namespace ExpressDelivery
             // cmbStatusPedidoCodigo
             // 
             this.cmbStatusPedidoCodigo.FormattingEnabled = true;
-            this.cmbStatusPedidoCodigo.Items.AddRange(new object[] {"TODOS", "ABERTO", "FECHADO"});
+            this.cmbStatusPedidoCodigo.Items.AddRange(new object[] {
+            "TODOS",
+            "ABERTO",
+            "BAIXADO",
+            "CANCELADO"});
             this.cmbStatusPedidoCodigo.Location = new System.Drawing.Point(142, 34);
             this.cmbStatusPedidoCodigo.Name = "cmbStatusPedidoCodigo";
             this.cmbStatusPedidoCodigo.Size = new System.Drawing.Size(101, 21);
@@ -149,7 +153,7 @@ namespace ExpressDelivery
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(13, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(99, 16);
@@ -174,7 +178,11 @@ namespace ExpressDelivery
             // cmbStatusPedidoData
             // 
             this.cmbStatusPedidoData.FormattingEnabled = true;
-            this.cmbStatusPedidoData.Items.AddRange(new object[] {"ABERTO", "FECHADO"});
+            this.cmbStatusPedidoData.Items.AddRange(new object[] {
+            "TODOS",
+            "ABERTO",
+            "BAIXADO",
+            "CANCELADO"});
             this.cmbStatusPedidoData.Location = new System.Drawing.Point(310, 35);
             this.cmbStatusPedidoData.Name = "cmbStatusPedidoData";
             this.cmbStatusPedidoData.Size = new System.Drawing.Size(89, 21);
@@ -213,7 +221,7 @@ namespace ExpressDelivery
             // 
             // label5
             // 
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(163, 36);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(46, 19);
@@ -222,7 +230,7 @@ namespace ExpressDelivery
             // 
             // label4
             // 
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(11, 36);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 19);
@@ -232,7 +240,7 @@ namespace ExpressDelivery
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(12, 15);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 16);
@@ -241,6 +249,7 @@ namespace ExpressDelivery
             // 
             // listPedidos
             // 
+            this.listPedidos.HideSelection = false;
             this.listPedidos.Location = new System.Drawing.Point(12, 208);
             this.listPedidos.Name = "listPedidos";
             this.listPedidos.Size = new System.Drawing.Size(768, 304);
@@ -252,7 +261,7 @@ namespace ExpressDelivery
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(12, 189);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(59, 16);
@@ -271,7 +280,7 @@ namespace ExpressDelivery
             // 
             // label7
             // 
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(30, 73);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(77, 20);
@@ -280,6 +289,7 @@ namespace ExpressDelivery
             // 
             // listDetalhePedido
             // 
+            this.listDetalhePedido.HideSelection = false;
             this.listDetalhePedido.Location = new System.Drawing.Point(12, 544);
             this.listDetalhePedido.Name = "listDetalhePedido";
             this.listDetalhePedido.Size = new System.Drawing.Size(768, 134);
@@ -289,7 +299,7 @@ namespace ExpressDelivery
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.Location = new System.Drawing.Point(16, 528);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(36, 16);

@@ -262,14 +262,18 @@ namespace ExpressDelivery.Repository
             return pedidos;
         }
 
-        public List<Pedido> LoadByDate(string inicio, string fim)
+        public List<Pedido> LoadByDate(string inicio, string fim, string status)
         {
             var pedidos = new List<Pedido>();
 
             try
             {
+                var cmdStatus =  $"AND STATUS_PEDIDO = '{status}'";
+                if (status.Equals("TODOS"))
+                    cmdStatus = "";
                 _cmd.CommandText =
-                    $"SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE WHERE DATA_PEDIDO BETWEEN '{inicio}' AND '{fim} 23:59:59';";
+                    $"SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE" +
+                    $" WHERE DATA_PEDIDO BETWEEN '{inicio}' AND '{fim} 23:59:59' {cmdStatus};";
                 _cmd.Connection = _con.Connect();
                 _dr = _cmd.ExecuteReader();
 
