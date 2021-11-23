@@ -146,20 +146,29 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BairroController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\ProdutoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="FormBairroTaxa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBairroTaxa.Designer.cs">
+      <DependentUpon>FormBairroTaxa.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormPedidos.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormPedidos.Designer.cs">
       <DependentUpon>FormPedidos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Bairro.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Usuario.cs" />
+    <Compile Include="Repository\BairroRepository.cs" />
     <Compile Include="Repository\ClientRepository.cs" />
     <Compile Include="Repository\ConexaoDBRepository.cs" />
     <Compile Include="Repository\LoginRepository.cs" />
@@ -211,6 +220,9 @@
     <Compile Include="Repository\PedidoRepository.cs" />
     <Compile Include="Repository\ProdutoRepository.cs" />
     <Compile Include="Repository\UsuarioRepository.cs" />
+    <EmbeddedResource Include="FormBairroTaxa.resx">
+      <DependentUpon>FormBairroTaxa.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormPedidos.resx">
       <DependentUpon>FormPedidos.cs</DependentUpon>
     </EmbeddedResource>

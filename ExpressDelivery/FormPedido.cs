@@ -18,15 +18,19 @@ namespace ExpressDelivery
         private readonly ClientController _clientController = new ClientController();
         private readonly ProdutoController _produtoController = new ProdutoController();
         private readonly PedidoController _pedidoController = new PedidoController();
+        private readonly BairroController _bairroController = new BairroController();
 
         private Client _clientSelected = new Client();
         private Product _productSelected = new Product();
         private List<Product> _products = new List<Product>();
         private List<PedidoItem> _pedidoItens = new List<PedidoItem>();
+        private List<Bairro> _bairros = new List<Bairro>();
         private double _vrTotalPedido;
 
         private void FormPedido_Load(object sender, EventArgs e)
         {
+            _bairros = _bairroController.LoadAll();
+
             ClearClient();
             ClearOrder();
         }
@@ -45,6 +49,11 @@ namespace ExpressDelivery
             cmbBairro.Text = "";
             txtObservacaoCliente.Text = "";
             txtTaxaEntrega.Text = "0.00";
+
+            foreach (var bairro in _bairros)
+            {
+                cmbBairro.Items.Add(bairro.Nome);
+            }
 
             _clientSelected = null;
             txtTelefone.Focus();
@@ -145,6 +154,20 @@ namespace ExpressDelivery
                 txtObservacaoCliente.Text = _clientSelected.Observacao;
                 txtCEP.Text = _clientSelected.CEP;
                 txtNumero.Text = _clientSelected.Numero.ToString();
+
+                foreach (var bairro in _bairros)
+                {
+                    if (bairro.Nome == _clientSelected.Bairro)
+                    {
+                        txtTaxaEntrega.Text = bairro.VrTaxa.ToString("0.00");
+                        break;
+                    }
+                }
+
+                if (txtTaxaEntrega.Text.Equals("0") || txtTaxaEntrega.Text.Equals("0.00"))
+                {
+                    txtTaxaEntrega.Enabled = true;
+                }
             }
 
             txtNome.Focus();
@@ -267,6 +290,8 @@ namespace ExpressDelivery
 
             panelClient.Enabled = false;
             panelOrder.Enabled = true;
+
+            txtVrTaxaEntrega.Text = txtTaxaEntrega.Text;
 
             txtCodBarras.Focus();
         }
@@ -472,7 +497,7 @@ namespace ExpressDelivery
             listProdutos.Items.Add(items);
 
             var vrTotalSemTaxa = 0.00;
-            var vrTotalTaxa = 3.00;
+            var vrTotalTaxa = Convert.ToDouble(txtVrTaxaEntrega.Text);
             _pedidoItens.ForEach(i => vrTotalSemTaxa += i.VrTotal);
             _vrTotalPedido = vrTotalSemTaxa + vrTotalTaxa;
 
@@ -600,12 +625,14 @@ namespace ExpressDelivery
             txtValorUnit.Text = "0.00";
             txtObservacaoProduto.Text = "";
             txtObservacaoProduto.Enabled = false;
+
+            var vrTotalPedido = pedido.VrTotal + pedido.VrTaxa;
             
             lblNrPedido.Text = pedido.Id.ToString();
-            txtVrTotalItens.Text = pedido.VrTaxa.ToString("0.00");
+            txtVrTotalItens.Text = pedido.VrTotal.ToString("0.00");
             txtVrTroco.Text = pedido.VrTroco.ToString("0.00");
             txtVrTaxaEntrega.Text = pedido.VrTaxa.ToString("0.00");
-            txtVrTotalPedido.Text = pedido.VrTotal.ToString("0.00");
+            txtVrTotalPedido.Text = vrTotalPedido.ToString("0.00");
             txtVrTrocoPara.Text = "";
             txtVrTrocoPara.Enabled = true;
             cmbFormaPagamento.Text = pedido.FormaPagamento;
@@ -681,6 +708,46 @@ namespace ExpressDelivery
 
             items.BackColor = Color.Brown;
             listProdutos.Items.Add(items);
+        }
+
+        private void btnCadastroBairros_Click(object sender, EventArgs e)
+        {
+            using (var formBairro = new FormBairroTaxa())
+            {
+                formBairro.ShowDialog();
+            }
+        }
+
+        private void cmbBairro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_clientSelected != null)
+            {
+                foreach (var bairro in _bairros)
+                {
+                    if (_clientSelected.Bairro != null)
+                    {
+                        if (bairro.Nome.ToUpper().Equals(_clientSelected.Bairro.ToUpper()))
+                        {
+                            txtTaxaEntrega.Text = bairro.VrTaxa.ToString("0.00");
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (bairro.Nome.ToUpper().Equals(cmbBairro.Text.ToUpper()))
+                        {
+                            txtTaxaEntrega.Text = bairro.VrTaxa.ToString("0.00");
+                            break;
+                        }
+                        
+                    }
+                }
+            }
+
+            if (txtTaxaEntrega.Text.Equals("0") || txtTaxaEntrega.Text.Equals("0.00"))
+            {
+                txtTaxaEntrega.Enabled = true;
+            }
         }
     }
 }
