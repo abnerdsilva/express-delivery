@@ -6,6 +6,7 @@ import delivery.model.PagamentoDelivery;
 import delivery.model.PedidoDelivery;
 import delivery.model.PedidoItemDelivery;
 import ifood.model.OrderIntegration;
+import ifood.model.dao.PedidoDao;
 import ifood.repository.OrderRepository;
 import log.LoggerInFile;
 
@@ -16,7 +17,6 @@ import java.util.List;
 public class Order {
 
     private final static OrderRepository repository = new OrderRepository();
-//    private final static OrderRepository repository = new OrderRepository();
 
     public static void saveOrdersPending() {
         try {
@@ -43,6 +43,41 @@ public class Order {
         } catch (SQLException e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
+        }
+    }
+
+    public static void ordersToConfirmProduction() {
+        List<PedidoDao> confirmedOrders = new ArrayList<>();
+        for (; ; ) {
+            try {
+                List<PedidoDao> ordersPending = repository.getOrdersToConfirmProduction();
+                for (PedidoDao orderPending : confirmedOrders) {
+                    var statusPedidoConfirmar = false;
+                    for (PedidoDao order : ordersPending) {
+//                        System.out.println(orderPending.toString());
+                        if (orderPending.getCodPedido() == order.getCodPedido()) {
+                            statusPedidoConfirmar = true;
+                        }
+                    }
+
+                    if (!statusPedidoConfirmar) {
+                        System.out.println("confirmar pedido -> " + orderPending.toString());
+                        if (repository.confirmProductionOrder(orderPending.getCodPedidoIntegracao())) {
+                            LoggerInFile.printInfo("Pedido confirmado com sucesso");
+                        }
+                    }
+                }
+
+                confirmedOrders = ordersPending;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

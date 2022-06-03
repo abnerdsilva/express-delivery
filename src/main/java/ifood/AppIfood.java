@@ -10,8 +10,8 @@ public class AppIfood {
     private final static long timeSleepRepeatAuthentication = 120000;
     private final static long timeSleepEvents = 30000;
     private final static long timeSleepOrders = 30000;
-    private final static long timeSleepConfirmationOrders = 50000;
-    private final static long timeSleepDispatchOrders = 50000;
+    private final static long timeSleepConfirmationOrders = 10000;
+    private final static long timeSleepDispatchOrders = 10000;
 
     public static boolean statusAuthentication = false;
 
@@ -69,6 +69,22 @@ public class AppIfood {
                         Order.saveOrdersPending();
                     }
                     Thread.sleep(timeSleepOrders);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    LoggerInFile.printError(e.getMessage());
+                }
+            }
+        }).start();
+
+        new Thread(() -> {
+            for (; ; ) {
+                try {
+                    if (statusAuthentication) {
+                        System.out.println("loop confirm order");
+
+                        Order.ordersToConfirmProduction();
+                    }
+                    Thread.sleep(timeSleepConfirmationOrders);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     LoggerInFile.printError(e.getMessage());
