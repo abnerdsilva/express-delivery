@@ -1,11 +1,13 @@
 package ifood;
 
 import ifood.controller.Auth;
+import ifood.controller.Event;
 import log.LoggerInFile;
 
 public class AppIfood {
     private final static long timeSleepAuthentication = 3600000;
     private final static long timeSleepRepeatAuthentication = 120000;
+    private final static long timeSleepEvents = 30000;
 
     public static boolean statusAuthentication = false;
 
@@ -31,6 +33,22 @@ public class AppIfood {
                     }
 
                     Thread.sleep(timeSleepAuthentication);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    LoggerInFile.printError(e.getMessage());
+                }
+            }
+        }).start();
+
+        new Thread(() -> {
+            for (; ; ) {
+                try {
+                    if (statusAuthentication) {
+                        System.out.println("loop events");
+
+                        Event.getEventsPolling();
+                    }
+                    Thread.sleep(timeSleepEvents);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     LoggerInFile.printError(e.getMessage());
