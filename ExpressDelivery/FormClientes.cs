@@ -189,11 +189,14 @@ namespace ExpressDelivery
                 MessageBox.Show(@"O campo telefone é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+            var cpf = txtCPF.Text;
+            if (!cpf.Equals(""))
+                cpf = Convert.ToUInt64(txtCPF.Text).ToString(@"000\.000\.000\-00");
+
             var client = new Client
             {
                 Nome = txtNome.Text,
-                CPF = txtCPF.Text,
+                CPF = cpf,
                 RG = txtRG.Text,
                 Endereco = txtEndereco.Text,
                 Numero = Convert.ToInt16(txtNumero.Text),
