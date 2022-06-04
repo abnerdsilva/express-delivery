@@ -130,10 +130,15 @@ public class Order {
             PedidoItemDelivery pedidoItemDelivery = new PedidoItemDelivery();
             pedidoItemDelivery.setNome(item.getName());
             pedidoItemDelivery.setCodExterno(item.getExternalCode());
-            pedidoItemDelivery.setObservacao(item.getObservations());
+            String obs = "";
+            for (ifood.model.Order.OrderItems.OrderItemsOptions option : item.getOptions()) {
+                obs += " " + option.getName() + "\n";
+            }
+            obs += " " + item.getObservations() + "\n";
+            pedidoItemDelivery.setObservacao(obs);
             pedidoItemDelivery.setQuantidade(item.getQuantity());
             pedidoItemDelivery.setVrDesconto(0);
-            pedidoItemDelivery.setVrAdicional(0);
+            pedidoItemDelivery.setVrAdicional(item.getOptionsPrice());
             pedidoItemDelivery.setVrUnit(item.getUnitPrice());
             pedidoItemDelivery.setVrTotal(item.getTotalPrice());
 
