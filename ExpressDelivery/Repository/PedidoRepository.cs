@@ -390,10 +390,10 @@ namespace ExpressDelivery.Repository
                                 oCommand.CommandText =
                                     $"INSERT INTO TB_PEDIDO (COD_CLIENTE, STATUS_PEDIDO, DATA_PEDIDO, VR_TOTAL, VR_TAXA, VR_TROCO," +
                                     $" LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP, TIPO_PEDIDO, ORIGEM, OBSERVACAO," +
-                                    $" FORMA_PAGAMENTO) VALUES ({order.CodCliente}, '{order.StatusPedido}', '{order.DataPedido:yyyy-MM-dd HH:mm:ss}'," +
+                                    $" FORMA_PAGAMENTO, IMPRIME_PEDIDO) VALUES ({order.CodCliente}, '{order.StatusPedido}', '{order.DataPedido:yyyy-MM-dd HH:mm:ss}'," +
                                     $" {order.VrTotal.ToString(nfi)}, {order.VrTaxa.ToString(nfi)}, {order.VrTroco.ToString(nfi)}, '{order.Logradouro}'," +
                                     $" {order.Numero}, '{order.Bairro}', '{order.Cidade}', '{order.Estado}', '{order.CEP}'," +
-                                    $" '{order.TipoPedido}', '{order.Origem}', '{order.Observacao}', '{order.FormaPagamento}');";
+                                    $" '{order.TipoPedido}', '{order.Origem}', '{order.Observacao}', '{order.FormaPagamento}', 1);";
                             }
                             else
                             {
@@ -402,8 +402,9 @@ namespace ExpressDelivery.Repository
                                     $" LOGRADOURO='{order.Logradouro}', NUMERO='{order.Numero}', FORMA_PAGAMENTO='{order.FormaPagamento}'," +
                                     $" BAIRRO='{order.Bairro}', CIDADE='{order.Cidade}', ESTADO='{order.Estado}', CEP='{order.CEP}'," +
                                     $" VR_TOTAL='{order.VrTotal.ToString(nfi)}', VR_TAXA='{order.VrTaxa.ToString(nfi)}'," +
-                                    $" VR_TROCO='{order.VrTroco}', TIPO_PEDIDO='{order.TipoPedido}', ORIGEM='{order.Origem}'," +
-                                    $" DATA_ATUALIZACAO='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', OBSERVACAO='{order.Observacao}'" +
+                                    $" VR_TROCO='{order.VrTroco}', TIPO_PEDIDO='{order.TipoPedido}'," +
+                                    $" DATA_ATUALIZACAO='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', OBSERVACAO='{order.Observacao}'," +
+                                    $" IMPRIME_PEDIDO=1" +
                                     $" WHERE COD_PEDIDO={order.Id};";
                             }
 
