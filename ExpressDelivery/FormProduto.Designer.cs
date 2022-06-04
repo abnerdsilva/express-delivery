@@ -200,6 +200,7 @@ namespace ExpressDelivery
             // 
             // panelDetalheCardapio
             // 
+            this.panelDetalheCardapio.Controls.Add(this.label8);
             this.panelDetalheCardapio.Controls.Add(this.cmbUnMedida);
             this.panelDetalheCardapio.Controls.Add(this.label14);
             this.panelDetalheCardapio.Controls.Add(this.txtLocalizacao);
@@ -208,7 +209,6 @@ namespace ExpressDelivery
             this.panelDetalheCardapio.Controls.Add(this.label13);
             this.panelDetalheCardapio.Controls.Add(this.label11);
             this.panelDetalheCardapio.Controls.Add(this.txtCodBarras);
-            this.panelDetalheCardapio.Controls.Add(this.label8);
             this.panelDetalheCardapio.Controls.Add(this.txtPrecoCompra);
             this.panelDetalheCardapio.Controls.Add(this.label12);
             this.panelDetalheCardapio.Controls.Add(this.txtPrecoVenda);
@@ -490,8 +490,8 @@ namespace ExpressDelivery
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(792, 690);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.painelConsultaCardapio);
             this.Controls.Add(this.panelDetalheCardapio);
+            this.Controls.Add(this.painelConsultaCardapio);
             this.Name = "FormCardapio";
             this.Text = "FormCardapio";
             this.painelConsultaCardapio.ResumeLayout(false);
