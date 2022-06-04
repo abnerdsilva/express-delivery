@@ -81,6 +81,41 @@ public class Order {
         }
     }
 
+    public static void ordersToConfirmDispatch() {
+        List<PedidoDao> dispatchOrders = new ArrayList<>();
+        for (; ; ) {
+            try {
+                List<PedidoDao> ordersPending = repository.getOrdersToDispatch();
+                for (PedidoDao orderPending : dispatchOrders) {
+                    var statusPedidoDispatch = false;
+                    for (PedidoDao order : ordersPending) {
+//                        System.out.println(orderPending.toString());
+                        if (orderPending.getCodPedido() == order.getCodPedido()) {
+                            statusPedidoDispatch = true;
+                        }
+                    }
+
+                    if (!statusPedidoDispatch) {
+                        System.out.println("despacha pedido -> " + orderPending.toString());
+                        if (repository.confirmDispatchOrder(orderPending.getCodPedidoIntegracao())) {
+                            LoggerInFile.printInfo("Pedido despachado com sucesso");
+                        }
+                    }
+                }
+
+                dispatchOrders = ordersPending;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private static PedidoDelivery trataPedido(ifood.model.Order order, OrderIntegration orderIntegration) {
         PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
         pagamentoDelivery.setNome(order.getPayments().getMethods().get(0).getCard().getBrand());

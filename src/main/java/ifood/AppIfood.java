@@ -91,5 +91,21 @@ public class AppIfood {
                 }
             }
         }).start();
+
+        new Thread(() -> {
+            for (; ; ) {
+                try {
+                    if (statusAuthentication) {
+                        System.out.println("loop dispatch order");
+
+                        Order.ordersToConfirmDispatch();
+                    }
+                    Thread.sleep(timeSleepDispatchOrders);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    LoggerInFile.printError(e.getMessage());
+                }
+            }
+        }).start();
     }
 }

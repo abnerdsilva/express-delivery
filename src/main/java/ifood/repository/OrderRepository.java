@@ -149,8 +149,74 @@ public class OrderRepository implements IOrderRepository {
         return ret;
     }
 
+    public boolean confirmDispatchOrder(String codPedidoIntegracao) {
+        boolean ret = false;
+
+        final String url = URL_BASE_IFOOD + "/order/v1.0/orders/" + codPedidoIntegracao + "/dispatch";
+        RequestBody requestBody = RequestBody.create(JSON_APPLICATION, "");
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", Geral.accessToken)
+                .addHeader("Content-type", "application/json")
+                .post(requestBody)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            ResponseBody responseBody = response.peekBody(Long.MAX_VALUE);
+
+            if (response.code() != 202) {
+                LoggerInFile.printError(responseBody.string());
+            } else {
+                ret = true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        }
+
+        return ret;
+    }
+
     public List<PedidoDao> getOrdersToConfirmProduction() throws SQLException {
         String sql = "SELECT * FROM TB_PEDIDO WHERE STATUS_PEDIDO='ABERTO' AND DATA_ATUALIZACAO IS NULL";
+
+        DatabaseConnection.connect();
+        connection = DatabaseConnection.connection;
+
+        List<PedidoDao> pedidos = new ArrayList<>();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet resultSet = stmt.executeQuery();
+            while (resultSet.next()) {
+                PedidoDao order = new PedidoDao();
+                order.setCodPedido(resultSet.getInt("cod_pedido"));
+                order.setCodCliente(resultSet.getInt("cod_cliente"));
+                order.setCodPedidoIntegracao(resultSet.getString("cod_pedido_integracao"));
+                order.setStatusPedido(resultSet.getString("status_pedido"));
+                order.setDataPedido(resultSet.getString("data_pedido"));
+                order.setDataEntrega(resultSet.getString("data_entrega"));
+                order.setVrTotal(resultSet.getDouble("vr_total"));
+                order.setVrTaxa(resultSet.getDouble("vr_taxa"));
+                order.setVrTroco(resultSet.getDouble("vr_troco"));
+                order.setOrigem(resultSet.getString("origem"));
+                order.setDataAtualizacao(resultSet.getString("data_atualizacao"));
+                order.setFormaPagamento(resultSet.getString("forma_pagamento"));
+                order.setObservacao(resultSet.getString("observacao"));
+                order.setTipoPedido(resultSet.getString("tipo_pedido"));
+
+                pedidos.add(order);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        }
+
+        return pedidos;
+    }
+
+    public List<PedidoDao> getOrdersToDispatch() throws SQLException {
+        String sql = "SELECT * FROM TB_PEDIDO WHERE STATUS_PEDIDO='ABERTO' AND DATA_ATUALIZACAO IS NOT NULL";
 
         DatabaseConnection.connect();
         connection = DatabaseConnection.connection;
