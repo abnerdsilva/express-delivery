@@ -25,7 +25,7 @@ namespace ExpressDelivery
             txtBairro.Text = "";
             txtIdBairro.Text = "0";
             txtVrTaxa.Text = "";
-            listBairros.Clear();
+            listBairros.Items.Clear();
         }
 
         private void btnCadastrar_Click(object sender, EventArgs e)
