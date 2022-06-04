@@ -783,8 +783,6 @@ namespace ExpressDelivery
 
         private System.Windows.Forms.TextBox txtObservacaoPedido;
 
-        private System.Windows.Forms.TextBox textBox1;
-
         private System.Windows.Forms.Label label24;
 
         private System.Windows.Forms.Label label11;
@@ -799,11 +797,7 @@ namespace ExpressDelivery
 
         private System.Windows.Forms.Label lblDataHora;
 
-        private System.Windows.Forms.Timer timer1;
-
         private System.Windows.Forms.Button btnSalvarCliente;
-
-        private System.Windows.Forms.Button btnSalvar;
 
         private System.Windows.Forms.ListView listProdutos;
 
@@ -843,7 +837,6 @@ namespace ExpressDelivery
         private System.Windows.Forms.TextBox txtCEP;
         private System.Windows.Forms.TextBox txtNumero;
         private System.Windows.Forms.TextBox txtDDD;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panelOrder;
         private System.Windows.Forms.Panel panelClient;
         private System.Windows.Forms.Label label2;

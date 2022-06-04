@@ -50,6 +50,7 @@ namespace ExpressDelivery
             txtObservacaoCliente.Text = "";
             txtTaxaEntrega.Text = "0.00";
 
+            cmbBairro.Items.Clear();
             foreach (var bairro in _bairros)
             {
                 cmbBairro.Items.Add(bairro.Nome);
@@ -145,7 +146,7 @@ namespace ExpressDelivery
         private void LoadClientByPhone()
         {
             _clientSelected = _clientController.LoadByPhone(txtTelefone.Text.Replace("\r", "").Replace("\n", ""));
-            if (_clientSelected != null)
+            if (_clientSelected != null && _clientSelected.Id != 0)
             {
                 txtIdCliente.Text = _clientSelected.Id.ToString();
                 txtNome.Text = _clientSelected.Nome;
@@ -247,7 +248,7 @@ namespace ExpressDelivery
             var rg = "";
             var status = 1;
 
-            if (_clientSelected != null)
+            if (_clientSelected != null && _clientSelected.Id > 0)
             {
                 clientId = _clientSelected.Id;
                 city = _clientSelected.Cidade;
@@ -285,6 +286,10 @@ namespace ExpressDelivery
 
             _products = _produtoController.LoadAll();
             _products.ForEach(product => cmbDescricaoProduto.Items.Add(product.Descricao));
+
+            var clienteCadastrado = _clientController.LoadByPhone(client.Telefone);
+            _clientSelected = clienteCadastrado;
+            txtIdCliente.Text = clienteCadastrado.Id.ToString();
 
             InicializaPedido();
 
@@ -605,6 +610,9 @@ namespace ExpressDelivery
 
         private void btnVisualizaPedidos_Click(object sender, EventArgs e)
         {
+            ClearClient();
+            ClearOrder();
+
             using (var formPedidos = new FormPedidos())
             {
                 formPedidos.ShowDialog();
@@ -715,6 +723,9 @@ namespace ExpressDelivery
             using (var formBairro = new FormBairroTaxa())
             {
                 formBairro.ShowDialog();
+
+                ClearClient();
+                ClearOrder();
             }
         }
 
