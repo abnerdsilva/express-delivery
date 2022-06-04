@@ -1,51 +1,45 @@
 package delivery.repository;
 
 import db.DatabaseConnection;
-import log.LoggerInFile;
 import delivery.model.dao.ClienteDao;
 import delivery.repository.interfaces.IClienteRepository;
+import log.LoggerInFile;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteRepository implements IClienteRepository {
-    private ResultSet resultSet;
-    private Connection connection;
-
     @Override
     public List<ClienteDao> loadAll() throws SQLException {
         String sql = "SELECT * FROM TB_CLIENTE";
 
         List<ClienteDao> clientes = new ArrayList<>();
 
-        try {
-            DatabaseConnection.connect();
-            connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            resultSet = stmt.executeQuery(sql);
-            while (resultSet.next()) {
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery(sql);
+            while (bd.rs.next()) {
                 ClienteDao cliente = new ClienteDao();
-                cliente.setCodCliente(resultSet.getInt("cod_cliente"));
-                cliente.setNome(resultSet.getString("nome"));
-                cliente.setTelefone(resultSet.getString("telefone"));
-                cliente.setEmail(resultSet.getString("email"));
-                cliente.setCpf(resultSet.getString("cpf"));
-                cliente.setRg(resultSet.getString("rg"));
-                cliente.setLogradouro(resultSet.getString("logradouro"));
-                cliente.setNumero(resultSet.getInt("numero"));
-                cliente.setBairro(resultSet.getString("bairro"));
-                cliente.setCidade(resultSet.getString("cidade"));
-                cliente.setEstado(resultSet.getString("estado"));
-                cliente.setCep(resultSet.getInt("cep"));
-                cliente.setStatusCliente(resultSet.getInt("status_cliente"));
-                cliente.setDataCadastro(resultSet.getString("data_cadastro"));
-                cliente.setDataAtualizacao(resultSet.getString("data_atualizacao"));
-                cliente.setObservacao(resultSet.getString("observacao"));
+                cliente.setCodCliente(bd.rs.getInt("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setDataCadastro(bd.rs.getString("data_cadastro"));
+                cliente.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
 
                 clientes.add(cliente);
             }
@@ -53,7 +47,7 @@ public class ClienteRepository implements IClienteRepository {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
         } finally {
-            DatabaseConnection.disconnect();
+            bd.close();
         }
 
         return clientes;
@@ -65,37 +59,37 @@ public class ClienteRepository implements IClienteRepository {
 
         ClienteDao cliente = null;
 
-        try {
-            DatabaseConnection.connect();
-            connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, idClient);
-            resultSet = stmt.executeQuery();
-            while (resultSet.next()) {
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.st.setInt(1, idClient);
+            bd.rs = bd.st.executeQuery();
+            if (bd.rs.next()) {
                 cliente = new ClienteDao();
-                cliente.setCodCliente(resultSet.getInt(1));
-                cliente.setNome(resultSet.getString(2));
-                cliente.setTelefone(resultSet.getString(3));
-                cliente.setEmail(resultSet.getString(4));
-                cliente.setCpf(resultSet.getString(5));
-                cliente.setRg(resultSet.getString(6));
-                cliente.setLogradouro(resultSet.getString(7));
-                cliente.setNumero(resultSet.getInt(8));
-                cliente.setBairro(resultSet.getString(9));
-                cliente.setCidade(resultSet.getString(10));
-                cliente.setEstado(resultSet.getString(11));
-                cliente.setCep(resultSet.getInt(12));
-                cliente.setStatusCliente(resultSet.getInt(13));
-                cliente.setDataCadastro(resultSet.getString(14));
-                cliente.setDataAtualizacao(resultSet.getString(15));
-                cliente.setObservacao(resultSet.getString(16));
+                cliente.setCodCliente(bd.rs.getInt(1));
+                cliente.setNome(bd.rs.getString(2));
+                cliente.setTelefone(bd.rs.getString(3));
+                cliente.setEmail(bd.rs.getString(4));
+                cliente.setCpf(bd.rs.getString(5));
+                cliente.setRg(bd.rs.getString(6));
+                cliente.setLogradouro(bd.rs.getString(7));
+                cliente.setNumero(bd.rs.getInt(8));
+                cliente.setBairro(bd.rs.getString(9));
+                cliente.setCidade(bd.rs.getString(10));
+                cliente.setEstado(bd.rs.getString(11));
+                cliente.setCep(bd.rs.getInt(12));
+                cliente.setStatusCliente(bd.rs.getInt(13));
+                cliente.setDataCadastro(bd.rs.getString(14));
+                cliente.setDataAtualizacao(bd.rs.getString(15));
+                cliente.setObservacao(bd.rs.getString(16));
             }
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
         } finally {
-            DatabaseConnection.disconnect();
+            bd.close();
         }
 
         return cliente;
@@ -105,19 +99,19 @@ public class ClienteRepository implements IClienteRepository {
     public int loadMaxClientId() throws SQLException {
         String sql = "SELECT MAX(COD_CLIENTE) AS clientID FROM TB_CLIENTE";
 
-        try {
-            DatabaseConnection.connect();
-            connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            resultSet = stmt.executeQuery();
-            if (resultSet.next())
-                return resultSet.getInt(1);
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+            if (bd.rs.next())
+                return bd.rs.getInt(1);
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
         } finally {
-            DatabaseConnection.disconnect();
+            bd.close();
         }
 
         return -1;
@@ -127,25 +121,25 @@ public class ClienteRepository implements IClienteRepository {
     public int save(ClienteDao client) throws SQLException {
         String sql = "INSERT INTO TB_CLIENTE (NOME, TELEFONE, EMAIL, CPF, RG, LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP, DATA_CADASTRO, OBSERVACAO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        try {
-            DatabaseConnection.connect();
-            connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, client.getNome());
-            stmt.setString(2, client.getTelefone());
-            stmt.setString(3, client.getEmail());
-            stmt.setString(4, client.getCpf());
-            stmt.setString(5, client.getRg());
-            stmt.setString(6, client.getLogradouro());
-            stmt.setInt(7, client.getNumero());
-            stmt.setString(8, client.getBairro());
-            stmt.setString(9, client.getCidade());
-            stmt.setString(10, client.getEstado());
-            stmt.setInt(11, client.getCep());
-            stmt.setString(12, client.getDataCadastro());
-            stmt.setString(13, client.getObservacao());
-            int resultInsert = stmt.executeUpdate();
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.st.setString(1, client.getNome());
+            bd.st.setString(2, client.getTelefone());
+            bd.st.setString(3, client.getEmail());
+            bd.st.setString(4, client.getCpf());
+            bd.st.setString(5, client.getRg());
+            bd.st.setString(6, client.getLogradouro());
+            bd.st.setInt(7, client.getNumero());
+            bd.st.setString(8, client.getBairro());
+            bd.st.setString(9, client.getCidade());
+            bd.st.setString(10, client.getEstado());
+            bd.st.setInt(11, client.getCep());
+            bd.st.setString(12, client.getDataCadastro());
+            bd.st.setString(13, client.getObservacao());
+            int resultInsert = bd.st.executeUpdate();
             if (resultInsert > 0) {
                 int maxClientId = loadMaxClientId();
                 if (maxClientId > 0) {
@@ -156,7 +150,7 @@ public class ClienteRepository implements IClienteRepository {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
         } finally {
-            DatabaseConnection.disconnect();
+            bd.close();
         }
 
         return -1;

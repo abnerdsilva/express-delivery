@@ -10,8 +10,9 @@ import log.LoggerInFile;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +23,6 @@ import static ifood.utils.Geral.URL_BASE_IFOOD;
 public class EventsRepository implements IEventsRepository {
 
     private final OkHttpClient client = new OkHttpClient();
-    private Connection connection;
 
     @Override
     public List<EventsPolling> getEvents() {
@@ -70,17 +70,13 @@ public class EventsRepository implements IEventsRepository {
                 + "'" + event.getCode() + "', "
                 + 0 + ")";
 
-        try {
-            DatabaseConnection.connect();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
         try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
+            bd.st = bd.connection.prepareStatement(sql);
 
-            int resultInsert = stmt.executeUpdate();
+            int resultInsert = bd.st.executeUpdate();
             if (resultInsert > 0) {
                 return true;
             }
@@ -88,12 +84,7 @@ public class EventsRepository implements IEventsRepository {
             er.printStackTrace();
             LoggerInFile.printError(er.getMessage());
         } finally {
-            try {
-                DatabaseConnection.disconnect();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                LoggerInFile.printError(e.getMessage());
-            }
+            bd.close();
         }
 
         return false;
@@ -106,18 +97,12 @@ public class EventsRepository implements IEventsRepository {
                 + " codigo_status_integracao='" + event.getCode() + "'"
                 + " WHERE cod_pedido_integracao='" + event.getOrderId() + "';";
 
-        try {
-            DatabaseConnection.connect();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            LoggerInFile.printError(e.getMessage());
-            return false;
-        }
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
-        connection = DatabaseConnection.connection;
         try {
-            PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            int result = stmt.executeUpdate();
+            bd.st = bd.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            int result = bd.st.executeUpdate();
             if (result > 0) {
                 System.out.println("Generated: " + result);
             }
@@ -126,6 +111,8 @@ public class EventsRepository implements IEventsRepository {
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
         }
 
         return false;
@@ -135,13 +122,13 @@ public class EventsRepository implements IEventsRepository {
     public boolean findEventHeader(EventsPolling event) throws SQLException {
         String sql = "SELECT * FROM TB_PEDIDO_INTEGRACAO WHERE cod_pedido_integracao = ?";
 
-        DatabaseConnection.connect();
-        connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
         try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, event.getOrderId());
-            ResultSet resultSet = stmt.executeQuery();
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.st.setString(1, event.getOrderId());
+            ResultSet resultSet = bd.st.executeQuery();
             if (resultSet.next()) {
                 if (resultSet.getInt(1) > 0) {
                     return true;
@@ -150,6 +137,8 @@ public class EventsRepository implements IEventsRepository {
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
         }
 
         return false;

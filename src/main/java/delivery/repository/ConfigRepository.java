@@ -1,49 +1,43 @@
 package delivery.repository;
 
 import db.DatabaseConnection;
-import log.LoggerInFile;
 import delivery.model.dao.ConfigDao;
 import delivery.repository.interfaces.IConfigRepository;
+import log.LoggerInFile;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigRepository implements IConfigRepository {
-    private ResultSet resultSet;
-    private Connection connection;
-    private PreparedStatement stmt;
-
     @Override
-
     public List<ConfigDao> loadAll() {
         String sql = "SELECT * FROM TB_CONFIGURACAO";
 
         List<ConfigDao> configurations = new ArrayList<>();
 
-        try {
-            DatabaseConnection.connect();
-            connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            resultSet = stmt.executeQuery(sql);
-            while (resultSet.next()) {
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery(sql);
+            while (bd.rs.next()) {
                 ConfigDao config = new ConfigDao();
-                config.setItem(resultSet.getString(1));
-                config.setFlag1(resultSet.getString(2));
-                config.setFlag2(resultSet.getString(3));
-                config.setFlag3(resultSet.getString(4));
-                config.setFlag4(resultSet.getString(5));
-                config.setFlag5(resultSet.getString(6));
+                config.setItem(bd.rs.getString(1));
+                config.setFlag1(bd.rs.getString(2));
+                config.setFlag2(bd.rs.getString(3));
+                config.setFlag3(bd.rs.getString(4));
+                config.setFlag4(bd.rs.getString(5));
+                config.setFlag5(bd.rs.getString(6));
 
                 configurations.add(config);
             }
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
         }
 
         return configurations;
@@ -55,29 +49,29 @@ public class ConfigRepository implements IConfigRepository {
 
         ConfigDao config = null;
 
-        try {
-            DatabaseConnection.connect();
-            connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
-            stmt = connection.prepareStatement(sql);
-            stmt.setString(1, item);
-            resultSet = stmt.executeQuery();
-            while (resultSet.next()) {
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.st.setString(1, item);
+            bd.rs = bd.st.executeQuery();
+            while (bd.rs.next()) {
                 config = new ConfigDao();
-                config.setCodConfiguracao(resultSet.getInt(1));
-                config.setItem(resultSet.getString(2));
-                config.setFlag1(resultSet.getString(3));
-                config.setFlag2(resultSet.getString(4));
-                config.setFlag3(resultSet.getString(5));
-                config.setFlag4(resultSet.getString(6));
-                config.setFlag5(resultSet.getString(7));
+                config.setCodConfiguracao(bd.rs.getInt(1));
+                config.setItem(bd.rs.getString(2));
+                config.setFlag1(bd.rs.getString(3));
+                config.setFlag2(bd.rs.getString(4));
+                config.setFlag3(bd.rs.getString(5));
+                config.setFlag4(bd.rs.getString(6));
+                config.setFlag5(bd.rs.getString(7));
             }
+            bd.st.close();
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
         } finally {
-            DatabaseConnection.disconnect();
-            stmt.close();
+            bd.close();
         }
 
         return config;

@@ -10,8 +10,8 @@ import log.LoggerInFile;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.*;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import static ifood.utils.Geral.JSON;
 import static ifood.utils.Geral.URL_BASE_IFOOD;
@@ -19,8 +19,6 @@ import static ifood.utils.Geral.URL_BASE_IFOOD;
 public class UserCodeRepository implements IUserCodeRepository {
 
     private final OkHttpClient client = new OkHttpClient();
-    private ResultSet resultSet;
-    private Connection connection;
 
     @Override
     public UserCode postUserCode(String json) throws IOException {
@@ -71,21 +69,23 @@ public class UserCodeRepository implements IUserCodeRepository {
                 + "FLAG4='" + expiresIn + "' "
                 + "WHERE  ITEM = 'INTEGRA_IFOOD'";
 
-        ResultSet resultSet;
-        DatabaseConnection.connect();
-        connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
         try {
-            PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            bd.st = bd.connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
 
-            prepsInsertProduct.execute();
-            resultSet = prepsInsertProduct.getGeneratedKeys();
+            bd.st.execute();
+            bd.rs = bd.st.getGeneratedKeys();
 
-            while (resultSet.next()) {
-                System.out.println("Generated: " + resultSet.getString(1));
+            while (bd.rs.next()) {
+                System.out.println("Generated: " + bd.rs.getString(1));
             }
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
         }
     }
 
@@ -96,23 +96,25 @@ public class UserCodeRepository implements IUserCodeRepository {
                 + "FLAG3='" + refresToken + "' "
                 + "WHERE ITEM = 'INTEGRA_IFOOD_TOKEN'";
 
-        ResultSet resultSet;
-        DatabaseConnection.connect();
-        connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
         try {
-            PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            bd.st = bd.connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
 
-            prepsInsertProduct.execute();
-            resultSet = prepsInsertProduct.getGeneratedKeys();
+            bd.st.execute();
+            bd.rs = bd.st.getGeneratedKeys();
 
-            while (resultSet.next()) {
-                System.out.println("Generated: " + resultSet.getString(1));
+            while (bd.rs.next()) {
+                System.out.println("Generated: " + bd.rs.getString(1));
             }
 
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
         }
 
         return false;
@@ -121,27 +123,30 @@ public class UserCodeRepository implements IUserCodeRepository {
     public ConfigDao findConfigUserCode() throws SQLException {
         String sql = "SELECT * FROM TB_CONFIGURACAO WHERE ITEM = 'INTEGRA_IFOOD'";
 
-        DatabaseConnection.connect();
-        connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
         ConfigDao config = null;
 
         try {
-            Statement stmt = connection.createStatement();
-            resultSet = stmt.executeQuery(sql);
-            while (resultSet.next()) {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+            while (bd.rs.next()) {
                 config = new ConfigDao();
-                config.setCodConfiguracao(resultSet.getInt(1));
-                config.setItem(resultSet.getString(2));
-                config.setFlag1(resultSet.getString(3));
-                config.setFlag2(resultSet.getString(4));
-                config.setFlag3(resultSet.getString(5));
-                config.setFlag4(resultSet.getString(6));
-                config.setFlag5(resultSet.getString(7));
+                config.setCodConfiguracao(bd.rs.getInt(1));
+                config.setItem(bd.rs.getString(2));
+                config.setFlag1(bd.rs.getString(3));
+                config.setFlag2(bd.rs.getString(4));
+                config.setFlag3(bd.rs.getString(5));
+                config.setFlag4(bd.rs.getString(6));
+                config.setFlag5(bd.rs.getString(7));
             }
+            bd.st.close();
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
         }
 
         return config;
@@ -150,27 +155,29 @@ public class UserCodeRepository implements IUserCodeRepository {
     public ConfigDao findConfigToken() throws SQLException {
         String sql = "SELECT * FROM TB_CONFIGURACAO WHERE ITEM = 'INTEGRA_IFOOD_TOKEN'";
 
-        DatabaseConnection.connect();
-        connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
         ConfigDao config = null;
 
         try {
-            Statement stmt = connection.createStatement();
-            resultSet = stmt.executeQuery(sql);
-            while (resultSet.next()) {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+            while (bd.rs.next()) {
                 config = new ConfigDao();
-                config.setCodConfiguracao(resultSet.getInt(1));
-                config.setItem(resultSet.getString(2));
-                config.setFlag1(resultSet.getString(3));
-                config.setFlag2(resultSet.getString(4));
-                config.setFlag3(resultSet.getString(5));
-                config.setFlag4(resultSet.getString(6));
-                config.setFlag5(resultSet.getString(7));
+                config.setCodConfiguracao(bd.rs.getInt(1));
+                config.setItem(bd.rs.getString(2));
+                config.setFlag1(bd.rs.getString(3));
+                config.setFlag2(bd.rs.getString(4));
+                config.setFlag3(bd.rs.getString(5));
+                config.setFlag4(bd.rs.getString(6));
+                config.setFlag5(bd.rs.getString(7));
             }
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
         }
 
         return config;

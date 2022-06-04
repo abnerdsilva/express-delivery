@@ -1,54 +1,48 @@
 package delivery.repository;
 
 import db.DatabaseConnection;
-import log.LoggerInFile;
 import delivery.model.dao.ProdutoDao;
 import delivery.repository.interfaces.IProdutoRepository;
+import log.LoggerInFile;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ProdutoRepository implements IProdutoRepository {
-    private ResultSet resultSet;
-    private Connection connection;
-
     @Override
     public ProdutoDao loadById(int id) throws IOException, SQLException {
         String sql = "SELECT * FROM TB_PRODUTO WHERE COD_PRODUTO=?";
 
         ProdutoDao produto = null;
 
-        try {
-            DatabaseConnection.connect();
-            connection = DatabaseConnection.connection;
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, id);
-            resultSet = stmt.executeQuery();
-            if (resultSet.next()) {
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.st.setInt(1, id);
+            bd.rs = bd.st.executeQuery();
+            if (bd.rs.next()) {
                 produto = new ProdutoDao();
-                produto.setCodProduto(resultSet.getInt(1));
-                produto.setCodBarras(resultSet.getString(2));
-                produto.setNome(resultSet.getString(3));
-                produto.setCategoria(resultSet.getString(4));
-                produto.setUnMedida(resultSet.getString(5));
-                produto.setVrCompra(resultSet.getDouble(6));
-                produto.setVrUnitario(resultSet.getDouble(7));
-                produto.setMargemLucro(resultSet.getDouble(8));
-                produto.setLocalizacao(resultSet.getString(9));
-                produto.setStatusProduto(resultSet.getInt(10));
-                produto.setDataCadastro(resultSet.getString(11));
-                produto.setDataAtualizacao(resultSet.getString(12));
-                produto.setObservacao(resultSet.getString(13));
+                produto.setCodProduto(bd.rs.getInt(1));
+                produto.setCodBarras(bd.rs.getString(2));
+                produto.setNome(bd.rs.getString(3));
+                produto.setCategoria(bd.rs.getString(4));
+                produto.setUnMedida(bd.rs.getString(5));
+                produto.setVrCompra(bd.rs.getDouble(6));
+                produto.setVrUnitario(bd.rs.getDouble(7));
+                produto.setMargemLucro(bd.rs.getDouble(8));
+                produto.setLocalizacao(bd.rs.getString(9));
+                produto.setStatusProduto(bd.rs.getInt(10));
+                produto.setDataCadastro(bd.rs.getString(11));
+                produto.setDataAtualizacao(bd.rs.getString(12));
+                produto.setObservacao(bd.rs.getString(13));
             }
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
         } finally {
-            DatabaseConnection.disconnect();
+            bd.close();
         }
 
         return produto;

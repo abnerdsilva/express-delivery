@@ -1,27 +1,59 @@
 package db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import log.LoggerInFile;
+
+import java.sql.*;
 
 public class DatabaseConnection {
 
-    private static final String DB_PORT = "1433";
-    private static final String DB_USER = "sa";
-    private static final String DB_PASS = "Senha@15937";
-    private static final String DB_HOST = "ec2-3-90-108-28.compute-1.amazonaws.com"; //localhost
-    private static final String DB_NAME = "expressDelivery"; //ExpressDelivery
-    private static final String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    private static final String DRIVER_NAME = "jdbc.Drivers";
-    private static final String PATH = "jdbc:sqlserver://" + DB_HOST + ":" + DB_PORT + ";databaseName=" + DB_NAME + "";
-    public static Connection connection;
+    private final String MSG_ERRO_DRIVER_NAO_ENCONTRADO = "Driver não encontrado";
+    private final String MSG_ERRO_FALHA_CONEXAO = "Falha na conexão";
 
-    public static void connect() throws SQLException {
-        System.setProperty(DRIVER_NAME, DRIVER);
-        connection = DriverManager.getConnection(PATH, DB_USER, DB_PASS);
+    private final String DB_PORT = "1433";
+    private final String DB_USER = "sa";
+    private final String DB_PASS = "Senha@15937";
+    private final String DB_HOST = "ec2-3-90-108-28.compute-1.amazonaws.com";
+    private final String DB_NAME = "expressDelivery";
+    private final String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+    private final String PATH = "jdbc:sqlserver://" + DB_HOST + ":" + DB_PORT + ";databaseName=" + DB_NAME + "";
+
+    public Connection connection;
+    public PreparedStatement st = null;
+    public ResultSet rs = null;
+
+    /**
+     * Abre uma conexão com o banco de dados a partir dos dados definidos acima
+     *
+     * @return - true em caso de sucesso ou false caso contrário
+     */
+    public boolean getConnection() {
+        boolean status = false;
+        try {
+            Class.forName(DRIVER);
+            connection = DriverManager.getConnection(PATH, DB_USER, DB_PASS);
+            status = true;
+        } catch (ClassNotFoundException erro) {
+            System.out.println(MSG_ERRO_DRIVER_NAO_ENCONTRADO);
+            LoggerInFile.printError(erro.getMessage());
+        } catch (SQLException erro) {
+            System.out.println(MSG_ERRO_FALHA_CONEXAO + ": " + erro.getMessage());
+            LoggerInFile.printError(erro.getMessage());
+        }
+        return status;
     }
 
-    public static void disconnect() throws SQLException {
-        connection.close();
+    /**
+     * Encerra a conexão com o banco de dados
+     */
+    public void close() {
+        try {
+            if (rs != null) rs.close();
+            if (st != null) st.close();
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException erro) {
+            LoggerInFile.printError(erro.getMessage());
+        }
     }
 }
