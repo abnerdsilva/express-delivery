@@ -195,21 +195,25 @@ namespace ExpressDelivery.Repository
         
         public int Save(Product product, string type)
         {
+            var precoCompra = product.PrecoCompra.ToString().Replace(",", ".");
+            var vrUnitario = product.PrecoVenda.ToString().Replace(",", ".");
+            var margemLucro = product.MargemLucro.ToString().Replace(",", ".");
+
             if (type == "new")
             {
                 _cmd.CommandText =
                     $"INSERT INTO TB_PRODUTO (NOME, CATEGORIA, VR_COMPRA, VR_UNITARIO, LOCALIZACAO, STATUS_PRODUTO," +
                     $" MARGEM_LUCRO, UN_MEDIDA, OBSERVACAO, COD_BARRAS) VALUES ('{product.Descricao}'," +
-                    $" '{product.Categoria}', {product.PrecoCompra}, {product.PrecoVenda}, '{product.Localizacao}'," +
-                    $" {product.Status}, {product.MargemLucro}, '{product.UnMedida}', '{product.Observacao}'," +
+                    $" '{product.Categoria}', {precoCompra}, {vrUnitario}, '{product.Localizacao}'," +
+                    $" {product.Status}, {margemLucro}, '{product.UnMedida}', '{product.Observacao}'," +
                     $" '{product.CodBarras}');";
             }
             else
             {
                 _cmd.CommandText =
                     $"UPDATE TB_PRODUTO SET NOME='{product.Descricao}', CATEGORIA='{product.Categoria}'," +
-                    $" VR_COMPRA={product.PrecoCompra}, VR_UNITARIO={product.PrecoVenda}, LOCALIZACAO='{product.Localizacao}'," +
-                    $" STATUS_PRODUTO={product.Status}, MARGEM_LUCRO={product.MargemLucro}, UN_MEDIDA='{product.UnMedida}'," +
+                    $" VR_COMPRA={precoCompra}, VR_UNITARIO={vrUnitario}, LOCALIZACAO='{product.Localizacao}'," +
+                    $" STATUS_PRODUTO={product.Status}, MARGEM_LUCRO={margemLucro}, UN_MEDIDA='{product.UnMedida}'," +
                     $" OBSERVACAO='{product.Observacao}', COD_BARRAS='{product.CodBarras}'," +
                     $" DATA_ATUALIZACAO='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' WHERE COD_PRODUTO={product.Id};";
             }
