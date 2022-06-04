@@ -77,7 +77,7 @@ public class ImprimeController {
 
             if (p.getObservacao() != null) {
                 if (!p.getObservacao().isEmpty()) {
-                    textToPrint += imprimir.preencheLinha("Obs.: " + p.getObservacao(), " ", 60, "E");
+                    textToPrint += imprimir.preencheLinha("  Obs.: " + p.getObservacao(), " ", 60, "E");
                     textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
                 }
             }
