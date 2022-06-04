@@ -1,15 +1,15 @@
 package delivery.controller;
 
-import db.DatabaseConnection;
+import delivery.model.ClienteDelivery;
+import delivery.model.PedidoDelivery;
 import delivery.model.dao.ClienteDao;
 import delivery.model.dao.PedidoDao;
 import delivery.model.dao.PedidoItemDao;
 import delivery.model.dao.ProdutoDao;
-import log.LoggerInFile;
-import log.MessageDefault;
-import delivery.model.*;
 import delivery.repository.PedidoRepository;
 import delivery.repository.ProdutoRepository;
+import log.LoggerInFile;
+import log.MessageDefault;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -93,8 +93,6 @@ public class PedidoController {
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
-        } finally {
-            DatabaseConnection.disconnect();
         }
 
         return -1;

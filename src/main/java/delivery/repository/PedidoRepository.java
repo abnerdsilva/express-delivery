@@ -15,8 +15,37 @@ import java.util.List;
 
 public class PedidoRepository implements IPedidoRepository {
     @Override
-    public List<PedidoDao> loadAllOrders() throws IOException {
-        return null;
+    public List<PedidoItemDao> loadItensByCode(int code) throws IOException {
+        String sql = "SELECT * FROM TB_PEDIDO_ITEM WHERE COD_PEDIDO = " + code;
+
+        List<PedidoItemDao> itens = new ArrayList<>();
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+            while (bd.rs.next()) {
+                PedidoItemDao item = new PedidoItemDao();
+                item.setCodPedido(bd.rs.getInt("cod_pedido"));
+                item.setCodPedidoItem(bd.rs.getInt("cod_pedido_item"));
+                item.setCodProduto(bd.rs.getInt("cod_produto"));
+                item.setObservacao(bd.rs.getString("observacao"));
+                item.setQuantidade(bd.rs.getInt("quantidade"));
+                item.setVrTotal(bd.rs.getDouble("vr_total"));
+                item.setVrUnitario(bd.rs.getDouble("vr_unitario"));
+
+                itens.add(item);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return itens;
     }
 
     @Override
@@ -141,12 +170,80 @@ public class PedidoRepository implements IPedidoRepository {
     }
 
     @Override
-    public int update(String idPedido) {
-        return 0;
+    public int updateOrderPrinted(int idPedido) throws SQLException {
+        int ret = -1;
+
+        String insertSql = "UPDATE TB_PEDIDO SET IMPRIME_PEDIDO=0 WHERE COD_PEDIDO = ?";
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            PreparedStatement prepsInsertProduct = bd.connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            prepsInsertProduct.setInt(1, idPedido);
+            prepsInsertProduct.execute();
+            bd.rs = prepsInsertProduct.getGeneratedKeys();
+
+            if (bd.rs.next()) {
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return ret;
     }
 
     @Override
     public int delete(String idPedido) {
         return 0;
+    }
+
+    public List<PedidoDao> getPedidosParaImprimir() throws SQLException {
+        String sql = "SELECT * FROM TB_PEDIDO WHERE IMPRIME_PEDIDO = 1";
+
+        List<PedidoDao> pedidos = new ArrayList<>();
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+            while (bd.rs.next()) {
+                PedidoDao pedido = new PedidoDao();
+                pedido.setCodPedido(bd.rs.getInt("cod_pedido"));
+                pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
+                pedido.setDataEntrega(bd.rs.getString("data_entrega"));
+                pedido.setDataPedido(bd.rs.getString("data_pedido"));
+                pedido.setLogradouro(bd.rs.getString("logradouro"));
+                pedido.setNumero(bd.rs.getInt("numero"));
+                pedido.setBairro(bd.rs.getString("bairro"));
+                pedido.setCidade(bd.rs.getString("cidade"));
+                pedido.setEstado(bd.rs.getString("estado"));
+                pedido.setCep(bd.rs.getString("cep"));
+                pedido.setTipoPedido(bd.rs.getString("tipo_pedido"));
+                pedido.setOrigem(bd.rs.getString("origem"));
+                pedido.setObservacao(bd.rs.getString("observacao"));
+                pedido.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                pedido.setFormaPagamento(bd.rs.getString("forma_pagamento"));
+                pedido.setCodCliente(bd.rs.getInt("cod_cliente"));
+                pedido.setVrTotal(bd.rs.getDouble("vr_total"));
+                pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
+                pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+
+                pedidos.add(pedido);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return pedidos;
     }
 }

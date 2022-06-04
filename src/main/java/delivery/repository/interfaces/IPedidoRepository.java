@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IPedidoRepository {
-    List<PedidoDao> loadAllOrders() throws IOException;
+    List<PedidoItemDao> loadItensByCode(int code) throws IOException;
 
     PedidoDao loadOrderById(int idPedido) throws IOException, SQLException;
 
@@ -18,7 +18,7 @@ public interface IPedidoRepository {
 
     int saveOrderItem(PedidoItemDao item) throws Exception;
 
-    int update(String idPedido);
+    int updateOrderPrinted(int idPedido) throws SQLException;
 
     int delete(String idPedido);
 }
