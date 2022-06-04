@@ -1,14 +1,13 @@
 package delivery;
 
+import delivery.controller.ImprimeController;
 import delivery.controller.PedidoController;
 import delivery.model.ClienteDelivery;
 import delivery.model.PagamentoDelivery;
 import delivery.model.PedidoDelivery;
 import delivery.model.PedidoItemDelivery;
-import imprime.Impressora;
 import log.LoggerInFile;
 
-import javax.print.PrintException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +16,7 @@ import java.util.List;
 
 public class AppDelivery {
     private static final PedidoController pedidoController = new PedidoController();
+    private static final ImprimeController imprimeController = new ImprimeController();
 
     public static void main(String[] args) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -30,18 +30,19 @@ public class AppDelivery {
         pagamentoDelivery.setValor(15.5);
 
         List<PedidoItemDelivery> itens = new ArrayList<>();
+        for (int i = 1; i < 5; i++) {
+            PedidoItemDelivery pedidoItemDelivery = new PedidoItemDelivery();
+            pedidoItemDelivery.setNome("Esfiha de carne " + i);
+            pedidoItemDelivery.setCodExterno(Integer.toString(i));
+            pedidoItemDelivery.setObservacao("tesdfksjhskfjd lskdjfksdfl");
+            pedidoItemDelivery.setQuantidade(1);
+            pedidoItemDelivery.setVrDesconto(0);
+            pedidoItemDelivery.setVrAdicional(0);
+            pedidoItemDelivery.setVrUnit(15.587);
+            pedidoItemDelivery.setVrTotal(15.587);
 
-        PedidoItemDelivery pedidoItemDelivery = new PedidoItemDelivery();
-        pedidoItemDelivery.setNome("Esfiha de carne");
-        pedidoItemDelivery.setCodExterno("1");
-        pedidoItemDelivery.setObservacao("Sem azeitona");
-        pedidoItemDelivery.setQuantidade(1);
-        pedidoItemDelivery.setVrDesconto(0);
-        pedidoItemDelivery.setVrAdicional(0);
-        pedidoItemDelivery.setVrUnit(15.5);
-        pedidoItemDelivery.setVrTotal(15.5);
-
-        itens.add(pedidoItemDelivery);
+            itens.add(pedidoItemDelivery);
+        }
 
         ClienteDelivery clienteDelivery = new ClienteDelivery();
         clienteDelivery.setNome("Abner Silva");
@@ -57,7 +58,7 @@ public class AppDelivery {
         clienteDelivery.setTelefone("(19)995323443");
 
         PedidoDelivery pedidoDelivery = new PedidoDelivery();
-        pedidoDelivery.setCodPedido(0);
+        pedidoDelivery.setCodPedido(123);
         pedidoDelivery.setDataCriacao(now.format(dtf));
         pedidoDelivery.setAgendado(false);
         pedidoDelivery.setDataEntrega("2022/04/22 23:58:00");
@@ -65,7 +66,7 @@ public class AppDelivery {
         pedidoDelivery.setReferencia("123");
         pedidoDelivery.setReferenciaCurta("");
         pedidoDelivery.setTipo("ENTREGA");
-        pedidoDelivery.setVrTotal(15.5);
+        pedidoDelivery.setVrTotal(15.585);
         pedidoDelivery.setVrAdicional(0.0);
         pedidoDelivery.setVrDesconto(0.0);
         pedidoDelivery.setPagamento(pagamentoDelivery);
@@ -80,41 +81,8 @@ public class AppDelivery {
             LoggerInFile.printError(e.getMessage());
         }
 
-        Impressora imprimir = new Impressora();
-
-        String textToPrint = "\n-----------------------------------------------------------\n";
-        textToPrint += imprimir.preencheLinha("Pedido Delivery", " ", 60, "E");
-        textToPrint += "\n-----------------------------------------------------------";
-
-        textToPrint += "\n";
-        textToPrint += "\n";
-
-        textToPrint += imprimir.preencheLinha("VIA: 1", "*", 60, "ED");
-        textToPrint += "\n";
-        textToPrint += "\n";
-
-        textToPrint += imprimir.preencheLinha("Nome", " ", 40, "M")
-                + imprimir.preencheLinha("Qtde", " ", 7, "M")
-                + imprimir.preencheLinha("V.Unit", " ", 7, "M")
-                + imprimir.preencheLinha("V.Total", " ", 7, "M");
-//                + preencheLinha("1", "*", 6, "EDB")
-//                + preencheLinha("1540,54", "*", 10, "EDB") + "\n";
-        for (var p : pedidoDelivery.getItens()) {
-            textToPrint += imprimir.preencheLinha(p.getNome(), "-", 40, "M");
-//                + preencheLinha("1", "*", 6, "EDB")
-//                + preencheLinha("1540,54", "*", 10, "EDB") + "\n";
+        if (imprimeController.imprimePedido(pedidoDelivery)) {
+            LoggerInFile.printInfo("Pedido impresso com sucesso");
         }
-
-
-        imprimir.detectaImpressoras();
-        try {
-            imprimir.imprime(textToPrint);
-            imprimir.imprime("\n");
-            imprimir.imprime("\n");
-        } catch (PrintException e) {
-            e.printStackTrace();
-            LoggerInFile.printError(e.getMessage());
-        }
-//        imprimir.imprime2();
     }
 }
