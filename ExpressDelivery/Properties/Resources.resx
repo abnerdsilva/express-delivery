@@ -130,4 +130,19 @@
   <data name="add1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="EXPRESS_DELIVERY__1_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EXPRESS_DELIVERY__1_.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EXPRESS_DELIVERY__2_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EXPRESS_DELIVERY__2_.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EXPRESS_DELIVERY" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EXPRESS_DELIVERY.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EXPRESS_DELIVERY1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EXPRESS_DELIVERY1.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EXPRESS_DELIVERY2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EXPRESS_DELIVERY2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

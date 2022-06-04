@@ -83,6 +83,56 @@ namespace ExpressDelivery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap EXPRESS_DELIVERY {
+            get {
+                object obj = ResourceManager.GetObject("EXPRESS_DELIVERY", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EXPRESS_DELIVERY__1_ {
+            get {
+                object obj = ResourceManager.GetObject("EXPRESS_DELIVERY__1_", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EXPRESS_DELIVERY__2_ {
+            get {
+                object obj = ResourceManager.GetObject("EXPRESS_DELIVERY__2_", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EXPRESS_DELIVERY1 {
+            get {
+                object obj = ResourceManager.GetObject("EXPRESS_DELIVERY1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EXPRESS_DELIVERY2 {
+            get {
+                object obj = ResourceManager.GetObject("EXPRESS_DELIVERY2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap no_imagem {
             get {
                 object obj = ResourceManager.GetObject("no_imagem", resourceCulture);

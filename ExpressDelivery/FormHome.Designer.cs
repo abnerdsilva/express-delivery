@@ -43,7 +43,7 @@ namespace ExpressDelivery
             this.panelHomeBody = new System.Windows.Forms.Panel();
             this.panelSideMenu.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelSideMenu
@@ -58,7 +58,7 @@ namespace ExpressDelivery
             this.panelSideMenu.Controls.Add(this.btnFormDashbord);
             this.panelSideMenu.Controls.Add(this.panel1);
             this.panelSideMenu.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelSideMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.panelSideMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelSideMenu.Location = new System.Drawing.Point(0, 0);
             this.panelSideMenu.Name = "panelSideMenu";
             this.panelSideMenu.Size = new System.Drawing.Size(200, 729);
@@ -157,11 +157,11 @@ namespace ExpressDelivery
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::ExpressDelivery.Properties.Resources.no_imagem;
+            this.pictureBox1.Image = global::ExpressDelivery.Properties.Resources.EXPRESS_DELIVERY__2_;
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(194, 128);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -191,8 +191,9 @@ namespace ExpressDelivery
             this.Load += new System.EventHandler(this.FormHome_Load);
             this.panelSideMenu.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.Button btnFormPedido;

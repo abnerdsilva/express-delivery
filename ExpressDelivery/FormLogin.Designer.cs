@@ -31,7 +31,6 @@ namespace ExpressDelivery
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLogin));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtLoginUsuario = new System.Windows.Forms.TextBox();
@@ -44,7 +43,7 @@ namespace ExpressDelivery
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Image = global::ExpressDelivery.Properties.Resources.EXPRESS_DELIVERY__2_;
             this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(270, 258);
