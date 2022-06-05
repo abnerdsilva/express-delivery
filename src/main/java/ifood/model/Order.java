@@ -384,9 +384,25 @@ public class Order {
         }
     }
 
-    private class OrderTakeout {
+    public class OrderTakeout {
         private String mode;
         private String takeoutDateTime;
+
+        public String getMode() {
+            return mode;
+        }
+
+        public void setMode(String mode) {
+            this.mode = mode;
+        }
+
+        public String getTakeoutDateTime() {
+            return takeoutDateTime;
+        }
+
+        public void setTakeoutDateTime(String takeoutDateTime) {
+            this.takeoutDateTime = takeoutDateTime;
+        }
     }
 
     private class OrderIndoor {
@@ -400,9 +416,25 @@ public class Order {
         private String deliveryDateTimeEnd;
     }
 
-    private class OrderMerchant {
+    public class OrderMerchant {
         private String id;
         private String name;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
 
         @Override
         public String toString() {

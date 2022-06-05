@@ -8,6 +8,7 @@ import delivery.model.PedidoItemDelivery;
 import ifood.model.OrderIntegration;
 import ifood.model.dao.PedidoDao;
 import ifood.repository.OrderRepository;
+import ifood.utils.Geral;
 import log.LoggerInFile;
 
 import java.sql.SQLException;
@@ -131,8 +132,10 @@ public class Order {
             pedidoItemDelivery.setNome(item.getName());
             pedidoItemDelivery.setCodExterno(item.getExternalCode());
             String obs = "";
-            for (ifood.model.Order.OrderItems.OrderItemsOptions option : item.getOptions()) {
-                obs += " " + option.getName() + "\n";
+            if (item.getOptions() != null) {
+                for (ifood.model.Order.OrderItems.OrderItemsOptions option : item.getOptions()) {
+                    obs += " " + option.getName() + "\n";
+                }
             }
             obs += " " + item.getObservations() + "\n";
             pedidoItemDelivery.setObservacao(obs);
@@ -149,16 +152,38 @@ public class Order {
         clienteDelivery.setNome(order.getCustomer().getName());
         clienteDelivery.setCodCliente(1006);
         clienteDelivery.setDocumento(order.getCustomer().getDocumentNumber());
-        clienteDelivery.setBairro(order.getDelivery().getDeliveryAddress().getNeighborhood());
-        clienteDelivery.setLogradouro(order.getDelivery().getDeliveryAddress().getStreetName());
+        String logradouro = "";
+        String bairro = "";
+        String city = "";
+        String state = "";
+        String postalCode = "0";
         int numero = 0;
-        if (order.getDelivery().getDeliveryAddress().getStreeNumber() != null) {
-            numero = Integer.parseInt(order.getDelivery().getDeliveryAddress().getStreeNumber());
+        String dataEntrega = "";
+        String observacao = "";
+        String referencia = "";
+
+        if (order.getDelivery() != null) {
+            logradouro = order.getDelivery().getDeliveryAddress().getStreetName();
+            bairro = order.getDelivery().getDeliveryAddress().getNeighborhood();
+            postalCode = order.getDelivery().getDeliveryAddress().getPostalCode();
+            state = order.getDelivery().getDeliveryAddress().getState();
+            city = order.getDelivery().getDeliveryAddress().getCity();
+            if (order.getDelivery().getDeliveryAddress().getStreeNumber() != null)
+                numero = Integer.parseInt(order.getDelivery().getDeliveryAddress().getStreeNumber());
+            referencia = order.getDelivery().getDeliveryAddress().getReference();
+            observacao = order.getDelivery().getObservations();
+            dataEntrega = Geral.formateDateToLocal(order.getDelivery().getDeliveryDateTime());
         }
+        if (order.getTakeout() != null) {
+            dataEntrega = Geral.formateDateToLocal(order.getTakeout().getTakeoutDateTime());
+        }
+
+        clienteDelivery.setBairro(bairro);
+        clienteDelivery.setLogradouro(logradouro);
         clienteDelivery.setNumero(numero);
-        clienteDelivery.setCidade(order.getDelivery().getDeliveryAddress().getCity());
-        clienteDelivery.setEstado(order.getDelivery().getDeliveryAddress().getState());
-        clienteDelivery.setCep(Integer.parseInt(order.getDelivery().getDeliveryAddress().getPostalCode()));
+        clienteDelivery.setCidade(city);
+        clienteDelivery.setEstado(state);
+        clienteDelivery.setCep(Integer.parseInt(postalCode));
         clienteDelivery.setEmail("");
         clienteDelivery.setTelefone(order.getDisplayId());
 
@@ -166,12 +191,12 @@ public class Order {
 
         PedidoDelivery pedidoDelivery = new PedidoDelivery();
         pedidoDelivery.setCodPedido(0);
-        pedidoDelivery.setDataCriacao(order.getCreatedAt());
+        pedidoDelivery.setDataCriacao(Geral.formateDateToLocal(order.getCreatedAt()));
 //        pedidoDelivery.setDataCriacao(lt1.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
         pedidoDelivery.setAgendado(!order.getOrderTiming().equals("IMMEDIATE"));
-        pedidoDelivery.setDataEntrega(order.getDelivery().getDeliveryDateTime());
-        pedidoDelivery.setObservacao(order.getDelivery().getObservations());
-        pedidoDelivery.setReferencia(order.getDelivery().getDeliveryAddress().getReference());
+        pedidoDelivery.setDataEntrega(dataEntrega);
+        pedidoDelivery.setObservacao(observacao);
+        pedidoDelivery.setReferencia(referencia);
         pedidoDelivery.setReferenciaCurta(order.getDisplayId());
         pedidoDelivery.setTipo(order.getOrderType());
         pedidoDelivery.setVrTotal(order.getTotal().getSubTotal());

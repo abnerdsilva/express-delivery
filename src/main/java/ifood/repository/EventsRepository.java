@@ -65,7 +65,7 @@ public class EventsRepository implements IEventsRepository {
 //                + 0 + ", "
                 + "'" + event.getId() + "', "
                 + "'" + event.getOrderId() + "', "
-                + "'" + event.getCreatedAt() + "', "
+                + "'" + Geral.formateDateToLocal(event.getCreatedAt()) + "', "
                 + "'" + event.getFullCode() + "', "
                 + "'" + event.getCode() + "', "
                 + 0 + ")";
