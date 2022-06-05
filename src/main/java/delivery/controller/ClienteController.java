@@ -8,7 +8,13 @@ import java.sql.SQLException;
 public class ClienteController {
     private final ClienteRepository clienteRepository = new ClienteRepository();
 
-    long checkClientExists(int idClient) {
+    /**
+     * verifica se cliente informado existe
+     *
+     * @param idClient - codigo do cliente
+     * @return -
+     */
+    public long checkClientExists(int idClient) {
         try {
             ClienteDao cliente = clienteRepository.loadById(idClient);
             if (cliente != null) {
@@ -21,6 +27,13 @@ public class ClienteController {
         return -1;
     }
 
+    /**
+     * solicita salvar cliente no banco de dados
+     *
+     * @param cliente - dados do cliente
+     * @return - retorna id do cliente que foi salvo
+     * @throws SQLException - retorna exceção quando ocorre erro
+     */
     public int addCliente(ClienteDao cliente) throws SQLException {
         return clienteRepository.save(cliente);
     }

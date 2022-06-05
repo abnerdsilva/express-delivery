@@ -3,7 +3,6 @@ package ifood.repository.interfaces;
 import ifood.model.EventsAcknowledgment;
 import ifood.model.EventsPolling;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface IEventsRepository {
@@ -13,7 +12,7 @@ public interface IEventsRepository {
 
     boolean updateEventHeader(EventsPolling event);
 
-    boolean findEventHeader(EventsPolling event) throws SQLException;
+    boolean findEventHeader(String orderId);
 
     void postEventsAcknowledgment(List<EventsAcknowledgment> eventsAcknowledgments);
 }

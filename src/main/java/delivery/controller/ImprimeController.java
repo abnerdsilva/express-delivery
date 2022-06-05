@@ -29,6 +29,7 @@ public class ImprimeController {
 
     /**
      * imprime pedido de acordo com dados informados
+     *
      * @param pedido - dados do pedido
      * @return - status do processo de imprimir pedido
      */
@@ -124,6 +125,9 @@ public class ImprimeController {
         return statusImpressao;
     }
 
+    /**
+     * inicia processo de loop para imprimir pedidos
+     */
     public void startPrinter() {
         new Thread(() -> {
             for (; ; ) {
@@ -138,25 +142,21 @@ public class ImprimeController {
                         pagamentoDelivery.setValor(p.getVrTotal());
 
                         List<PedidoItemDelivery> itens = new ArrayList<>();
-                        try {
-                            List<PedidoItemDao> itensPedido = pedidoRepository.loadItensByCode(p.getCodPedido());
-                            for (PedidoItemDao it : itensPedido) {
-                                ProdutoDao produtoDao = produtoRepository.loadById(it.getCodProduto());
+                        List<PedidoItemDao> itensPedido = pedidoRepository.loadItensByCode(p.getCodPedido());
+                        for (PedidoItemDao it : itensPedido) {
+                            ProdutoDao produtoDao = produtoRepository.loadById(it.getCodProduto());
 
-                                PedidoItemDelivery item = new PedidoItemDelivery();
-                                item.setNome(produtoDao.getNome());
-                                item.setCodExterno(Integer.toString(it.getCodProduto()));
-                                item.setObservacao(it.getObservacao());
-                                item.setQuantidade(it.getQuantidade());
-                                item.setVrDesconto(0);
-                                item.setVrAdicional(0);
-                                item.setVrUnit(it.getVrUnitario());
-                                item.setVrTotal(it.getVrTotal());
+                            PedidoItemDelivery item = new PedidoItemDelivery();
+                            item.setNome(produtoDao.getNome());
+                            item.setCodExterno(Integer.toString(it.getCodProduto()));
+                            item.setObservacao(it.getObservacao());
+                            item.setQuantidade(it.getQuantidade());
+                            item.setVrDesconto(0);
+                            item.setVrAdicional(0);
+                            item.setVrUnit(it.getVrUnitario());
+                            item.setVrTotal(it.getVrTotal());
 
-                                itens.add(item);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            itens.add(item);
                         }
 
                         ClienteDao clienteDao = clienteRepository.loadById(p.getCodCliente());

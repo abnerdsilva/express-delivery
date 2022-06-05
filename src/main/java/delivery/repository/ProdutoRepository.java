@@ -5,12 +5,14 @@ import delivery.model.dao.ProdutoDao;
 import delivery.repository.interfaces.IProdutoRepository;
 import log.LoggerInFile;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 public class ProdutoRepository implements IProdutoRepository {
+    /**
+     * consulta dados do produto de acordo com codigo do produto solicitado
+     * @param id - codigo do produto que será consultado
+     * @return - retorna informações do produto consultado
+     */
     @Override
-    public ProdutoDao loadById(int id) throws IOException, SQLException {
+    public ProdutoDao loadById(int id) {
         String sql = "SELECT * FROM TB_PRODUTO WHERE COD_PRODUTO=?";
 
         ProdutoDao produto = null;

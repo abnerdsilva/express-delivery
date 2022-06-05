@@ -16,8 +16,6 @@ public class Impressora {
             "(Generic Text Only) e reinicie o programa.";
     private static PrintService impressora;
 
-    private static String impressoraSelecionada = "";
-
     /**
      * Construtor
      */
@@ -98,6 +96,16 @@ public class Impressora {
         return false;
     }
 
+    /**
+     * preenche linha com caracteres, com tamanho e posição de alinhamento informado e espaço em branco
+     * ou retirada de caracteres
+     *
+     * @param sequencia - texto que será preenchido
+     * @param txtSub    - texto que deseja preencher os espaços em branco
+     * @param tamanho   - tamanho maximo de caracteres
+     * @param posicao   - posição de alinhamento
+     * @return - retorna texto com preenchimento ou retirada de caracteres
+     */
     public String preencheLinha(String sequencia, String txtSub, long tamanho, String posicao) {
         StringBuilder caracteresPreenchidos = new StringBuilder();
         String novoTexto = "";

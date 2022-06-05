@@ -19,60 +19,58 @@ public class Order {
 
     private final static OrderRepository repository = new OrderRepository();
 
+    /**
+     * consulta detalhes dos pedidos pendentes junto ao ifood,
+     * solicita tratamento dos pedidos recebidos e solicita salvar os detalhes dos pedidos
+     */
     public static void saveOrdersPending() {
-        try {
-            List<OrderIntegration> ordersPending = repository.getOrdersPendingToConfirmation();
+        List<OrderIntegration> ordersPending = repository.getOrdersPendingToConfirmation();
 
-            if (ordersPending.size() > 0) {
-                for (OrderIntegration order : ordersPending) {
-                    ifood.model.Order orderDetails = repository.getOrderDetails(order.getCodPedidoIntegracao());
+        if (ordersPending.size() > 0) {
+            for (OrderIntegration order : ordersPending) {
+                ifood.model.Order orderDetails = repository.getOrderDetails(order.getCodPedidoIntegracao());
 
-                    PedidoDelivery pedido = trataPedido(orderDetails, order);
+                PedidoDelivery pedido = trataPedido(orderDetails, order);
 
-                    try {
-                        PedidoController pedidoController = new PedidoController();
-                        int orderId = pedidoController.savePedido(pedido);
-                        if (repository.updateOrderId(orderId, pedido.getCodPedidoIntegracao())) {
-                            LoggerInFile.printInfo("Sucesso");
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                        LoggerInFile.printError(e.getMessage());
+                try {
+                    PedidoController pedidoController = new PedidoController();
+                    int orderId = pedidoController.savePedido(pedido);
+                    if (repository.updateOrderId(orderId, pedido.getCodPedidoIntegracao())) {
+                        LoggerInFile.printInfo("Sucesso");
                     }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    LoggerInFile.printError(e.getMessage());
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            LoggerInFile.printError(e.getMessage());
         }
     }
 
+    /**
+     * loop de consulta pedidos pendentes para confirmar a produção junto ao ifood
+     */
     public static void ordersToConfirmProduction() {
         List<PedidoDao> confirmedOrders = new ArrayList<>();
         for (; ; ) {
-            try {
-                List<PedidoDao> ordersPending = repository.getOrdersToConfirmProduction();
-                for (PedidoDao orderPending : confirmedOrders) {
-                    var statusPedidoConfirmar = false;
-                    for (PedidoDao order : ordersPending) {
+            List<PedidoDao> ordersPending = repository.getOrdersToConfirmProduction();
+            for (PedidoDao orderPending : confirmedOrders) {
+                var statusPedidoConfirmar = false;
+                for (PedidoDao order : ordersPending) {
 //                        System.out.println(orderPending.toString());
-                        if (orderPending.getCodPedido() == order.getCodPedido()) {
-                            statusPedidoConfirmar = true;
-                        }
-                    }
-
-                    if (!statusPedidoConfirmar) {
-                        System.out.println("confirmar pedido -> " + orderPending.toString());
-                        if (repository.confirmProductionOrder(orderPending.getCodPedidoIntegracao())) {
-                            LoggerInFile.printInfo("Pedido confirmado com sucesso");
-                        }
+                    if (orderPending.getCodPedido() == order.getCodPedido()) {
+                        statusPedidoConfirmar = true;
                     }
                 }
 
-                confirmedOrders = ordersPending;
-            } catch (SQLException e) {
-                e.printStackTrace();
+                if (!statusPedidoConfirmar) {
+                    System.out.println("confirmar pedido -> " + orderPending.toString());
+                    if (repository.confirmProductionOrder(orderPending.getCodPedidoIntegracao())) {
+                        LoggerInFile.printInfo("Pedido confirmado com sucesso");
+                    }
+                }
             }
+
+            confirmedOrders = ordersPending;
 
             try {
                 Thread.sleep(10000);
@@ -82,32 +80,31 @@ public class Order {
         }
     }
 
+    /**
+     * loop de consulta de pedidos pendentes informar despacho
+     */
     public static void ordersToConfirmDispatch() {
         List<PedidoDao> dispatchOrders = new ArrayList<>();
         for (; ; ) {
-            try {
-                List<PedidoDao> ordersPending = repository.getOrdersToDispatch();
-                for (PedidoDao orderPending : dispatchOrders) {
-                    var statusPedidoDispatch = false;
-                    for (PedidoDao order : ordersPending) {
+            List<PedidoDao> ordersPending = repository.getOrdersToDispatch();
+            for (PedidoDao orderPending : dispatchOrders) {
+                var statusPedidoDispatch = false;
+                for (PedidoDao order : ordersPending) {
 //                        System.out.println(orderPending.toString());
-                        if (orderPending.getCodPedido() == order.getCodPedido()) {
-                            statusPedidoDispatch = true;
-                        }
-                    }
-
-                    if (!statusPedidoDispatch) {
-                        System.out.println("despacha pedido -> " + orderPending.toString());
-                        if (repository.confirmDispatchOrder(orderPending.getCodPedidoIntegracao())) {
-                            LoggerInFile.printInfo("Pedido despachado com sucesso");
-                        }
+                    if (orderPending.getCodPedido() == order.getCodPedido()) {
+                        statusPedidoDispatch = true;
                     }
                 }
 
-                dispatchOrders = ordersPending;
-            } catch (SQLException e) {
-                e.printStackTrace();
+                if (!statusPedidoDispatch) {
+                    System.out.println("despacha pedido -> " + orderPending.toString());
+                    if (repository.confirmDispatchOrder(orderPending.getCodPedidoIntegracao())) {
+                        LoggerInFile.printInfo("Pedido despachado com sucesso");
+                    }
+                }
             }
+
+            dispatchOrders = ordersPending;
 
             try {
                 Thread.sleep(10000);
@@ -117,6 +114,13 @@ public class Order {
         }
     }
 
+    /**
+     * trata dados do pedido para salvar no banco de dados
+     *
+     * @param order            - informações do pedido
+     * @param orderIntegration - informações do cabeçalho do pedido de integração
+     * @return - retorna pedido tratado
+     */
     private static PedidoDelivery trataPedido(ifood.model.Order order, OrderIntegration orderIntegration) {
         PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
         pagamentoDelivery.setNome(order.getPayments().getMethods().get(0).getCard().getBrand());

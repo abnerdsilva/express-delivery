@@ -4,7 +4,6 @@ import delivery.model.dao.ConfigDao;
 import delivery.repository.ConfigRepository;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public class ConfigController {
     public final String permitionGranted = "SIM";
@@ -17,6 +16,12 @@ public class ConfigController {
 
     ConfigRepository configRepository = new ConfigRepository();
 
+    /**
+     * verifica permissão de uso do modulo de integração com ifood
+     *
+     * @return - retorna status da permissão de integração
+     * @throws SQLException - retorna exceção quando ocorre erro de SQL
+     */
     public boolean checkIntegrationPermition() throws SQLException {
         ConfigDao config = configRepository.load(itemConfigurationIfood);
         if (config != null) {
@@ -29,6 +34,12 @@ public class ConfigController {
         return false;
     }
 
+    /**
+     * verifica permissão de uso do modulo de integração com ifood
+     *
+     * @return - retorna status da permissão do modulo de impressão
+     * @throws SQLException - retorna exceção quando ocorre erro de SQL
+     */
     public boolean checkPrinterPermition() throws SQLException {
         boolean ret = false;
         ConfigDao config = configRepository.load(CONFIG_MODULO_IMPRESSAO);
@@ -40,9 +51,5 @@ public class ConfigController {
             }
         }
         return ret;
-    }
-
-    public List<ConfigDao> loadConfigurations() {
-        return configRepository.loadAll();
     }
 }

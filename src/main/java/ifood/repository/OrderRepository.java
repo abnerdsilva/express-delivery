@@ -12,7 +12,6 @@ import log.LoggerInFile;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +23,13 @@ public class OrderRepository implements IOrderRepository {
 
     private final OkHttpClient client = new OkHttpClient();
 
+    /**
+     * consulta pedidos pendentes para baixar detalhes dos pedidos
+     *
+     * @return - retorna lista de pedidos pendentes - sem codigo do pedido salvo no cabeçalho
+     */
     @Override
-    public List<OrderIntegration> getOrdersPendingToConfirmation() throws SQLException {
+    public List<OrderIntegration> getOrdersPendingToConfirmation() {
         String sql = "SELECT * FROM TB_PEDIDO_INTEGRACAO WHERE nr_pedido = 0 AND codigo_status_integracao!='CAN'";
 
         DatabaseConnection bd = new DatabaseConnection();
@@ -57,6 +61,12 @@ public class OrderRepository implements IOrderRepository {
         return pedidos;
     }
 
+    /**
+     * consulta detalhes do pedido na api do ifood
+     *
+     * @param orderId - codigo do pedido do ifood
+     * @return - retorna detalhes do pedido
+     */
     @Override
     public Order getOrderDetails(String orderId) {
         final String url = URL_BASE_IFOOD + "/order/v1.0/orders/" + orderId;
@@ -91,6 +101,13 @@ public class OrderRepository implements IOrderRepository {
         return null;
     }
 
+    /**
+     * atualiza numero do pedido no cabeçalho do pedido de integração
+     *
+     * @param id                  - codigo interno do pedido
+     * @param codPedidoIntegracao - codigo do pedido da integração
+     * @return - retorna se foi atualizado numero do pedido
+     */
     @Override
     public boolean updateOrderId(int id, String codPedidoIntegracao) {
         String sql = "UPDATE TB_PEDIDO_INTEGRACAO SET"
@@ -116,6 +133,12 @@ public class OrderRepository implements IOrderRepository {
         return false;
     }
 
+    /**
+     * envia ordem de confirmação de produção para ifood
+     *
+     * @param codPedidoIntegracao - codigo do pedido do ifood
+     * @return - retorna status se foi aceito a confirmação pelo ifood
+     */
     @Override
     public boolean confirmProductionOrder(String codPedidoIntegracao) {
         boolean ret = false;
@@ -146,6 +169,13 @@ public class OrderRepository implements IOrderRepository {
         return ret;
     }
 
+    /**
+     * envia ordem de despacho do pedido para ifood
+     *
+     * @param codPedidoIntegracao - codigo do pedido do ifood
+     * @return - retorna status se foi aceito despacho do pedido pelo ifood
+     */
+    @Override
     public boolean confirmDispatchOrder(String codPedidoIntegracao) {
         boolean ret = false;
 
@@ -175,7 +205,13 @@ public class OrderRepository implements IOrderRepository {
         return ret;
     }
 
-    public List<PedidoDao> getOrdersToConfirmProduction() throws SQLException {
+    /**
+     * consulta pedidos pendentes para confirmar que será produzido
+     *
+     * @return - retorna lista com pedidos
+     */
+    @Override
+    public List<PedidoDao> getOrdersToConfirmProduction() {
         String sql = "SELECT * FROM TB_PEDIDO WHERE STATUS_PEDIDO='ABERTO' AND ORIGEM='IFOOD' AND DATA_ATUALIZACAO IS NULL";
 
         DatabaseConnection bd = new DatabaseConnection();
@@ -184,9 +220,6 @@ public class OrderRepository implements IOrderRepository {
         List<PedidoDao> pedidos = new ArrayList<>();
         try {
             bd.st = bd.connection.prepareStatement(sql);
-            if (bd.st == null) {
-                Thread.sleep(500);
-            }
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 PedidoDao order = new PedidoDao();
@@ -217,7 +250,13 @@ public class OrderRepository implements IOrderRepository {
         return pedidos;
     }
 
-    public List<PedidoDao> getOrdersToDispatch() throws SQLException {
+    /**
+     * consulta pedidos pendentes para despachar
+     *
+     * @return - retorna lista com pedidos pendentes para despachar
+     */
+    @Override
+    public List<PedidoDao> getOrdersToDispatch() {
         String sql = "SELECT * FROM TB_PEDIDO WHERE STATUS_PEDIDO='ABERTO' AND ORIGEM='IFOOD' AND DATA_ATUALIZACAO IS NOT NULL";
 
         DatabaseConnection bd = new DatabaseConnection();

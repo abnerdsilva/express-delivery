@@ -10,6 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteRepository implements IClienteRepository {
+    /**
+     * consulta todos os cliente cadastrados na tabela cliente
+     *
+     * @return - retorna lista com todos os clientes cadastrados
+     * @throws SQLException - retorna exceção quando ocorre erro de SQL
+     */
     @Override
     public List<ClienteDao> loadAll() throws SQLException {
         String sql = "SELECT * FROM TB_CLIENTE";
@@ -53,6 +59,13 @@ public class ClienteRepository implements IClienteRepository {
         return clientes;
     }
 
+    /**
+     * busca cliente através do id informado
+     *
+     * @param idClient - id do cliente que será consultado
+     * @return - retorna dados do cliente com modelo ClienteDao
+     * @throws SQLException - retorna exceção quando ocorre erro de SQL
+     */
     @Override
     public ClienteDao loadById(int idClient) throws SQLException {
         String sql = "SELECT * FROM TB_CLIENTE WHERE COD_CLIENTE=?";
@@ -95,6 +108,12 @@ public class ClienteRepository implements IClienteRepository {
         return cliente;
     }
 
+    /**
+     * busca id do ultimo cliente cadastrado na tabela cliente
+     *
+     * @return - retorna id do ultimo cliente
+     * @throws SQLException - retorna exceção quando ocorre erro de SQL
+     */
     @Override
     public int loadMaxClientId() throws SQLException {
         String sql = "SELECT MAX(COD_CLIENTE) AS clientID FROM TB_CLIENTE";
@@ -117,6 +136,13 @@ public class ClienteRepository implements IClienteRepository {
         return -1;
     }
 
+    /**
+     * salva cliente no banco de dados
+     *
+     * @param client - informações do cliente
+     * @return - retorna id do cliente cadastrado ou -1 quando ocorre erro
+     * @throws SQLException - retorna exceção quando ocorre erro de SQL
+     */
     @Override
     public int save(ClienteDao client) throws SQLException {
         String sql = "INSERT INTO TB_CLIENTE (NOME, TELEFONE, EMAIL, CPF, RG, LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP, DATA_CADASTRO, OBSERVACAO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";

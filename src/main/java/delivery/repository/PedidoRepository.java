@@ -14,8 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PedidoRepository implements IPedidoRepository {
+    /**
+     * consulta itens do pedido de acordo com codigo do pedido
+     *
+     * @param code - codigo do pedido que será consultado
+     * @return - retorna lista com itens do pedido
+     */
     @Override
-    public List<PedidoItemDao> loadItensByCode(int code) throws IOException {
+    public List<PedidoItemDao> loadItensByCode(int code) {
         String sql = "SELECT * FROM TB_PEDIDO_ITEM WHERE COD_PEDIDO = " + code;
 
         List<PedidoItemDao> itens = new ArrayList<>();
@@ -48,34 +54,13 @@ public class PedidoRepository implements IPedidoRepository {
         return itens;
     }
 
+    /**
+     * consulta codigo do ultimo pedido cadastrado
+     *
+     * @return - retorna codigo do ultimo pedido ou -1 quando ocorre erro
+     */
     @Override
-    public PedidoDao loadOrderById(int idPedido) throws SQLException {
-        String sql = "SELECT * FROM TB_PEDIDO WHERE COD_PEDIDO = ?";
-
-        PedidoDao pedido = null;
-
-        DatabaseConnection bd = new DatabaseConnection();
-        bd.getConnection();
-
-        try {
-            bd.st = bd.connection.prepareStatement(sql);
-            bd.st.setInt(1, idPedido);
-            bd.rs = bd.st.executeQuery(sql);
-            while (bd.rs.next()) {
-                pedido = new PedidoDao();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LoggerInFile.printError(e.getMessage());
-        } finally {
-            bd.close();
-        }
-
-        return pedido;
-    }
-
-    @Override
-    public int loadMaxOrder() throws SQLException {
+    public int loadMaxOrder() {
         String sql = "SELECT MAX(COD_PEDIDO) AS orderID FROM TB_PEDIDO";
 
         DatabaseConnection bd = new DatabaseConnection();
@@ -97,16 +82,20 @@ public class PedidoRepository implements IPedidoRepository {
         return -1;
     }
 
+    /**
+     * salva dados do pedido
+     *
+     * @param pedido - informações do pedido
+     * @return - retorna id do pedido cadastado ou -1 quando ocorre erro
+     */
     @Override
-    public int saveOrder(PedidoDao pedido) throws Exception {
+    public int saveOrder(PedidoDao pedido) {
         String sql = "INSERT INTO TB_PEDIDO (COD_CLIENTE, DATA_PEDIDO, DATA_ENTREGA, VR_TOTAL, VR_TAXA, VR_TROCO, LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP, TIPO_PEDIDO, ORIGEM, OBSERVACAO, FORMA_PAGAMENTO, cod_pedido_integracao) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
-        bd.connection.beginRequest();
-
         try {
-
+            bd.connection.beginRequest();
             bd.st = bd.connection.prepareStatement(sql);
             bd.st.setInt(1, pedido.getCodCliente());
             bd.st.setString(2, pedido.getDataPedido());
@@ -142,8 +131,14 @@ public class PedidoRepository implements IPedidoRepository {
         return -1;
     }
 
+    /**
+     * salva item do pedido
+     *
+     * @param item - informações do item
+     * @return - retorna id do item do pedido que foi salvo ou -1 quando ocorre erro
+     */
     @Override
-    public int saveOrderItem(PedidoItemDao item) throws Exception {
+    public int saveOrderItem(PedidoItemDao item) {
         String sql = "INSERT INTO TB_PEDIDO_ITEM (COD_PEDIDO, COD_PRODUTO, QUANTIDADE, VR_UNITARIO, VR_TOTAL, OBSERVACAO) VALUES (?,?,?,?,?,?)";
 
         DatabaseConnection bd = new DatabaseConnection();
@@ -169,8 +164,14 @@ public class PedidoRepository implements IPedidoRepository {
         return -1;
     }
 
+    /**
+     * atualiza status de impresso o pedido para 0
+     *
+     * @param idPedido - id do pedido que será atualizado
+     * @return - retorna 1 para atualizado e -1 quando ocorre erro
+     */
     @Override
-    public int updateOrderPrinted(int idPedido) throws SQLException {
+    public int updateOrderPrinted(int idPedido) {
         int ret = -1;
 
         String insertSql = "UPDATE TB_PEDIDO SET IMPRIME_PEDIDO=0 WHERE COD_PEDIDO = ?";
@@ -197,12 +198,13 @@ public class PedidoRepository implements IPedidoRepository {
         return ret;
     }
 
+    /**
+     * consulta pedidos que estão com status de imprime_pedido = 1
+     *
+     * @return - retorna lista com pedidos pendentes para imprimir
+     */
     @Override
-    public int delete(String idPedido) {
-        return 0;
-    }
-
-    public List<PedidoDao> getPedidosParaImprimir() throws SQLException {
+    public List<PedidoDao> getPedidosParaImprimir() {
         String sql = "SELECT * FROM TB_PEDIDO WHERE IMPRIME_PEDIDO = 1";
 
         List<PedidoDao> pedidos = new ArrayList<>();

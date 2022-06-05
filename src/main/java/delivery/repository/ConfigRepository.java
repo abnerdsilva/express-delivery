@@ -10,39 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigRepository implements IConfigRepository {
-    @Override
-    public List<ConfigDao> loadAll() {
-        String sql = "SELECT * FROM TB_CONFIGURACAO";
-
-        List<ConfigDao> configurations = new ArrayList<>();
-
-        DatabaseConnection bd = new DatabaseConnection();
-        bd.getConnection();
-
-        try {
-            bd.st = bd.connection.prepareStatement(sql);
-            bd.rs = bd.st.executeQuery(sql);
-            while (bd.rs.next()) {
-                ConfigDao config = new ConfigDao();
-                config.setItem(bd.rs.getString(1));
-                config.setFlag1(bd.rs.getString(2));
-                config.setFlag2(bd.rs.getString(3));
-                config.setFlag3(bd.rs.getString(4));
-                config.setFlag4(bd.rs.getString(5));
-                config.setFlag5(bd.rs.getString(6));
-
-                configurations.add(config);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LoggerInFile.printError(e.getMessage());
-        } finally {
-            bd.close();
-        }
-
-        return configurations;
-    }
-
+    /**
+     * consulta configuração técnica
+     *
+     * @param item - item de configuração que deseja consultar
+     * @return - retorna dados da configuração solicitada como ConfigDao
+     * @throws SQLException - retorna exceção quando ocorre erro de SQL
+     */
     @Override
     public ConfigDao load(String item) throws SQLException {
         String sql = "SELECT * FROM TB_CONFIGURACAO WHERE ITEM=?";
@@ -75,10 +49,5 @@ public class ConfigRepository implements IConfigRepository {
         }
 
         return config;
-    }
-
-    @Override
-    public ConfigDao save(ConfigDao config) {
-        return null;
     }
 }

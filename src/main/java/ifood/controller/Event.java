@@ -13,30 +13,29 @@ public class Event {
 
     private final static EventsRepository repository = new EventsRepository();
 
+    /**
+     * consulta eventos na lista de polling do ifood
+     * salva como cabeçalho na tabela TB_PEDIDO_INTEGRACAO
+     * confirma ai ifood que o evento foi recebido e salvo
+     */
     public static void getEventsPolling() {
         List<EventsPolling> events = repository.getEvents();
         if (events.size() > 0) {
             List<EventsAcknowledgment> eventsAcknowledgments = new ArrayList<>();
 
             for (EventsPolling e : events) {
-                try {
-                    if (!repository.findEventHeader(e)) {
-                        if (repository.saveEventHeader(e)) {
-                            eventsAcknowledgments.add(new EventsAcknowledgment(e.getId()));
-                        }
-                    } else {
-                        if (repository.updateEventHeader(e)) {
-                            eventsAcknowledgments.add(new EventsAcknowledgment(e.getId()));
-                        }
+                if (!repository.findEventHeader(e.getOrderId())) {
+                    if (repository.saveEventHeader(e)) {
+                        eventsAcknowledgments.add(new EventsAcknowledgment(e.getId()));
                     }
-                } catch (SQLException ex) {
-                    LoggerInFile.printError(ex.getMessage());
+                } else {
+                    if (repository.updateEventHeader(e)) {
+                        eventsAcknowledgments.add(new EventsAcknowledgment(e.getId()));
+                    }
                 }
             }
 
             repository.postEventsAcknowledgment(eventsAcknowledgments);
         }
-
-        events.forEach(p -> System.out.println(p.toString()));
     }
 }

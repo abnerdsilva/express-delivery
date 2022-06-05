@@ -11,7 +11,6 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +23,11 @@ public class EventsRepository implements IEventsRepository {
 
     private final OkHttpClient client = new OkHttpClient();
 
+    /**
+     * consulta eventos no polling pendentes na api do ifood
+     *
+     * @return - retorna lista de eventos no polling do ifood
+     */
     @Override
     public List<EventsPolling> getEvents() {
         final String url = URL_BASE_IFOOD + "/order/v1.0/events:polling";
@@ -59,6 +63,12 @@ public class EventsRepository implements IEventsRepository {
         return new ArrayList<>();
     }
 
+    /**
+     * salva evento de cabeçalho na tabela TB_PEDIDO_INTEGRACAO
+     *
+     * @param event - detalhes do evento pendente informado pelo ifood
+     * @return - retorna status verdadeiro ou falso de salvar evento
+     */
     @Override
     public boolean saveEventHeader(EventsPolling event) {
         String sql = "INSERT INTO TB_PEDIDO_INTEGRACAO VALUES ("
@@ -90,6 +100,12 @@ public class EventsRepository implements IEventsRepository {
         return false;
     }
 
+    /**
+     * atualiza status_integracao e codigo do status da integração
+     *
+     * @param event - detalhes do evento pendente recebido do ifood
+     * @return - retorna status da atualização dos dados do evento
+     */
     @Override
     public boolean updateEventHeader(EventsPolling event) {
         String sql = "UPDATE TB_PEDIDO_INTEGRACAO SET"
@@ -104,10 +120,8 @@ public class EventsRepository implements IEventsRepository {
             bd.st = bd.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             int result = bd.st.executeUpdate();
             if (result > 0) {
-                System.out.println("Generated: " + result);
+                return true;
             }
-
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
@@ -118,8 +132,14 @@ public class EventsRepository implements IEventsRepository {
         return false;
     }
 
+    /**
+     * consulta se codigo do evento ja está cadastrado na tabela TB_PEDIDO_INTEGRACAO
+     *
+     * @param orderId - codigo do evento do ifood
+     * @return - retorna status se evento já está salvo no banco de dados
+     */
     @Override
-    public boolean findEventHeader(EventsPolling event) throws SQLException {
+    public boolean findEventHeader(String orderId) {
         String sql = "SELECT * FROM TB_PEDIDO_INTEGRACAO WHERE cod_pedido_integracao = ?";
 
         DatabaseConnection bd = new DatabaseConnection();
@@ -127,7 +147,7 @@ public class EventsRepository implements IEventsRepository {
 
         try {
             bd.st = bd.connection.prepareStatement(sql);
-            bd.st.setString(1, event.getOrderId());
+            bd.st.setString(1, orderId);
             ResultSet resultSet = bd.st.executeQuery();
             if (resultSet.next()) {
                 if (resultSet.getInt(1) > 0) {
@@ -144,6 +164,11 @@ public class EventsRepository implements IEventsRepository {
         return false;
     }
 
+    /**
+     * envia confirmação de recebimento do evento para ifood
+     *
+     * @param eventsAcknowledgments - lista de eventos para enviar ao ifood
+     */
     @Override
     public void postEventsAcknowledgment(List<EventsAcknowledgment> eventsAcknowledgments) {
         final String url = URL_BASE_IFOOD + "/order/v1.0/events/acknowledgment";

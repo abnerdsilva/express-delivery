@@ -18,6 +18,10 @@ public class AppDelivery {
     private static final PedidoController pedidoController = new PedidoController();
     private static final ImprimeController imprimeController = new ImprimeController();
 
+    /**
+     * inicia, salva e imprime pedido de exemplo
+     * @param args
+     */
     public static void main(String[] args) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();

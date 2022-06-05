@@ -15,6 +15,11 @@ public class Geral {
 
     public static String accessToken = "";
 
+    /**
+     * formata e converte data para 3 horas a menos
+     * @param data - data informada
+     * @return - retorna texto com data com 3 horas a menos
+     */
     public static String formateDateToLocal(String data) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         formatter.setTimeZone(TimeZone.getTimeZone("UTC-3"));

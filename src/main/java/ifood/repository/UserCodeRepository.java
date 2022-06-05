@@ -20,6 +20,13 @@ public class UserCodeRepository implements IUserCodeRepository {
 
     private final OkHttpClient client = new OkHttpClient();
 
+    /**
+     * consulta dados da integração para fazer autenticação
+     *
+     * @param json - dados da integração
+     * @return - retorna detalhes do usuario para fazer autenticação
+     * @throws IOException - retorna exceção quando ocorre erro na consulta
+     */
     @Override
     public UserCode postUserCode(String json) throws IOException {
         final String url = URL_BASE_IFOOD + "/authentication/v1.0/oauth/userCode";
@@ -41,6 +48,13 @@ public class UserCodeRepository implements IUserCodeRepository {
         return gson.fromJson(responseBody.string(), UserCode.class);
     }
 
+    /**
+     * realiza autenticação do usuario junto ao ifood
+     *
+     * @param json - dados do usuario da autenticação
+     * @return - retorna access token de acesso e refresh token
+     * @throws IOException - retorna exceção quando ocorre erro na consulta
+     */
     @Override
     public Token postToken(String json) throws IOException {
         final String url = URL_BASE_IFOOD + "/authentication/v1.0/oauth/token";
@@ -62,7 +76,14 @@ public class UserCodeRepository implements IUserCodeRepository {
         return gson.fromJson(responseBody.string(), Token.class);
     }
 
-    public void saveConfigUserCode(String userCode, String authCodeVerifier, long expiresIn) throws SQLException {
+    /**
+     * salva configuração do usuario da autenticação
+     *
+     * @param userCode         - codigo do usuario
+     * @param authCodeVerifier - codigo de verificação do usuario
+     * @param expiresIn        - numero com tempo para expirar token
+     */
+    public void saveConfigUserCode(String userCode, String authCodeVerifier, long expiresIn) {
         String insertSql = "UPDATE TB_CONFIGURACAO SET "
                 + "FLAG2='" + userCode + "', "
                 + "FLAG3='" + authCodeVerifier + "', "
@@ -89,7 +110,15 @@ public class UserCodeRepository implements IUserCodeRepository {
         }
     }
 
-    public boolean saveConfigToken(String grantType, String accessToken, String refresToken) throws SQLException {
+    /**
+     * salva configuração de token de acesso
+     *
+     * @param grantType   - tipo de permissão do token de acesso
+     * @param accessToken - token de acesso
+     * @param refresToken - token de atualização do token de acesso
+     * @return - retorna status se configuração foi salva
+     */
+    public boolean saveConfigToken(String grantType, String accessToken, String refresToken) {
         String insertSql = "UPDATE TB_CONFIGURACAO SET "
                 + "FLAG1='" + grantType + "', "
                 + "FLAG2='" + accessToken + "', "
@@ -106,10 +135,8 @@ public class UserCodeRepository implements IUserCodeRepository {
             bd.rs = bd.st.getGeneratedKeys();
 
             while (bd.rs.next()) {
-                System.out.println("Generated: " + bd.rs.getString(1));
+                return true;
             }
-
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
@@ -120,7 +147,12 @@ public class UserCodeRepository implements IUserCodeRepository {
         return false;
     }
 
-    public ConfigDao findConfigUserCode() throws SQLException {
+    /**
+     * consulta dados de configuração do usuario de autenticação
+     *
+     * @return - retorna dados da configuração
+     */
+    public ConfigDao findConfigUserCode() {
         String sql = "SELECT * FROM TB_CONFIGURACAO WHERE ITEM = 'INTEGRA_IFOOD'";
 
         DatabaseConnection bd = new DatabaseConnection();
@@ -152,7 +184,12 @@ public class UserCodeRepository implements IUserCodeRepository {
         return config;
     }
 
-    public ConfigDao findConfigToken() throws SQLException {
+    /**
+     * consulta configuração de token de acesso
+     *
+     * @return - retorna configuração de token de acesso
+     */
+    public ConfigDao findConfigToken() {
         String sql = "SELECT * FROM TB_CONFIGURACAO WHERE ITEM = 'INTEGRA_IFOOD_TOKEN'";
 
         DatabaseConnection bd = new DatabaseConnection();

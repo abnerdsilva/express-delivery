@@ -20,6 +20,13 @@ public class PedidoController {
     ProdutoRepository produtoRepository = new ProdutoRepository();
     ClienteController clienteController = new ClienteController();
 
+    /**
+     * trata dados do pedido e solicita salvar no banco de dados
+     *
+     * @param pedidoDelivery - informações do pedido
+     * @return - retorna id do pedido cadastrado
+     * @throws SQLException - retorna exceção quando ocorre erro de SQL
+     */
     public int savePedido(PedidoDelivery pedidoDelivery) throws SQLException {
         try {
             long idCliente = clienteController.checkClientExists(pedidoDelivery.getCliente().getCodCliente());
@@ -98,6 +105,13 @@ public class PedidoController {
         return -1;
     }
 
+    /**
+     * trata ClienteDelivery para ClienteDao para adicionar cliente no banco de dados
+     *
+     * @param clienteDelivery - dados do cliente que foram recebidos da integraão
+     * @return - retorna id do cliente cadastrado
+     * @throws SQLException - retorna exceção quando ocorre erro de SQL
+     */
     private int addCliente(ClienteDelivery clienteDelivery) throws SQLException {
         ClienteDao cliente = new ClienteDao();
         cliente.setCodCliente(clienteDelivery.getCodCliente());

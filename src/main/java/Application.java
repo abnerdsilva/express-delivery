@@ -10,6 +10,11 @@ public class Application {
     private static final ConfigController configController = new ConfigController();
     private static final ImprimeController imprimeController = new ImprimeController();
 
+    /**
+     * inicia aplicação - verifica permissão de modulo de integração com ifood e impressão
+     *
+     * @param args - argumentos de inicio do projeto
+     */
     public static void main(String[] args) {
         LoggerInFile.start();
 
@@ -18,7 +23,6 @@ public class Application {
             if (!statusIntegration) {
                 System.out.println(MessageDefault.msgAccessIntegrationNotGranted);
                 LoggerInFile.printInfo(MessageDefault.msgAccessIntegrationNotGranted);
-                return;
             } else {
                 LoggerInFile.printInfo(MessageDefault.msgAccessIntegrationGranted);
                 AppIfood.start();
@@ -28,7 +32,6 @@ public class Application {
             if (!permiteModuloImpressao) {
                 System.out.println(MessageDefault.msgAccessIntegrationNotGranted);
                 LoggerInFile.printInfo(MessageDefault.msgAccessIntegrationNotGranted);
-                return;
             } else {
                 LoggerInFile.printInfo(MessageDefault.msgAccessIntegrationGranted);
                 imprimeController.startPrinter();
@@ -36,7 +39,6 @@ public class Application {
         } catch (SQLException e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
-            return;
         }
     }
 }

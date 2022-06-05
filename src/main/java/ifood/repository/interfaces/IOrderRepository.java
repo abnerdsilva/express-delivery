@@ -5,12 +5,11 @@ import ifood.model.Order;
 import ifood.model.OrderIntegration;
 import ifood.model.dao.PedidoDao;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface IOrderRepository {
 
-    List<OrderIntegration> getOrdersPendingToConfirmation() throws SQLException;
+    List<OrderIntegration> getOrdersPendingToConfirmation();
 
     Order getOrderDetails(String orderId);
 
@@ -20,5 +19,7 @@ public interface IOrderRepository {
 
     boolean confirmDispatchOrder(String codPedidoIntegracao);
 
-    List<PedidoDao> getOrdersToDispatch() throws SQLException;
+    List<PedidoDao> getOrdersToConfirmProduction();
+
+    List<PedidoDao> getOrdersToDispatch();
 }
