@@ -27,12 +27,19 @@ public class ImprimeController {
 
     private final static long timeSleepPrinter = 5000;
 
+    /**
+     * imprime pedido de acordo com dados informados
+     * @param pedido - dados do pedido
+     * @return - status do processo de imprimir pedido
+     */
     public boolean imprimePedido(PedidoDelivery pedido) {
         boolean statusImpressao = false;
         Impressora imprimir = new Impressora();
 
         String textToPrint = "\n-----------------------------------------------------------\n";
         textToPrint += imprimir.preencheLinha("Pedido Delivery", " ", 60, "ED");
+        textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
+        textToPrint += imprimir.preencheLinha("Pedido: " + pedido.getCodPedido(), " ", 60, "ED");
         textToPrint += "\n-----------------------------------------------------------";
 
         textToPrint += "\n";
@@ -43,11 +50,13 @@ public class ImprimeController {
 
         textToPrint += imprimir.preencheLinha("Cliente: " + pedido.getCliente().getNome(), " ", 60, "E");
         textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
-        textToPrint += imprimir.preencheLinha("Endereco: " + pedido.getCliente().getLogradouro(), " ", 60, "E");
+        String infoEndereco = "Pedido para retirar";
+        if (pedido.getCliente().getLogradouro().equals("")) {
+            infoEndereco = pedido.getCliente().getLogradouro();
+        }
+        textToPrint += imprimir.preencheLinha("Endereco: " + infoEndereco, " ", 60, "E");
         textToPrint += imprimir.preencheLinha("\n\n", " ", 60, "D");
 
-        textToPrint += imprimir.preencheLinha("Pedido: " + pedido.getCodPedido(), " ", 60, "E");
-        textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
         textToPrint += imprimir.preencheLinha("Data entrega: " + pedido.getDataEntrega(), " ", 60, "E");
         textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
         textToPrint += imprimir.preencheLinha("Origem: " + pedido.getOrigem(), " ", 60, "E");
@@ -76,7 +85,7 @@ public class ImprimeController {
             textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
 
             if (p.getObservacao() != null) {
-                if (!p.getObservacao().isEmpty()) {
+                if (!p.getObservacao().isEmpty() && !p.getObservacao().equals("null")) {
                     textToPrint += imprimir.preencheLinha("  Obs.: " + p.getObservacao(), " ", 60, "E");
                     textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
                 }
