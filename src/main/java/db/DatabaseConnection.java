@@ -11,9 +11,9 @@ public class DatabaseConnection {
 
     private final String DB_PORT = "1433";
     private final String DB_USER = "sa";
-    private final String DB_PASS = "Senha@15937";
-    private final String DB_HOST = "ec2-3-90-108-28.compute-1.amazonaws.com";
-    private final String DB_NAME = "expressDelivery";
+    private final String DB_PASS = "241180";
+    private final String DB_HOST = "localhost";
+    private final String DB_NAME = "ExpressDelivery";
     private final String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     private final String PATH = "jdbc:sqlserver://" + DB_HOST + ":" + DB_PORT + ";databaseName=" + DB_NAME + "";
 
