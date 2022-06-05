@@ -10,7 +10,6 @@ import log.LoggerInFile;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import static ifood.utils.Geral.JSON;
@@ -83,6 +82,7 @@ public class UserCodeRepository implements IUserCodeRepository {
      * @param authCodeVerifier - codigo de verificação do usuario
      * @param expiresIn        - numero com tempo para expirar token
      */
+    @Override
     public void saveConfigUserCode(String userCode, String authCodeVerifier, long expiresIn) {
         String insertSql = "UPDATE TB_CONFIGURACAO SET "
                 + "FLAG2='" + userCode + "', "
@@ -118,6 +118,7 @@ public class UserCodeRepository implements IUserCodeRepository {
      * @param refresToken - token de atualização do token de acesso
      * @return - retorna status se configuração foi salva
      */
+    @Override
     public boolean saveConfigToken(String grantType, String accessToken, String refresToken) {
         String insertSql = "UPDATE TB_CONFIGURACAO SET "
                 + "FLAG1='" + grantType + "', "
@@ -152,6 +153,7 @@ public class UserCodeRepository implements IUserCodeRepository {
      *
      * @return - retorna dados da configuração
      */
+    @Override
     public ConfigDao findConfigUserCode() {
         String sql = "SELECT * FROM TB_CONFIGURACAO WHERE ITEM = 'INTEGRA_IFOOD'";
 
@@ -189,6 +191,7 @@ public class UserCodeRepository implements IUserCodeRepository {
      *
      * @return - retorna configuração de token de acesso
      */
+    @Override
     public ConfigDao findConfigToken() {
         String sql = "SELECT * FROM TB_CONFIGURACAO WHERE ITEM = 'INTEGRA_IFOOD_TOKEN'";
 
