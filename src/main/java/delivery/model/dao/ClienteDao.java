@@ -1,22 +1,22 @@
 package delivery.model.dao;
 
 public class ClienteDao {
-    long codCliente;
-    String nome;
-    String telefone;
-    String email;
-    String cpf;
-    String rg;
-    String logradouro;
-    int numero;
-    String bairro;
-    String cidade;
-    String estado;
-    int cep;
-    int statusCliente;
-    String dataCadastro;
-    String dataAtualizacao;
-    String observacao;
+    private long codCliente;
+    private String nome;
+    private String telefone;
+    private String email;
+    private String cpf;
+    private String rg;
+    private String logradouro;
+    private int numero;
+    private String bairro;
+    private String cidade;
+    private String estado;
+    private int cep;
+    private int statusCliente;
+    private String dataCadastro;
+    private String dataAtualizacao;
+    private String observacao;
 
     public long getCodCliente() {
         return codCliente;

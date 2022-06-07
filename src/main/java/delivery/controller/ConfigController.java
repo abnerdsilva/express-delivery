@@ -10,7 +10,7 @@ public class ConfigController {
     public String statusIntegrationIfood = "";
     private final static String itemConfigurationIfood = "INTEGRA_IFOOD";
 
-    private String CONFIG_MODULO_IMPRESSAO = "MODULO_IMPRESSAO";
+    private final String CONFIG_MODULO_IMPRESSAO = "MODULO_IMPRESSAO";
     public String statusModuloImpressao = "";
     public String NOME_IMPRESSORA = "";
 

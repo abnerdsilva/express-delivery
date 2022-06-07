@@ -1,25 +1,15 @@
 package delivery.model.dao;
 
 public class ConfigDao {
-    int codConfiguracao;
-    String item;
-    String flag1;
-    String flag2;
-    String flag3;
-    String flag4;
-    String flag5;
+    private int codConfiguracao;
+    private String item;
+    private String flag1;
+    private String flag2;
+    private String flag3;
+    private String flag4;
+    private String flag5;
 
     public ConfigDao() {
-    }
-
-    public ConfigDao(int codConfiguracao, String item, String flag1, String flag2, String flag3, String flag4, String flag5) {
-        this.codConfiguracao = codConfiguracao;
-        this.item = item;
-        this.flag1 = flag1;
-        this.flag2 = flag2;
-        this.flag3 = flag3;
-        this.flag4 = flag4;
-        this.flag5 = flag5;
     }
 
     public void setCodConfiguracao(int codConfiguracao) {

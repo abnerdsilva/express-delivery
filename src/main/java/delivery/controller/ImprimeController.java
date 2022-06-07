@@ -15,7 +15,6 @@ import imprime.Impressora;
 import log.LoggerInFile;
 
 import javax.print.PrintException;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

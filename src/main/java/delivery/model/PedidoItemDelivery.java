@@ -1,14 +1,14 @@
 package delivery.model;
 
 public class PedidoItemDelivery {
-    String nome;
-    int quantidade;
-    double vrUnit;
-    double vrTotal;
-    double vrDesconto;
-    double vrAdicional;
-    String codExterno;
-    String observacao;
+    private String nome;
+    private int quantidade;
+    private double vrUnit;
+    private double vrTotal;
+    private double vrDesconto;
+    private double vrAdicional;
+    private String codExterno;
+    private String observacao;
 
     public PedidoItemDelivery() {
     }

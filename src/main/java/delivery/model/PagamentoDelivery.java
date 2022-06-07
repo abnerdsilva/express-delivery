@@ -1,11 +1,11 @@
 package delivery.model;
 
 public class PagamentoDelivery {
-    String nome;
-    double valor;
-    String tipo;
-    double troco;
-    boolean prePago;
+    private  String nome;
+    private  double valor;
+    private String tipo;
+    private  double troco;
+    private  boolean prePago;
 
     public PagamentoDelivery() {
     }

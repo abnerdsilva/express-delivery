@@ -1,18 +1,18 @@
 package delivery.model;
 
 public class ClienteDelivery {
-    int codCliente;
-    String nome;
-    String telefone;
-    String email;
-    String documento;
-    String observacao;
-    String logradouro;
-    int numero;
-    String bairro;
-    String cidade;
-    String estado;
-    int cep;
+    private  int codCliente;
+    private String nome;
+    private String telefone;
+    private String email;
+    private String documento;
+    private String observacao;
+    private String logradouro;
+    private int numero;
+    private String bairro;
+    private String cidade;
+    private String estado;
+    private int cep;
 
     public ClienteDelivery() {
     }

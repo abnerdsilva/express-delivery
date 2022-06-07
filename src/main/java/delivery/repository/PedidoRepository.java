@@ -6,9 +6,7 @@ import delivery.model.dao.PedidoItemDao;
 import delivery.repository.interfaces.IPedidoRepository;
 import log.LoggerInFile;
 
-import java.io.IOException;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;

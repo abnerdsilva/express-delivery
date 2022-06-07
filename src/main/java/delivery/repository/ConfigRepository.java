@@ -6,8 +6,6 @@ import delivery.repository.interfaces.IConfigRepository;
 import log.LoggerInFile;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ConfigRepository implements IConfigRepository {
     /**
