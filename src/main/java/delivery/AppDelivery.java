@@ -20,7 +20,8 @@ public class AppDelivery {
 
     /**
      * inicia, salva e imprime pedido de exemplo
-     * @param args
+     *
+     * @param args - argumento inicial do main
      */
     public static void main(String[] args) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
