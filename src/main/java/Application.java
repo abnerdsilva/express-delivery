@@ -30,10 +30,10 @@ public class Application {
 
             boolean permiteModuloImpressao = configController.checkPrinterPermition();
             if (!permiteModuloImpressao) {
-                System.out.println(MessageDefault.msgAccessIntegrationNotGranted);
-                LoggerInFile.printInfo(MessageDefault.msgAccessIntegrationNotGranted);
+                System.out.println(MessageDefault.msgAccessPrnterNotGranted);
+                LoggerInFile.printInfo(MessageDefault.msgAccessPrnterNotGranted);
             } else {
-                LoggerInFile.printInfo(MessageDefault.msgAccessIntegrationGranted);
+                LoggerInFile.printInfo(MessageDefault.msgAccessrPrinterGranted);
                 imprimeController.startPrinter();
             }
         } catch (SQLException e) {
