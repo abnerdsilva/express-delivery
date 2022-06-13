@@ -51,8 +51,8 @@ public class ImprimeController {
         textToPrint += imprimir.preencheLinha("Cliente: " + pedido.getCliente().getNome(), " ", 60, "E");
         textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
         String infoEndereco = "Pedido para retirar";
-        if (pedido.getCliente().getLogradouro().equals("")) {
-            infoEndereco = pedido.getCliente().getLogradouro();
+        if (!pedido.getCliente().getLogradouro().equals("")) {
+            infoEndereco = pedido.getCliente().getLogradouro() + " - " + pedido.getCliente().getNumero() + ", " + pedido.getCliente().getBairro();
         }
         textToPrint += imprimir.preencheLinha("Endereco: " + infoEndereco, " ", 60, "E");
         textToPrint += imprimir.preencheLinha("\n\n", " ", 60, "D");
