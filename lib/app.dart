@@ -1,3 +1,6 @@
+import 'package:express_delivery/config/theme_config.dart';
+import 'package:express_delivery/pages/login/login_page.dart';
+import 'package:express_delivery/pages/splash_screen/splash_screen_page.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -8,10 +11,12 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'ExpressDelivery',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Scaffold(),
+      theme: ThemeConfig.appTheme,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashSreenPage(),
+        '/login': (context) => const LoginPage(),
+      },
     );
   }
 }
