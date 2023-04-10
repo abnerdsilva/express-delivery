@@ -1,8 +1,10 @@
+import 'package:express_delivery/pages/login/login_controller.dart';
 import 'package:express_delivery/shared/components/custom_button.dart';
 import 'package:express_delivery/shared/components/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends GetView<LoginController> {
   const LoginPage({Key? key}) : super(key: key);
 
   static const String route = '/login';
@@ -19,22 +21,24 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 16),
               SizedBox(
                 width: MediaQuery.of(context).size.width * .7,
-                child: const CustomTextFormField(
+                child: CustomTextFormField(
                   radiusBorder: 10,
                   heightWithLabel: 70,
                   height: 40,
                   label: 'Usuário',
                   obscureText: true,
+                  controller: controller.userController,
                 ),
               ),
               const SizedBox(height: 12),
               SizedBox(
                 width: MediaQuery.of(context).size.width * .7,
-                child: const CustomTextFormField(
+                child: CustomTextFormField(
                   radiusBorder: 10,
                   heightWithLabel: 70,
                   height: 40,
                   label: 'Senha',
+                  controller: controller.passController,
                 ),
               ),
               const SizedBox(height: 24),
@@ -52,7 +56,7 @@ class LoginPage extends StatelessWidget {
                       alignment: Alignment.center,
                       width: 80,
                       fontSize: 16,
-                      onClick: () {},
+                      onClick: () => controller.login(),
                     ),
                   ],
                 ),
