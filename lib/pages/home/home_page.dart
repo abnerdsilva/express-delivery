@@ -30,7 +30,7 @@ class HomePage extends GetView<HomeController> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 8),
               TabBar(
                 controller: controller.tabController,
                 labelColor: Colors.black,
