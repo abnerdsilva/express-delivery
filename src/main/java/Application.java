@@ -1,3 +1,4 @@
+import api.ApiApplication;
 import delivery.controller.ConfigController;
 import delivery.controller.ImprimeController;
 import ifood.AppIfood;
@@ -16,6 +17,8 @@ public class Application {
      * @param args - argumentos de inicio do projeto
      */
     public static void main(String[] args) {
+        ApiApplication.start();
+
         LoggerInFile.start();
 
         try {
