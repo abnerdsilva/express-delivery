@@ -34,7 +34,33 @@ class OrderRepository {
       throw RestClientException(e.message, code: e.code);
     } catch (e) {
       log(e.toString());
-      throw Exception('Não foi possivel consultar pedidos');
+        throw Exception('Não foi possivel consultar pedidos');
+    }
+  }
+
+  Future<OrderDetailsModel> getOrderCompleteById(int code) async {
+    try {
+      final response = await restClient.get('/order/$code');
+
+      if (response.hasError) {
+        String message = response.bodyString!;
+
+        if (response.statusCode == 403) {
+          message = 'Usuário ou senha inválidos';
+        }
+        if (response.statusCode == 404) {
+          message = 'Erro ao autenticar usuário.';
+        }
+
+        throw RestClientException(message, code: response.statusCode);
+      }
+
+      return OrderDetailsModel.fromMap(response.body);
+    } on RestClientException catch (e) {
+      throw RestClientException(e.message, code: e.code);
+    } catch (e) {
+      log(e.toString());
+      throw Exception('Não foi possivel consultar pedido completo');
     }
   }
 }

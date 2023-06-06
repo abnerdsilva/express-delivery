@@ -24,26 +24,26 @@ class ProductOrder {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name,
-      'description': description,
-      'unitValue': unitValue,
-      'quantity': quantity,
-      'totalValue': totalValue,
-      'benefit': benefit,
-      'tax': tax,
+      'nome': name,
+      'observacao': description,
+      'vrUnit': unitValue,
+      'quantidade': quantity,
+      'vrTotal': totalValue,
+      'vrDesconto': benefit,
+      'vrAdicional': tax,
     };
   }
 
   factory ProductOrder.fromMap(Map<String, dynamic> map) {
     return ProductOrder(
       id: map['id']?.toInt() ?? 0,
-      name: map['name'] ?? '',
-      description: map['description'] ?? '',
-      unitValue: map['unitValue'] ?? 0.0,
-      quantity: map['quantity'] ?? 0,
-      totalValue: map['totalValue'] ?? 0.0,
-      benefit: map['benefit'] ?? 0.0,
-      tax: map['tax'] ?? 0.0,
+      name: map['nome'] ?? '',
+      description: map['observacao'] ?? '',
+      unitValue: map['vrUnit'] ?? 0.0,
+      quantity: map['quantidade'] ?? 0,
+      totalValue: map['vrTotal'] ?? 0.0,
+      benefit: map['vrDesconto'] ?? 0.0,
+      tax: map['vrAdicional'] ?? 0.0,
     );
   }
 

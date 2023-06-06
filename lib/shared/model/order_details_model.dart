@@ -82,7 +82,7 @@ class OrderDetailsModel {
       vrAdicional: map['vrAdicional'] ?? 0.0,
       vrDesconto: map['vrDesconto'] ?? 0.0,
       client: Client.fromMap(map['cliente']),
-      itens: map['item'] != null ? List<ProductOrder>.from(map['item'].map<ProductOrder>((x) => ProductOrder.fromMap(x))) : [],
+      itens: map['itens'] != null ? List<ProductOrder>.from(map['itens'].map<ProductOrder>((x) => ProductOrder.fromMap(x))) : [],
     );
   }
 

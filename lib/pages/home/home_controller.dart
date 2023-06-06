@@ -16,7 +16,6 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     _orderRepository = orderRepository;
   }
 
-  RxList<ProductOrder> itensOrder = <ProductOrder>[].obs;
   RxList<OrderDetailsModel> orders = <OrderDetailsModel>[].obs;
   RxList<OrderDetailsModel> ordersOpened = <OrderDetailsModel>[].obs;
   RxList<OrderDetailsModel> ordersClosed = <OrderDetailsModel>[].obs;
@@ -27,20 +26,6 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     super.onInit();
 
     loopGetOrders();
-
-    itensOrder.value = List.generate(6, (index) {
-      final unitValue = Random().nextDouble();
-      final quantity = Random().nextInt(10);
-      return ProductOrder(
-        id: 0,
-        name: 'Produto ${index + 1}',
-        unitValue: unitValue,
-        quantity: quantity,
-        totalValue: unitValue * quantity,
-        benefit: 0.0,
-        tax: 0.0,
-      );
-    });
   }
 
   Future<void> loopGetOrders() async {
