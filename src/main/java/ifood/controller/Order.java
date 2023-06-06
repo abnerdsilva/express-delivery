@@ -65,13 +65,16 @@ public class Order {
 //                        System.out.println(orderPending.toString());
                     if (orderPending.getCodPedido() == order.getCodPedido()) {
                         statusPedidoConfirmar = true;
+                        break;
                     }
                 }
 
                 if (!statusPedidoConfirmar) {
                     System.out.println("confirmar pedido -> " + orderPending.toString());
-                    if (repository.confirmProductionOrder(orderPending.getCodPedidoIntegracao())) {
-                        LoggerInFile.printInfo("Pedido confirmado com sucesso");
+                    if (!orderPending.getStatusPedido().equals("Cancelado")) {
+                        if (repository.confirmProductionOrder(orderPending.getCodPedidoIntegracao())) {
+                            LoggerInFile.printInfo("Pedido confirmado com sucesso");
+                        }
                     }
                 }
             }
