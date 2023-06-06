@@ -1,30 +1,32 @@
+import 'dart:async';
 import 'dart:math';
 
-import 'package:express_delivery/shared/model/client.dart';
-import 'package:express_delivery/shared/model/order_details.dart';
+import 'package:express_delivery/shared/model/order_details_model.dart';
 import 'package:express_delivery/shared/model/product_order.dart';
+import 'package:express_delivery/shared/repositories/order_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController with GetSingleTickerProviderStateMixin {
   late TabController tabController;
 
+  late OrderRepository _orderRepository;
+
+  HomeController(OrderRepository orderRepository) {
+    _orderRepository = orderRepository;
+  }
+
   RxList<ProductOrder> itensOrder = <ProductOrder>[].obs;
-  RxList<OrderDetails> orders = <OrderDetails>[].obs;
+  RxList<OrderDetailsModel> orders = <OrderDetailsModel>[].obs;
+  RxList<OrderDetailsModel> ordersOpened = <OrderDetailsModel>[].obs;
+  RxList<OrderDetailsModel> ordersClosed = <OrderDetailsModel>[].obs;
 
   @override
   void onInit() {
     tabController = TabController(length: 2, vsync: this);
     super.onInit();
 
-    // orders.value = List.generate(
-    //   30,
-    //   (index) => OrderModel(
-    //     clientId: index + 1,
-    //     clientName: 'Nome cliente ${index + 1}',
-    //     id: index + 1,
-    //   ),
-    // );
+    loopGetOrders();
 
     itensOrder.value = List.generate(6, (index) {
       final unitValue = Random().nextDouble();
@@ -39,23 +41,28 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
         tax: 0.0,
       );
     });
+  }
 
-    orders.value = List.generate(11, (index) {
-      return OrderDetails(
-        id: index,
-        status: 'Aberto',
-        dataPedido: '2023-04-15 12:36:70',
-        client: Client(
-          id: 214,
-          name: 'Cliente $index',
-          address: 'Rua Xpto',
-          addressNumber: '97',
-          city: 'Indaiatuba',
-          neighborhood: 'Bairro do cliente',
-          postalCode: '13330-000',
-        ),
-        itens: itensOrder,
-      );
+  Future<void> loopGetOrders() async {
+    await findOrders();
+
+    Timer.periodic(const Duration(seconds: 40), (timer) async {
+      await findOrders();
     });
+  }
+
+  Future<void> findOrders() async {
+    final ordersTemp = await _orderRepository.getOrders();
+    orders.clear();
+    ordersClosed.clear();
+    ordersOpened.clear();
+    orders.addAll(ordersTemp);
+    for(var el in orders){
+      if (el.statusPedido.toUpperCase() == 'CANCELADO' || el.statusPedido.toUpperCase() == 'CONCLUIDO') {
+        ordersClosed.add(el);
+      } else {
+        ordersOpened.add(el);
+      }
+    }
   }
 }

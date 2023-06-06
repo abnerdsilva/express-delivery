@@ -1,5 +1,4 @@
 import 'package:express_delivery/pages/order_details/order_details_controller.dart';
-import 'package:express_delivery/shared/model/order_details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,7 +33,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'ID: ${controller.order.id}',
+                        'ID: ${controller.order.codPedido}',
                         style: const TextStyle(fontSize: 16),
                       ),
                       Text(
@@ -42,7 +41,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                         style: const TextStyle(fontSize: 16),
                       ),
                       Text(
-                        controller.order.status,
+                        controller.order.statusPedido,
                         style: const TextStyle(fontSize: 16),
                       ),
                     ],
@@ -65,7 +64,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                       const SizedBox(width: 20),
                       Expanded(
                         flex: 4,
-                        child: Text(controller.order.client.name),
+                        child: Text(controller.order.client?.name ?? ''),
                       ),
                     ],
                   ),
@@ -86,7 +85,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                       const SizedBox(width: 20),
                       Expanded(
                         flex: 4,
-                        child: Text('${controller.order.client.address}, ${controller.order.client.addressNumber}'),
+                        child: Text('${controller.order.client?.address ?? ''}, ${controller.order.client?.addressNumber ?? ''}'),
                       ),
                     ],
                   ),
@@ -107,7 +106,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                       const SizedBox(width: 20),
                       Expanded(
                         flex: 4,
-                        child: Text(controller.order.client.neighborhood),
+                        child: Text(controller.order.client?.neighborhood ?? ''),
                       ),
                     ],
                   ),
@@ -128,7 +127,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                       const SizedBox(width: 20),
                       Expanded(
                         flex: 4,
-                        child: Text(controller.order.client.complement ?? ''),
+                        child: Text(controller.order.client?.complement ?? ''),
                       ),
                     ],
                   ),
@@ -175,9 +174,9 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.order.itens.length,
+                    itemCount: controller.order.itens?.length ?? 0,
                     itemBuilder: (context, index) {
-                      final product = controller.order.itens[index];
+                      final product = controller.order.itens?[index];
 
                       return Padding(
                         padding: const EdgeInsets.all(2.0),
@@ -185,7 +184,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                           children: [
                             Expanded(
                               flex: 6,
-                              child: Text(product.name),
+                              child: Text(product?.name ?? ''),
                             ),
                             const SizedBox(width: 20),
                             Expanded(
@@ -193,7 +192,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                               child: Container(
                                   alignment: Alignment.centerRight,
                                   child: Text(
-                                    product.quantity.toString(),
+                                    product?.quantity.toString()  ?? '',
                                   )),
                             ),
                             const SizedBox(width: 20),
@@ -201,7 +200,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                               flex: 3,
                               child: Container(
                                 alignment: Alignment.centerRight,
-                                child: Text('R\$ ${product.totalValue.toStringAsFixed(2)}'),
+                                child: Text('R\$ ${product?.totalValue.toStringAsFixed(2)}'),
                               ),
                             ),
                           ],

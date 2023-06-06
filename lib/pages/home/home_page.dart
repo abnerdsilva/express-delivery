@@ -47,9 +47,21 @@ class HomePage extends GetView<HomeController> {
               Expanded(
                 child: TabBarView(
                   controller: controller.tabController,
-                  children: const [
-                    OrdersWidget(title: 'Aberto'),
-                    OrdersWidget(title: 'Fechado'),
+                  children: [
+                    Obx(
+                      () => controller.ordersOpened.isNotEmpty
+                          ? OrdersWidget(orders: controller.ordersOpened)
+                          : const Center(
+                              child: Text('Nenhum item'),
+                            ),
+                    ),
+                    Obx(
+                      () => controller.ordersClosed.isNotEmpty
+                          ? OrdersWidget(orders: controller.ordersClosed)
+                          : const Center(
+                              child: Text('Nenhum item'),
+                            ),
+                    ),
                   ],
                 ),
               ),
