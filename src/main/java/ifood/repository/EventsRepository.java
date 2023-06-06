@@ -71,14 +71,13 @@ public class EventsRepository implements IEventsRepository {
      */
     @Override
     public boolean saveEventHeader(EventsPolling event) {
-        String sql = "INSERT INTO TB_PEDIDO_INTEGRACAO VALUES ("
-//                + 0 + ", "
+        String sql = "INSERT INTO TB_PEDIDO_INTEGRACAO (id_integracao, cod_pedido_integracao, data_criacao," +
+                " status_integracao, codigo_status_integracao) VALUES ("
                 + "'" + event.getId() + "', "
                 + "'" + event.getOrderId() + "', "
                 + "'" + Geral.formateDateToLocal(event.getCreatedAt()) + "', "
                 + "'" + event.getFullCode() + "', "
-                + "'" + event.getCode() + "', "
-                + 0 + ")";
+                + "'" + event.getCode() + "')";
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();

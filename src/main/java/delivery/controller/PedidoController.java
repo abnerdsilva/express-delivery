@@ -2,23 +2,46 @@ package delivery.controller;
 
 import delivery.model.ClienteDelivery;
 import delivery.model.PedidoDelivery;
+import delivery.model.PedidoItemDelivery;
 import delivery.model.dao.ClienteDao;
 import delivery.model.dao.PedidoDao;
 import delivery.model.dao.PedidoItemDao;
 import delivery.model.dao.ProdutoDao;
+import delivery.repository.ClienteRepository;
 import delivery.repository.PedidoRepository;
 import delivery.repository.ProdutoRepository;
 import log.LoggerInFile;
 import log.MessageDefault;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
+@RestController
 public class PedidoController {
-    PedidoRepository pedidoRepository = new PedidoRepository();
-    ProdutoRepository produtoRepository = new ProdutoRepository();
-    ClienteController clienteController = new ClienteController();
+    private static PedidoController instance;
+
+    PedidoRepository _pedidoRepository;
+    ProdutoRepository _produtoRepository;
+    ClienteRepository _clienteRepository;
+
+    private PedidoController() {
+        _pedidoRepository = new PedidoRepository();
+        _produtoRepository = new ProdutoRepository();
+        _clienteRepository = new ClienteRepository();
+    }
+
+    public static PedidoController getInstance() {
+        if (instance == null) {
+            instance = new PedidoController();
+        }
+        return instance;
+    }
 
     /**
      * trata dados do pedido e solicita salvar no banco de dados
@@ -29,8 +52,10 @@ public class PedidoController {
      */
     public int savePedido(PedidoDelivery pedidoDelivery) throws SQLException {
         try {
-            long idCliente = clienteController.checkClientExists(pedidoDelivery.getCliente().getCodCliente());
-            if (idCliente == -1) {
+            long idCliente = -99;
+
+            ClienteDao clienteDao = _clienteRepository.loadById(pedidoDelivery.getCliente().getCodCliente());
+            if (clienteDao == null || clienteDao.getCodCliente() == 0) {
                 idCliente = addCliente(pedidoDelivery.getCliente());
                 if (idCliente <= 0) {
                     LoggerInFile.printError(MessageDefault.msgErrorAddClient);
@@ -68,15 +93,20 @@ public class PedidoController {
 
             pedido.setObservacao(observacao);
 
-            int orderId = pedidoRepository.saveOrder(pedido);
+            int orderId = _pedidoRepository.saveOrder(pedido);
             if (orderId <= 0) {
                 return -1;
             }
 
             for (var item : pedidoDelivery.getItens()) {
+                if (item.getCodExterno() == null) {
+                    LoggerInFile.printError("Produto não possui codigo externo");
+                    continue;
+                }
+
                 int codProdutoExterno = Integer.parseInt(item.getCodExterno());
 
-                ProdutoDao produto = produtoRepository.loadById(codProdutoExterno);
+                ProdutoDao produto = _produtoRepository.loadById(codProdutoExterno);
                 if (produto == null || produto.getCodProduto() == 0) {
                     LoggerInFile.printError("Produto não encontrado");
                     continue;
@@ -90,7 +120,7 @@ public class PedidoController {
                 pedidoItem.setVrUnitario(item.getVrUnit());
                 pedidoItem.setVrTotal(item.getVrTotal());
 
-                int statusSaveOrderItem = pedidoRepository.saveOrderItem(pedidoItem);
+                int statusSaveOrderItem = _pedidoRepository.saveOrderItem(pedidoItem);
                 if (statusSaveOrderItem <= 0) {
                     LoggerInFile.printError("Erro ao incluir pedido item");
                 }
@@ -134,6 +164,61 @@ public class PedidoController {
         cliente.setDataAtualizacao(now.format(dtf));
         cliente.setObservacao(clienteDelivery.getObservacao());
 
-        return clienteController.addCliente(cliente);
+        int clientId = Long.valueOf(cliente.getCodCliente()).intValue();
+        clientId = _clienteRepository.hasClient(clientId, cliente.getTelefone());
+        if (clientId > 0){
+            return clientId;
+        }
+        return _clienteRepository.save(cliente);
+    }
+
+    /**
+     * Endpoint para consulta de pedidos do dia atual
+     *
+     * @return - lista de pedidos
+     */
+    @RequestMapping("/orders")
+    public List<PedidoDao> getOrders() {
+        return _pedidoRepository.getAll();
+    }
+
+    @RequestMapping("/order/{id}")
+    public PedidoDelivery getOrderFromId(@PathVariable int id) throws SQLException {
+        List<PedidoItemDelivery> itens = new ArrayList<>();
+        List<PedidoItemDao> itensDao = _pedidoRepository.loadItensByCode(id);
+
+        for (var item : itensDao) {
+            itens.add(item.itemDaoToItemDelivery());
+        }
+
+        ClienteDao clienteDao = _clienteRepository.loadById(1);
+
+        PedidoDao pedidoDao = _pedidoRepository.getOrderById(id);
+
+        PedidoDelivery pedidoDelivery = new PedidoDelivery();
+        pedidoDelivery.setCodPedido(id);
+        pedidoDelivery.setItens(itens);
+        pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+        pedidoDelivery.setDataCriacao(pedidoDao.getDataPedido());
+        pedidoDelivery.setVrTotal(pedidoDao.getVrTotal());
+        pedidoDelivery.setVrDesconto(pedidoDao.getVrDesconto());
+        pedidoDelivery.setVrAdicional(pedidoDao.getVrTaxa());
+        pedidoDelivery.setObservacao(pedidoDao.getObservacao());
+        pedidoDelivery.setCodPedidoIntegracao(pedidoDao.getCodPedidoIntegracao());
+        pedidoDelivery.setOrigem(pedidoDao.getOrigem());
+        pedidoDelivery.setTipo(pedidoDao.getTipoPedido());
+        pedidoDelivery.setReferencia("");
+        pedidoDelivery.setReferenciaCurta("");
+
+//        PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
+//        pagamentoDelivery.setTroco(pedidoDao.getVrTroco());
+//        pagamentoDelivery.setPrePago(false);
+//        pagamentoDelivery.setValor(pedidoDao.getVrTotal());
+//        pagamentoDelivery.setTipo(pedidoDao.getFormaPagamento());
+//        pagamentoDelivery.setNome(pedidoDao.getFormaPagamento());
+
+//        pedidoDelivery.setPagamento(pagamentoDelivery);
+
+        return pedidoDelivery;
     }
 }

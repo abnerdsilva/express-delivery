@@ -181,4 +181,28 @@ public class ClienteRepository implements IClienteRepository {
 
         return -1;
     }
+
+    public int hasClient(int idClient, String phone) throws SQLException {
+        String sql = "SELECT COD_CLIENTE FROM TB_CLIENTE WHERE COD_CLIENTE=? OR TELEFONE=?";
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.st.setInt(1, idClient);
+            bd.st.setString(2, phone);
+            bd.rs = bd.st.executeQuery();
+            if (bd.rs.next()) {
+                return bd.rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return -1;
+    }
 }

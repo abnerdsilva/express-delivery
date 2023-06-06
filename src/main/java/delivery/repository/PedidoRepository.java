@@ -5,12 +5,14 @@ import delivery.model.dao.PedidoDao;
 import delivery.model.dao.PedidoItemDao;
 import delivery.repository.interfaces.IPedidoRepository;
 import log.LoggerInFile;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class PedidoRepository implements IPedidoRepository {
     /**
      * consulta itens do pedido de acordo com codigo do pedido
@@ -20,7 +22,9 @@ public class PedidoRepository implements IPedidoRepository {
      */
     @Override
     public List<PedidoItemDao> loadItensByCode(int code) {
-        String sql = "SELECT * FROM TB_PEDIDO_ITEM WHERE COD_PEDIDO = " + code;
+        String sql = "SELECT * FROM TB_PEDIDO_ITEM" +
+                " INNER JOIN TB_PRODUTO TP on (TP.COD_PRODUTO = TB_PEDIDO_ITEM.COD_PRODUTO)" +
+                " WHERE COD_PEDIDO = " + code;
 
         List<PedidoItemDao> itens = new ArrayList<>();
 
@@ -39,6 +43,7 @@ public class PedidoRepository implements IPedidoRepository {
                 item.setQuantidade(bd.rs.getInt("quantidade"));
                 item.setVrTotal(bd.rs.getDouble("vr_total"));
                 item.setVrUnitario(bd.rs.getDouble("vr_unitario"));
+                item.setNome(bd.rs.getString("nome"));
 
                 itens.add(item);
             }
@@ -88,7 +93,9 @@ public class PedidoRepository implements IPedidoRepository {
      */
     @Override
     public int saveOrder(PedidoDao pedido) {
-        String sql = "INSERT INTO TB_PEDIDO (COD_CLIENTE, DATA_PEDIDO, DATA_ENTREGA, VR_TOTAL, VR_TAXA, VR_TROCO, LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP, TIPO_PEDIDO, ORIGEM, OBSERVACAO, FORMA_PAGAMENTO, cod_pedido_integracao) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO TB_PEDIDO (COD_CLIENTE, DATA_PEDIDO, DATA_ENTREGA, VR_TOTAL, VR_TAXA, VR_TROCO," +
+                " LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP, TIPO_PEDIDO, ORIGEM, OBSERVACAO, FORMA_PAGAMENTO," +
+                " cod_pedido_integracao, ID_USER) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
@@ -112,6 +119,7 @@ public class PedidoRepository implements IPedidoRepository {
             bd.st.setString(15, pedido.getObservacao());
             bd.st.setString(16, pedido.getFormaPagamento());
             bd.st.setString(17, pedido.getCodPedidoIntegracao());
+            bd.st.setInt(18, 1);
             int resultInsert = bd.st.executeUpdate();
             if (resultInsert > 0) {
                 int maxOrderId = loadMaxOrder();
@@ -245,5 +253,100 @@ public class PedidoRepository implements IPedidoRepository {
         }
 
         return pedidos;
+    }
+
+    @Override
+    public List<PedidoDao> getAll() {
+        String sql = "SELECT * FROM TB_PEDIDO WHERE STATUS_PEDIDO NOT IN ('FECHADO', 'CANCELADO')";
+
+        List<PedidoDao> pedidos = new ArrayList<>();
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+            while (bd.rs.next()) {
+                PedidoDao pedido = new PedidoDao();
+                pedido.setCodPedido(bd.rs.getInt("cod_pedido"));
+                pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
+                pedido.setDataEntrega(bd.rs.getString("data_entrega"));
+                pedido.setDataPedido(bd.rs.getString("data_pedido"));
+                pedido.setLogradouro(bd.rs.getString("logradouro"));
+                pedido.setNumero(bd.rs.getInt("numero"));
+                pedido.setBairro(bd.rs.getString("bairro"));
+                pedido.setCidade(bd.rs.getString("cidade"));
+                pedido.setEstado(bd.rs.getString("estado"));
+                pedido.setCep(bd.rs.getString("cep"));
+                pedido.setTipoPedido(bd.rs.getString("tipo_pedido"));
+                pedido.setOrigem(bd.rs.getString("origem"));
+                pedido.setObservacao(bd.rs.getString("observacao"));
+                pedido.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                pedido.setFormaPagamento(bd.rs.getString("forma_pagamento"));
+                pedido.setCodCliente(bd.rs.getInt("cod_cliente"));
+                pedido.setVrTotal(bd.rs.getDouble("vr_total"));
+                pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
+                pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+                pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+
+                pedidos.add(pedido);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return pedidos;
+    }
+
+    @Override
+    public PedidoDao getOrderById(int code) {
+        String sql = "SELECT * FROM TB_PEDIDO WHERE COD_PEDIDO = " + code;
+
+        PedidoDao order = null;
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+
+            if (bd.rs.next()) {
+                PedidoDao pedido = new PedidoDao();
+                pedido.setCodPedido(bd.rs.getInt("cod_pedido"));
+                pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
+                pedido.setDataEntrega(bd.rs.getString("data_entrega"));
+                pedido.setDataPedido(bd.rs.getString("data_pedido"));
+                pedido.setLogradouro(bd.rs.getString("logradouro"));
+                pedido.setNumero(bd.rs.getInt("numero"));
+                pedido.setBairro(bd.rs.getString("bairro"));
+                pedido.setCidade(bd.rs.getString("cidade"));
+                pedido.setEstado(bd.rs.getString("estado"));
+                pedido.setCep(bd.rs.getString("cep"));
+                pedido.setTipoPedido(bd.rs.getString("tipo_pedido"));
+                pedido.setOrigem(bd.rs.getString("origem"));
+                pedido.setObservacao(bd.rs.getString("observacao"));
+                pedido.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                pedido.setFormaPagamento(bd.rs.getString("forma_pagamento"));
+                pedido.setCodCliente(bd.rs.getInt("cod_cliente"));
+                pedido.setVrTotal(bd.rs.getDouble("vr_total"));
+                pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
+                pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+                pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+
+                order = pedido;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return order;
     }
 }

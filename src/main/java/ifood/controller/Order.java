@@ -28,15 +28,21 @@ public class Order {
 
         if (ordersPending.size() > 0) {
             for (OrderIntegration order : ordersPending) {
+                if (repository.hasOrderLaunched(order.getCodPedidoIntegracao())) {
+                    continue;
+                }
                 ifood.model.Order orderDetails = repository.getOrderDetails(order.getCodPedidoIntegracao());
 
                 PedidoDelivery pedido = trataPedido(orderDetails, order);
 
                 try {
-                    PedidoController pedidoController = new PedidoController();
+                    PedidoController pedidoController = PedidoController.getInstance();
                     int orderId = pedidoController.savePedido(pedido);
                     if (repository.updateOrderId(orderId, pedido.getCodPedidoIntegracao())) {
                         LoggerInFile.printInfo("Sucesso");
+                    }
+                    if (repository.updateStatusSyncOrder(pedido.getCodPedidoIntegracao())) {
+                        LoggerInFile.printInfo("Sucesso sync codigo integração");
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -187,7 +193,7 @@ public class Order {
         clienteDelivery.setNumero(numero);
         clienteDelivery.setCidade(city);
         clienteDelivery.setEstado(state);
-        clienteDelivery.setCep(Integer.parseInt(postalCode));
+        clienteDelivery.setCep(Integer.parseInt(postalCode.replaceAll("-", "")));
         clienteDelivery.setEmail("");
         clienteDelivery.setTelefone(order.getDisplayId());
 
@@ -209,7 +215,7 @@ public class Order {
         pedidoDelivery.setPagamento(pagamentoDelivery);
         pedidoDelivery.setItens(itens);
         pedidoDelivery.setCliente(clienteDelivery);
-        pedidoDelivery.setOrigem(order.getSalesChannel());
+        pedidoDelivery.setOrigem("IFOOD");
         pedidoDelivery.setCodPedidoIntegracao(orderIntegration.getCodPedidoIntegracao());
 
         return pedidoDelivery;

@@ -1,9 +1,10 @@
-import api.ApiApplication;
+import delivery.AppDelivery;
 import delivery.controller.ConfigController;
 import delivery.controller.ImprimeController;
 import ifood.AppIfood;
 import log.LoggerInFile;
 import log.MessageDefault;
+import org.springframework.boot.SpringApplication;
 
 import java.sql.SQLException;
 
@@ -17,8 +18,6 @@ public class Application {
      * @param args - argumentos de inicio do projeto
      */
     public static void main(String[] args) {
-        ApiApplication.start();
-
         LoggerInFile.start();
 
         try {
@@ -39,6 +38,17 @@ public class Application {
                 LoggerInFile.printInfo(MessageDefault.msgAccessrPrinterGranted);
                 imprimeController.startPrinter();
             }
+
+            boolean webserverPermition = configController.checkWebserverPermition();
+            if (!webserverPermition) {
+                System.out.println(MessageDefault.msgAccessWebserverNotGranted);
+                LoggerInFile.printInfo(MessageDefault.msgAccessWebserverNotGranted);
+            } else {
+                LoggerInFile.printInfo(MessageDefault.msgAccessrWebserverGranted);
+
+                SpringApplication.run(AppDelivery.class, args);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());

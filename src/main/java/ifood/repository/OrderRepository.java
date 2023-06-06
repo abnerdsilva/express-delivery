@@ -30,7 +30,8 @@ public class OrderRepository implements IOrderRepository {
      */
     @Override
     public List<OrderIntegration> getOrdersPendingToConfirmation() {
-        String sql = "SELECT * FROM TB_PEDIDO_INTEGRACAO WHERE nr_pedido = 0 AND codigo_status_integracao!='CAN'";
+        String sql = "SELECT * FROM TB_PEDIDO_INTEGRACAO TI" +
+                " WHERE status_sync_pedido=0 AND codigo_status_integracao!='CAN'";
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
@@ -110,9 +111,9 @@ public class OrderRepository implements IOrderRepository {
      */
     @Override
     public boolean updateOrderId(int id, String codPedidoIntegracao) {
-        String sql = "UPDATE TB_PEDIDO_INTEGRACAO SET"
-                + " nr_pedido=" + id + " "
-                + " WHERE cod_pedido_integracao='" + codPedidoIntegracao + "';";
+        String sql = "UPDATE TB_PEDIDO SET"
+                + " cod_pedido_integracao='" + codPedidoIntegracao + "'"
+                + " WHERE COD_PEDIDO=" + id + ";";
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
@@ -294,5 +295,79 @@ public class OrderRepository implements IOrderRepository {
         }
 
         return pedidos;
+    }
+
+    @Override
+    public boolean hasOrderLaunched(String code) {
+        String sql = "SELECT * FROM TB_PEDIDO WHERE COD_PEDIDO_INTEGRACAO=?";
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.st.setString(1, code);
+            bd.rs = bd.st.executeQuery();
+            if (bd.rs.next()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean updateStatusSyncOrder(String code) {
+        String sql = "UPDATE TB_PEDIDO_INTEGRACAO SET"
+                + " status_sync_pedido=1"
+                + " WHERE cod_pedido_integracao='" + code + "';";
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            int result = bd.st.executeUpdate();
+            if (result > 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return false;
+    }
+
+    @Override
+    public int updateStatusOrderCancelled(String code) {
+        String sql = "UPDATE TB_PEDIDO SET"
+                + " STATUS_PEDIDO='Cancelado'"
+                + " WHERE cod_pedido_integracao='" + code + "';";
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            int result = bd.st.executeUpdate();
+            if (result > 0) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return -1;
     }
 }

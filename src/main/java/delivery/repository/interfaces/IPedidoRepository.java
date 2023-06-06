@@ -18,4 +18,8 @@ public interface IPedidoRepository {
     int updateOrderPrinted(int idPedido);
 
     List<PedidoDao> getPedidosParaImprimir();
+
+    List<PedidoDao> getAll();
+
+    PedidoDao getOrderById(int id);
 }

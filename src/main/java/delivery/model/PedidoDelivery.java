@@ -1,5 +1,7 @@
 package delivery.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 
 public class PedidoDelivery {
@@ -8,9 +10,13 @@ public class PedidoDelivery {
     private String referenciaCurta;
     private String dataCriacao;
     private boolean agendado;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String dataEntrega;
     private String tipo;
     private ClienteDelivery cliente;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private PagamentoDelivery pagamento;
     private List<PedidoItemDelivery> itens;
     private double vrTotal;
@@ -18,6 +24,8 @@ public class PedidoDelivery {
     private double vrDesconto;
     private String observacao;
     private String origem;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String codPedidoIntegracao;
 
     public PedidoDelivery() {
