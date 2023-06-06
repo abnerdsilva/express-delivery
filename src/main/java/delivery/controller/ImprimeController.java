@@ -143,7 +143,7 @@ public class ImprimeController {
                         List<PedidoItemDelivery> itens = new ArrayList<>();
                         List<PedidoItemDao> itensPedido = pedidoRepository.loadItensByCode(p.getCodPedido());
                         for (PedidoItemDao it : itensPedido) {
-                            ProdutoDao produtoDao = produtoRepository.loadById(it.getCodProduto());
+                            ProdutoDao produtoDao = produtoRepository.loadById(String.valueOf(it.getCodProduto()));
 
                             PedidoItemDelivery item = new PedidoItemDelivery();
                             item.setNome(produtoDao.getNome());

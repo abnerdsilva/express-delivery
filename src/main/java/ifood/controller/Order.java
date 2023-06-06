@@ -132,9 +132,13 @@ public class Order {
      */
     private static PedidoDelivery trataPedido(ifood.model.Order order, OrderIntegration orderIntegration) {
         PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
-        pagamentoDelivery.setNome(order.getPayments().getMethods().get(0).getCard().getBrand());
+        if (order.getPayments().getMethods().get(0).getCard() == null) {
+            pagamentoDelivery.setNome(order.getPayments().getMethods().get(0).getMethod());
+        } else {
+            pagamentoDelivery.setNome(order.getPayments().getMethods().get(0).getCard().getBrand());
+        }
         pagamentoDelivery.setPrePago(order.getPayments().getMethods().get(0).isPrepaid());
-        pagamentoDelivery.setTipo(order.getPayments().getMethods().get(0).getMethod());
+        pagamentoDelivery.setTipo(order.getPayments().getMethods().get(0).getType());
         pagamentoDelivery.setTroco(order.getPayments().getPending());
         pagamentoDelivery.setValor(order.getPayments().getPrepaid());
 

@@ -8,12 +8,16 @@ import log.LoggerInFile;
 public class ProdutoRepository implements IProdutoRepository {
     /**
      * consulta dados do produto de acordo com codigo do produto solicitado
+     *
      * @param id - codigo do produto que será consultado
      * @return - retorna informações do produto consultado
      */
     @Override
-    public ProdutoDao loadById(int id) {
+    public ProdutoDao loadById(String id) {
         String sql = "SELECT * FROM TB_PRODUTO WHERE COD_PRODUTO=?";
+        if (id.equals("") || id.equals("0")) {
+            sql = "SELECT * FROM TB_PRODUTO WHERE COD_BARRAS=?";
+        }
 
         ProdutoDao produto = null;
 
@@ -22,7 +26,7 @@ public class ProdutoRepository implements IProdutoRepository {
 
         try {
             bd.st = bd.connection.prepareStatement(sql);
-            bd.st.setInt(1, id);
+            bd.st.setString(1, id);
             bd.rs = bd.st.executeQuery();
             if (bd.rs.next()) {
                 produto = new ProdutoDao();

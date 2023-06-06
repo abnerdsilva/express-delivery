@@ -103,15 +103,18 @@ public class PedidoController {
 
             for (var item : pedidoDelivery.getItens()) {
                 if (item.getCodExterno() == null) {
-                    LoggerInFile.printError("Produto não possui codigo externo");
+                    LoggerInFile.printError("Produto " + item.getId() + " não possui codigo externo");
                     continue;
                 }
 
-                int codProdutoExterno = Integer.parseInt(item.getCodExterno());
+                String codProdutoExterno = "0";
+                if (!item.getCodExterno().equals("0") && !item.getCodExterno().equals("")) {
+                    codProdutoExterno = item.getCodExterno();
+                }
 
                 ProdutoDao produto = _produtoRepository.loadById(codProdutoExterno);
                 if (produto == null || produto.getCodProduto() == 0) {
-                    LoggerInFile.printError("Produto não encontrado");
+                    LoggerInFile.printError("Produto [COD_EXTERNO = " + codProdutoExterno + "] não encontrado");
                     continue;
                 }
 
