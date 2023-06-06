@@ -6,9 +6,14 @@ import java.util.List;
 
 public class PedidoDelivery {
     private int codPedido;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String referencia;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String referenciaCurta;
     private String dataCriacao;
+    private String statusPedido;
     private boolean agendado;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -18,9 +23,15 @@ public class PedidoDelivery {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private PagamentoDelivery pagamento;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<PedidoItemDelivery> itens;
     private double vrTotal;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private double vrAdicional;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private double vrDesconto;
     private String observacao;
     private String origem;
@@ -157,5 +168,13 @@ public class PedidoDelivery {
 
     public void setCodPedidoIntegracao(String codPedidoIntegracao) {
         this.codPedidoIntegracao = codPedidoIntegracao;
+    }
+
+    public void setStatusPedido(String statusPedido) {
+        this.statusPedido = statusPedido;
+    }
+
+    public String getStatusPedido() {
+        return statusPedido;
     }
 }

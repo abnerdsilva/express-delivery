@@ -10,13 +10,8 @@ import java.util.List;
 
 public class Event {
 
-    private static EventsRepository _eventRepository;
-    private static OrderRepository _orderRepository;
-
-    public Event() {
-        _eventRepository = new EventsRepository();
-        _orderRepository = new OrderRepository();
-    }
+    private static final EventsRepository _eventRepository = new EventsRepository();
+    private static final OrderRepository _orderRepository = new OrderRepository();
 
     /**
      * consulta eventos na lista de polling do ifood

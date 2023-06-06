@@ -1,5 +1,6 @@
 package delivery.controller;
 
+import delivery.Erro;
 import delivery.model.ClienteDelivery;
 import delivery.model.PedidoDelivery;
 import delivery.model.PedidoItemDelivery;
@@ -12,6 +13,8 @@ import delivery.repository.PedidoRepository;
 import delivery.repository.ProdutoRepository;
 import log.LoggerInFile;
 import log.MessageDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -166,7 +169,7 @@ public class PedidoController {
 
         int clientId = Long.valueOf(cliente.getCodCliente()).intValue();
         clientId = _clienteRepository.hasClient(clientId, cliente.getTelefone());
-        if (clientId > 0){
+        if (clientId > 0) {
             return clientId;
         }
         return _clienteRepository.save(cliente);
@@ -178,8 +181,40 @@ public class PedidoController {
      * @return - lista de pedidos
      */
     @RequestMapping("/orders")
-    public List<PedidoDao> getOrders() {
-        return _pedidoRepository.getAll();
+    public ResponseEntity getOrders() {
+        List<PedidoDelivery> orders = new ArrayList<>();
+        List<PedidoDao> pedidoDao = _pedidoRepository.getOrdersFromToday();
+        for (var ped : pedidoDao) {
+            PedidoDelivery pedidoDelivery = new PedidoDelivery();
+            try {
+                ClienteDao clienteDao = _clienteRepository.loadById(ped.getCodCliente());
+
+                if (clienteDao == null) {
+                    throw new Exception("cliente não encontrado");
+                }
+
+                pedidoDelivery.setCodPedido(ped.getCodPedido());
+                pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+                pedidoDelivery.setDataCriacao(ped.getDataPedido());
+                pedidoDelivery.setVrTotal(ped.getVrTotal());
+                pedidoDelivery.setVrDesconto(ped.getVrDesconto());
+                pedidoDelivery.setVrAdicional(ped.getVrTaxa());
+                pedidoDelivery.setObservacao(ped.getObservacao());
+                pedidoDelivery.setCodPedidoIntegracao(ped.getCodPedidoIntegracao());
+                pedidoDelivery.setOrigem(ped.getOrigem());
+                pedidoDelivery.setTipo(ped.getTipoPedido());
+                pedidoDelivery.setStatusPedido(ped.getStatusPedido());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(e.getMessage()));
+            }
+
+            orders.add(pedidoDelivery);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(orders);
     }
 
     @RequestMapping("/order/{id}")

@@ -256,8 +256,8 @@ public class PedidoRepository implements IPedidoRepository {
     }
 
     @Override
-    public List<PedidoDao> getAll() {
-        String sql = "SELECT * FROM TB_PEDIDO WHERE STATUS_PEDIDO NOT IN ('FECHADO', 'CANCELADO')";
+    public List<PedidoDao> getOrdersFromToday() {
+        String sql = "SELECT * FROM TB_PEDIDO WHERE DATA_PEDIDO > CAST(GETDATE() AS Date)";
 
         List<PedidoDao> pedidos = new ArrayList<>();
 

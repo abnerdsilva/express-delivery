@@ -19,7 +19,7 @@ public interface IPedidoRepository {
 
     List<PedidoDao> getPedidosParaImprimir();
 
-    List<PedidoDao> getAll();
+    List<PedidoDao> getOrdersFromToday();
 
     PedidoDao getOrderById(int id);
 }
