@@ -1,3 +1,4 @@
+import 'package:express_delivery/config/theme_config.dart';
 import 'package:express_delivery/pages/home/components/orders_widget.dart';
 import 'package:express_delivery/pages/home/home_controller.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,23 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: TabBar(
+          controller: controller.tabController,
+          labelColor: ThemeConfig.kTextThirdColor,
+          labelStyle: const TextStyle(fontSize: 18),
+          indicatorSize: TabBarIndicatorSize.label,
+          indicatorWeight: 4,
+          tabs: const [
+            Tab(
+              icon: Text('ABERTO'),
+            ),
+            Tab(
+              icon: Text('FECHADO'),
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
         key: _globalKey,
         child: Container(
@@ -20,30 +38,7 @@ class HomePage extends GetView<HomeController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
-              const Center(
-                child: Text(
-                  'Pedidos do dia',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
               const SizedBox(height: 8),
-              TabBar(
-                controller: controller.tabController,
-                labelColor: Colors.black,
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50), // Creates border
-                  color: Colors.grey,
-                ),
-                //
-                tabs: const [
-                  Tab(icon: Text('Aberto')),
-                  Tab(icon: Text('Fechado')),
-                ],
-              ),
               Expanded(
                 child: TabBarView(
                   controller: controller.tabController,
