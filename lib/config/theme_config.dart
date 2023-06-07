@@ -11,8 +11,7 @@ class ThemeConfig {
 
   static const kPrimaryColor = Color(0xFFC13C53);
   static const kSecondaryColor = Color(0xFFEAF0F5);
-  static const kThirdSecondaryColor = Color(0xFFEAEAEA);
-  static const kGravishBlueColor = Color(0xff1564B3);
+  static const kThirdSecondaryColor = Color(0xFFD4D4D4);
 
   static const backgroundColor = Color(0xFFf0f0f0);
 
@@ -29,7 +28,8 @@ class ThemeConfig {
     },
   );
 
-  static const kTextPrimaryColor = Colors.black;
+  static const kTextPrimaryColor = Color(0xff000000);
   static const kTextSecundaryColor = Colors.grey;
   static const kTextThirdColor = Colors.white;
+  static const kTextFourtyColor = Color(0xFF6C6C6C);
 }
