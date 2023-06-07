@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ThemeConfig {
   ThemeConfig._();
@@ -7,6 +8,8 @@ class ThemeConfig {
     primaryColor: kPrimaryColor,
     primarySwatch: kToDark,
     canvasColor: kSecondaryColor,
+    fontFamily: GoogleFonts.lato().fontFamily,
+    backgroundColor: backgroundColor,
   );
 
   static const kPrimaryColor = Color(0xFFC13C53);
