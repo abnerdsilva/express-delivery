@@ -12,6 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   final Color? backgroundColor;
   final TextAlign? textAlign;
   final String? initialValue;
+  final String? hintText;
   final TextAlignVertical? textAlignVertical;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
@@ -40,6 +41,7 @@ class CustomTextFormField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.initialValue,
+    this.hintText,
     this.autofocus = false,
     this.obscuringCharacter = '•',
     this.inputFormatters,
@@ -99,6 +101,7 @@ class CustomTextFormField extends StatelessWidget {
                             ),
                           ),
                           filled: true,
+                          hintText: hintText,
                           contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                           hintStyle: TextStyle(color: hintColor ?? Colors.grey[800]),
                           fillColor: fillColor ?? Colors.white70,

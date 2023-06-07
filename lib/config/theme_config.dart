@@ -9,23 +9,23 @@ class ThemeConfig {
     canvasColor: kSecondaryColor,
   );
 
-  static const kPrimaryColor = Color(0xFF1A2E35);
+  static const kPrimaryColor = Color(0xFFC13C53);
   static const kSecondaryColor = Color(0xFFEAF0F5);
-  static const kThirdSecondaryColor = Color(0xFFD9D9D9);
+  static const kThirdSecondaryColor = Color(0xFFEAEAEA);
   static const kGravishBlueColor = Color(0xff1564B3);
 
   static const backgroundColor = Color(0xFFf0f0f0);
 
   static const MaterialColor kToDark = MaterialColor(
-    0xFF1A2E35,
+    0xFFC33D55,
     <int, Color>{
-      50: Color(0xFF1A2E35),
-      100: Color(0xFF1A2E35),
-      200: Color(0xFF1A2E35),
-      300: Color(0xFF1A2E35),
-      500: Color(0xFF1A2E35),
-      600: Color(0xFF1A2E35),
-      700: Color(0xFF1A2E35),
+      50: Color(0xFFC13C53),
+      100: Color(0xFFC13C53),
+      200: Color(0xFFC13C53),
+      300: Color(0xFFC33D55),
+      500: Color(0xFFC33D55),
+      600: Color(0xFFC33D55),
+      700: Color(0xFFC33D55),
     },
   );
 

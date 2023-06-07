@@ -1,3 +1,4 @@
+import 'package:express_delivery/config/theme_config.dart';
 import 'package:express_delivery/pages/login/login_controller.dart';
 import 'package:express_delivery/shared/components/custom_button.dart';
 import 'package:express_delivery/shared/components/custom_text_form_field.dart';
@@ -18,14 +19,24 @@ class LoginPage extends GetView<LoginController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 16),
+              Image.asset('assets/images/logosemfundo.png'),
+              const SizedBox(height: 24),
+              const Text(
+                'LOGIN',
+                style: TextStyle(
+                  fontSize: 22,
+                  color: ThemeConfig.kPrimaryColor,
+                ),
+              ),
+              const SizedBox(height: 32),
               SizedBox(
                 width: MediaQuery.of(context).size.width * .7,
                 child: CustomTextFormField(
                   radiusBorder: 10,
                   heightWithLabel: 70,
                   height: 40,
-                  label: 'Usuário',
+                  hintText: 'Usuário',
+                  fillColor: ThemeConfig.kThirdSecondaryColor,
                   controller: controller.userController,
                 ),
               ),
@@ -37,28 +48,28 @@ class LoginPage extends GetView<LoginController> {
                   heightWithLabel: 70,
                   height: 40,
                   obscureText: true,
-                  label: 'Senha',
+                  hintText: 'Senha',
                   controller: controller.passController,
+                  fillColor: ThemeConfig.kThirdSecondaryColor,
                 ),
               ),
               const SizedBox(height: 24),
-              SizedBox(
+              Container(
                 width: MediaQuery.of(context).size.width * .7,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Esqueci minha senha',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    CustomButton(
-                      label: 'Entrar',
-                      alignment: Alignment.center,
-                      width: 80,
-                      fontSize: 16,
-                      onClick: () => controller.login(),
-                    ),
-                  ],
+                alignment: Alignment.centerRight,
+                child: const Text(
+                  'esqueceu a senha?',
+                ),
+              ),
+              const SizedBox(height: 60),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * .4,
+                child: CustomButton(
+                  label: 'Entrar',
+                  alignment: Alignment.center,
+                  width: 80,
+                  fontSize: 16,
+                  onClick: () => controller.login(),
                 ),
               )
             ],
