@@ -26,6 +26,8 @@
     "priceExchange": "1.0",
     "paymentForm": "Forma de pagamento",
     "observation": "Observação",
+    "orderCreatedAtDescription": "Data pedido",
+    "orderStatusDescription": "Status",
     "ready": "Pronto",
     "login": "Entrar"
 }

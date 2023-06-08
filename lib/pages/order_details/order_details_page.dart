@@ -1,5 +1,7 @@
 import 'package:express_delivery/config/theme_config.dart';
 import 'package:express_delivery/generated/l10n.dart';
+import 'package:express_delivery/pages/order_details/components/header_order_details_widget.dart';
+import 'package:express_delivery/pages/order_details/components/product_order_details_widget.dart';
 import 'package:express_delivery/pages/order_details/order_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -49,12 +51,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
             child: Obx(
               () => Column(
                 children: [
-                  Center(
-                    child: Text(
-                      S().orderDetails,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ),
+                  HeaderOrderDetailsWidget(order: controller.order.value),
                   const SizedBox(height: 4),
                   const Divider(
                     color: Colors.white60,
@@ -63,195 +60,8 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                     endIndent: 30,
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        controller.order.value.dataPedido.toString(),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        controller.order.value.statusPedido,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            '${S().clientName}:',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 4,
-                        child: Text(controller.order.value.client?.name ?? ''),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            '${S().clientAddress}:',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                            '${controller.order.value.client?.address ?? ''}, ${controller.order.value.client?.addressNumber ?? ''}'),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            '${S().clientNeighborhood}:',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                            controller.order.value.client?.neighborhood ?? ''),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            '${S().clientComplement}:',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                            controller.order.value.client?.complement ?? ''),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  const Divider(
-                    color: Colors.white60,
-                    thickness: 4,
-                    indent: 30,
-                    endIndent: 30,
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 6,
-                        child: Text(
-                          S().items,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          S().quantity,
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            S().price,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.order.value.itens?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      final product = controller.order.value.itens?[index];
-                      if (product == null) return Container();
-
-                      return Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 6,
-                              child: Text(product.name),
-                            ),
-                            const SizedBox(width: 20),
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    product.quantity.toString(),
-                                    textAlign: TextAlign.end,
-                                  )),
-                            ),
-                            const SizedBox(width: 20),
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  '${S().priceCode} ${(product.totalValue / double.parse(S().priceExchange)).toStringAsFixed(2)}',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 4),
+                  ProductOrderDetailsWidget(order: controller.order.value),
+                  const SizedBox(height: 12),
                   const Divider(
                     color: Colors.white60,
                     thickness: 4,
@@ -331,9 +141,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  const Divider(),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 22),
                   Row(
                     children: [
                       Expanded(
@@ -348,8 +156,6 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                       const Text('VERIFICAR'),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  const Divider(),
                   const SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerLeft,

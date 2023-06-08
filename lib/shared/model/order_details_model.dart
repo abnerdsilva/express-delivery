@@ -47,7 +47,7 @@ class OrderDetailsModel {
       'codPedido': codPedido,
       'codCliente': codCliente,
       'observacao': observacao,
-      'dataPedido': dataPedido,
+      'dataCriacao': dataPedido,
       'dataEntrega': dataEntrega,
       'statusPedido': statusPedido,
       'tipoPedido': tipoPedido,
@@ -69,7 +69,7 @@ class OrderDetailsModel {
       codPedido: map['codPedido'],
       codCliente: map['codCliente'] ?? 0,
       observacao: map['observacao'] ?? '',
-      dataPedido: map['dataPedido'] ?? '',
+      dataPedido: map['dataCriacao'] ?? '',
       dataEntrega: map['dataEntrega'] ?? '',
       statusPedido: map['statusPedido'] ?? '',
       tipoPedido: map['tipoPedido'] ?? '',
@@ -82,11 +82,15 @@ class OrderDetailsModel {
       vrAdicional: map['vrAdicional'] ?? 0.0,
       vrDesconto: map['vrDesconto'] ?? 0.0,
       client: Client.fromMap(map['cliente']),
-      itens: map['itens'] != null ? List<ProductOrder>.from(map['itens'].map<ProductOrder>((x) => ProductOrder.fromMap(x))) : [],
+      itens: map['itens'] != null
+          ? List<ProductOrder>.from(
+              map['itens'].map<ProductOrder>((x) => ProductOrder.fromMap(x)))
+          : [],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory OrderDetailsModel.fromJson(String source) => OrderDetailsModel.fromMap(json.decode(source));
+  factory OrderDetailsModel.fromJson(String source) =>
+      OrderDetailsModel.fromMap(json.decode(source));
 }

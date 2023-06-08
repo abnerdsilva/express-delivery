@@ -39,11 +39,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("PEDIDO CANCELADO"),
         "orderConcluded":
             MessageLookupByLibrary.simpleMessage("PEDIDO FINALIZADO"),
+        "orderCreatedAtDescription":
+            MessageLookupByLibrary.simpleMessage("Data pedido"),
         "orderDetails":
             MessageLookupByLibrary.simpleMessage("Detalhes do pedido"),
         "orderID": MessageLookupByLibrary.simpleMessage("Nº"),
         "orderInProgress":
             MessageLookupByLibrary.simpleMessage("PREPARANDO PEDIDO"),
+        "orderStatusDescription":
+            MessageLookupByLibrary.simpleMessage("Status"),
         "orderWaiting":
             MessageLookupByLibrary.simpleMessage("AGUARDANDO CONFIRMAÇÃO"),
         "password": MessageLookupByLibrary.simpleMessage("Senha"),

@@ -24,8 +24,10 @@
     "price": "Price",
     "priceCode": "U$",
     "priceExchange": "5.2",
-    "paymentForm": "Payment",
+    "paymentForm": "Payment Type",
     "observation": "Observations",
+    "orderCreatedAtDescription": "Order date",
+    "orderStatusDescription": "Status",
     "ready": "Ready",
     "login": "Login"
 }

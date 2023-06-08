@@ -290,10 +290,10 @@ class S {
     );
   }
 
-  /// `Payment`
+  /// `Payment Type`
   String get paymentForm {
     return Intl.message(
-      'Payment',
+      'Payment Type',
       name: 'paymentForm',
       desc: '',
       args: [],
@@ -305,6 +305,26 @@ class S {
     return Intl.message(
       'Observations',
       name: 'observation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order date`
+  String get orderCreatedAtDescription {
+    return Intl.message(
+      'Order date',
+      name: 'orderCreatedAtDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status`
+  String get orderStatusDescription {
+    return Intl.message(
+      'Status',
+      name: 'orderStatusDescription',
       desc: '',
       args: [],
     );
