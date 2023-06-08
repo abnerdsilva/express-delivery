@@ -20,7 +20,7 @@ class RoutesConfig {
     ),
     GetPage(
       name: HomePage.route,
-      page: () => HomePage(),
+      page: () => const HomePage(),
       binding: HomeBinding(),
     ),
     GetPage(

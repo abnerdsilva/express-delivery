@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:express_delivery/shared/model/order_details_model.dart';
-import 'package:express_delivery/shared/model/product_order.dart';
 import 'package:express_delivery/shared/repositories/order_repository.dart';
+import 'package:express_delivery/shared/repositories/shared_preferences_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController with GetSingleTickerProviderStateMixin {
+class HomeController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   late TabController tabController;
 
   late OrderRepository _orderRepository;
@@ -16,13 +16,20 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     _orderRepository = orderRepository;
   }
 
+  final statusCancelled = 'CANCELADO';
+  final statusConcluded = 'CONCLUIDO';
+
   RxList<OrderDetailsModel> orders = <OrderDetailsModel>[].obs;
   RxList<OrderDetailsModel> ordersOpened = <OrderDetailsModel>[].obs;
   RxList<OrderDetailsModel> ordersClosed = <OrderDetailsModel>[].obs;
 
+  late SharedPrefsRepository prefs;
+
   @override
-  void onInit() {
+  Future<void> onInit() async {
     tabController = TabController(length: 2, vsync: this);
+    prefs = await SharedPrefsRepository.instance;
+
     super.onInit();
 
     loopGetOrders();
@@ -42,12 +49,17 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     ordersClosed.clear();
     ordersOpened.clear();
     orders.addAll(ordersTemp);
-    for(var el in orders){
-      if (el.statusPedido.toUpperCase() == 'CANCELADO' || el.statusPedido.toUpperCase() == 'CONCLUIDO') {
+    for (var el in orders) {
+      if (el.statusPedido.toUpperCase() == statusCancelled ||
+          el.statusPedido.toUpperCase() == statusConcluded) {
         ordersClosed.add(el);
       } else {
         ordersOpened.add(el);
       }
     }
+  }
+
+  Future<void> changeLanguage(String lang) async {
+    await prefs.registerLocaleId(lang);
   }
 }

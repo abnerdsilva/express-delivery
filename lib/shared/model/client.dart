@@ -39,10 +39,10 @@ class Client {
       id: map['codCliente']?.toInt() ?? 0,
       name: map['nome'] ?? '',
       address: map['logradouro'] ?? '',
-      addressNumber: map['numero'].toString() ?? '',
+      addressNumber: map['numero'].toString(),
       neighborhood: map['bairro'] ?? '',
       city: map['cidade'] ?? '',
-      postalCode: map['cep'].toString() ?? '',
+      postalCode: map['cep'].toString(),
       complement: map['observacao'] ?? '',
     );
   }

@@ -1,4 +1,5 @@
 import 'package:express_delivery/config/theme_config.dart';
+import 'package:express_delivery/generated/l10n.dart';
 import 'package:express_delivery/pages/order_details/order_details_page.dart';
 import 'package:express_delivery/shared/model/order_details_model.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,10 @@ class OrdersWidget extends StatelessWidget {
   final List<OrderDetailsModel> orders;
 
   const OrdersWidget({Key? key, required this.orders}) : super(key: key);
+
+  static const statusCancelled = 'CANCELADO';
+  static const statusConcluded = 'CONCLUIDO';
+  static const statusOpened = 'ABERTO';
 
   @override
   Widget build(BuildContext context) {
@@ -20,20 +25,20 @@ class OrdersWidget extends StatelessWidget {
         String btnTitle = '';
         late Color btnTitleColor;
         switch (item.statusPedido.toUpperCase()) {
-          case 'ABERTO':
-            btnTitle = 'PREPARANDO PEDIDO';
+          case statusOpened:
+            btnTitle = S().orderInProgress;
             btnTitleColor = const Color(0xff3D7BC3);
             break;
-          case 'FECHADO':
-            btnTitle = 'PEDIDO FINALIZADO';
+          case statusConcluded:
+            btnTitle = S().orderConcluded;
             btnTitleColor = const Color(0xff72AE42);
             break;
-          case 'CANCELADO':
-            btnTitle = 'PEDIDO CANCELADO';
+          case statusCancelled:
+            btnTitle = S().orderCancelled;
             btnTitleColor = const Color(0xffA65454);
             break;
           default:
-            btnTitle = 'AGUARDANDO CONFIRMAÇÃO';
+            btnTitle = S().orderWaiting;
             btnTitleColor = const Color(0xffC39D3D);
             break;
         }
@@ -66,7 +71,7 @@ class OrdersWidget extends StatelessWidget {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          'PEDIDO Nº ${item.codPedido}',
+                          '${S().order} ${S().orderID} ${item.codPedido}',
                           style: const TextStyle(
                             fontSize: 20,
                             color: ThemeConfig.kTextFourtyColor,
@@ -94,7 +99,8 @@ class OrdersWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   TextButton(
-                    onPressed: () => Get.toNamed(OrderDetailsPage.route, arguments: item),
+                    onPressed: () =>
+                        Get.toNamed(OrderDetailsPage.route, arguments: item),
                     child: Container(
                       width: MediaQuery.of(context).size.width * .6,
                       alignment: Alignment.center,

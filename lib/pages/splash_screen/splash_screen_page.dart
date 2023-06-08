@@ -1,5 +1,7 @@
 import 'package:express_delivery/config/theme_config.dart';
+import 'package:express_delivery/generated/l10n.dart';
 import 'package:express_delivery/pages/login/login_page.dart';
+import 'package:express_delivery/shared/repositories/shared_preferences_repository.dart';
 import 'package:flutter/material.dart';
 
 class SplashSreenPage extends StatefulWidget {
@@ -16,8 +18,33 @@ class _SplashSreenPageState extends State<SplashSreenPage> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushNamedAndRemoveUntil(context, LoginPage.route, (route) => false);
+    Future.delayed(const Duration(seconds: 3), () async {
+      final prefs = await SharedPrefsRepository.instance;
+      final locale = prefs.localeID ?? 'pt';
+
+      setState(() {
+        switch (locale) {
+          case 'pt':
+            S.load(const Locale('pt'));
+            prefs.registerLocaleId('pt');
+            break;
+          case 'en':
+            S.load(const Locale('en'));
+            prefs.registerLocaleId('en');
+            break;
+          default:
+            S.load(const Locale('pt'));
+            prefs.registerLocaleId('pt');
+            break;
+        }
+      });
+
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        LoginPage.route,
+        (route) => false,
+      );
     });
   }
 

@@ -1,14 +1,29 @@
 import 'package:express_delivery/config/theme_config.dart';
+import 'package:express_delivery/generated/l10n.dart';
 import 'package:express_delivery/pages/login/login_controller.dart';
 import 'package:express_delivery/shared/components/custom_button.dart';
 import 'package:express_delivery/shared/components/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginPage extends GetView<LoginController> {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   static const String route = '/login';
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late LoginController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = Get.find<LoginController>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +36,9 @@ class LoginPage extends GetView<LoginController> {
             children: [
               Image.asset('assets/images/logosemfundo.png'),
               const SizedBox(height: 24),
-              const Text(
-                'LOGIN',
-                style: TextStyle(
+              Text(
+                S().login.toUpperCase(),
+                style: const TextStyle(
                   fontSize: 22,
                   color: ThemeConfig.kPrimaryColor,
                 ),
@@ -35,7 +50,7 @@ class LoginPage extends GetView<LoginController> {
                   radiusBorder: 10,
                   heightWithLabel: 70,
                   height: 40,
-                  hintText: 'Usuário',
+                  hintText: S().username,
                   fillColor: ThemeConfig.kThirdSecondaryColor,
                   controller: controller.userController,
                 ),
@@ -48,7 +63,7 @@ class LoginPage extends GetView<LoginController> {
                   heightWithLabel: 70,
                   height: 40,
                   obscureText: true,
-                  hintText: 'Senha',
+                  hintText: S().password,
                   controller: controller.passController,
                   fillColor: ThemeConfig.kThirdSecondaryColor,
                 ),
@@ -57,15 +72,15 @@ class LoginPage extends GetView<LoginController> {
               Container(
                 width: MediaQuery.of(context).size.width * .7,
                 alignment: Alignment.centerRight,
-                child: const Text(
-                  'esqueceu a senha?',
+                child: Text(
+                  S().forgotPassword,
                 ),
               ),
               const SizedBox(height: 60),
               SizedBox(
                 width: MediaQuery.of(context).size.width * .4,
                 child: CustomButton(
-                  label: 'Entrar',
+                  label: S().login,
                   alignment: Alignment.center,
                   width: 80,
                   fontSize: 16,

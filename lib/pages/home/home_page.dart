@@ -1,15 +1,30 @@
 import 'package:express_delivery/config/theme_config.dart';
+import 'package:express_delivery/generated/l10n.dart';
 import 'package:express_delivery/pages/home/components/orders_widget.dart';
 import 'package:express_delivery/pages/home/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomePage extends GetView<HomeController> {
-  HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   static const String route = '/home';
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final _globalKey = GlobalKey();
+
+  late HomeController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = Get.find<HomeController>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +36,12 @@ class HomePage extends GetView<HomeController> {
           labelStyle: const TextStyle(fontSize: 18),
           indicatorSize: TabBarIndicatorSize.label,
           indicatorWeight: 4,
-          tabs: const [
+          tabs: [
             Tab(
-              icon: Text('ABERTO'),
+              icon: Text(S().statusOpened),
             ),
             Tab(
-              icon: Text('FECHADO'),
+              icon: Text(S().statusClosed),
             ),
           ],
         ),
@@ -46,34 +61,48 @@ class HomePage extends GetView<HomeController> {
                     Obx(
                       () => controller.ordersOpened.isNotEmpty
                           ? OrdersWidget(orders: controller.ordersOpened)
-                          : const Center(
-                              child: Text('Nenhum item'),
+                          : Center(
+                              child: Text(S().noOrders),
                             ),
                     ),
                     Obx(
                       () => controller.ordersClosed.isNotEmpty
                           ? OrdersWidget(orders: controller.ordersClosed)
-                          : const Center(
-                              child: Text('Nenhum item'),
+                          : Center(
+                              child: Text(S().noOrders),
                             ),
                     ),
                   ],
                 ),
               ),
-
-              // const SizedBox(height: 8),
-              // const Divider(),
-              // const SizedBox(height: 8),
-              // //   const Text(
-              //     'Fechado',
-              //     style: TextStyle(
-              //       fontSize: 18,
-              //       color: Colors.red,
-              //     ),
-              //   ),
-              //
             ],
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          final locale = controller.prefs.localeID ?? 'pt';
+          String codeLocale = 'pt';
+
+          setState(() {
+            switch (locale) {
+              case 'en':
+                codeLocale = 'pt';
+                break;
+              case 'pt':
+              default:
+                codeLocale = 'en';
+                break;
+            }
+
+            S.load(Locale(codeLocale));
+            controller.changeLanguage(codeLocale);
+          });
+        },
+        child: const Icon(
+          Icons.settings_outlined,
+          color: Colors.black,
+          size: 45,
         ),
       ),
     );
