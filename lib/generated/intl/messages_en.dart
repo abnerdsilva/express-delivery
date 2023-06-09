@@ -22,16 +22,18 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "clientAddress": MessageLookupByLibrary.simpleMessage("Address"),
-        "clientComplement": MessageLookupByLibrary.simpleMessage("Complement"),
-        "clientName": MessageLookupByLibrary.simpleMessage("Client"),
-        "clientNeighborhood":
-            MessageLookupByLibrary.simpleMessage("Neighborhood"),
+        "address": MessageLookupByLibrary.simpleMessage("Address"),
+        "client": MessageLookupByLibrary.simpleMessage("Client"),
+        "complement": MessageLookupByLibrary.simpleMessage("Complement"),
+        "email": MessageLookupByLibrary.simpleMessage("Email"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("forgot the passoword?"),
         "items": MessageLookupByLibrary.simpleMessage("Items"),
+        "language": MessageLookupByLibrary.simpleMessage("Language"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
+        "logout": MessageLookupByLibrary.simpleMessage("Logout"),
         "message": MessageLookupByLibrary.simpleMessage("message"),
+        "neighborhood": MessageLookupByLibrary.simpleMessage("Neighborhood"),
         "noOrders": MessageLookupByLibrary.simpleMessage("No orders released"),
         "observation": MessageLookupByLibrary.simpleMessage("Observations"),
         "order": MessageLookupByLibrary.simpleMessage("ORDER"),
@@ -50,14 +52,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderWaiting":
             MessageLookupByLibrary.simpleMessage("WAITING CONFIRMATION"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
-        "paymentForm": MessageLookupByLibrary.simpleMessage("Payment Type"),
+        "paymentType": MessageLookupByLibrary.simpleMessage("Payment Type"),
+        "phone": MessageLookupByLibrary.simpleMessage("Phone"),
         "price": MessageLookupByLibrary.simpleMessage("Price"),
         "priceCode": MessageLookupByLibrary.simpleMessage("U\$"),
         "priceExchange": MessageLookupByLibrary.simpleMessage("5.2"),
         "quantity": MessageLookupByLibrary.simpleMessage("Qty"),
         "ready": MessageLookupByLibrary.simpleMessage("Ready"),
+        "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "statusClosed": MessageLookupByLibrary.simpleMessage("Closed"),
         "statusOpened": MessageLookupByLibrary.simpleMessage("Open"),
+        "support": MessageLookupByLibrary.simpleMessage("Support"),
         "title": MessageLookupByLibrary.simpleMessage("ExpressDelivery"),
         "username": MessageLookupByLibrary.simpleMessage("Username")
       };

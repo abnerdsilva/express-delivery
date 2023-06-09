@@ -45,9 +45,12 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
-            color: ThemeConfig.kThirdSecondaryColor,
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: ThemeConfig.kThirdSecondaryColor,
+            ),
             child: Obx(
               () => Column(
                 children: [
@@ -60,7 +63,9 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                     endIndent: 30,
                   ),
                   const SizedBox(height: 16),
-                  ProductOrderDetailsWidget(order: controller.order.value),
+                  ProductOrderDetailsWidget(
+                    order: controller.order.value,
+                  ),
                   const SizedBox(height: 12),
                   const Divider(
                     color: Colors.white60,
@@ -146,7 +151,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                     children: [
                       Expanded(
                         child: Text(
-                          S().paymentForm,
+                          S().paymentType,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),

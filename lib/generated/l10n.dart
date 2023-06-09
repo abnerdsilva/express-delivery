@@ -201,40 +201,40 @@ class S {
   }
 
   /// `Client`
-  String get clientName {
+  String get client {
     return Intl.message(
       'Client',
-      name: 'clientName',
+      name: 'client',
       desc: '',
       args: [],
     );
   }
 
   /// `Address`
-  String get clientAddress {
+  String get address {
     return Intl.message(
       'Address',
-      name: 'clientAddress',
+      name: 'address',
       desc: '',
       args: [],
     );
   }
 
   /// `Neighborhood`
-  String get clientNeighborhood {
+  String get neighborhood {
     return Intl.message(
       'Neighborhood',
-      name: 'clientNeighborhood',
+      name: 'neighborhood',
       desc: '',
       args: [],
     );
   }
 
   /// `Complement`
-  String get clientComplement {
+  String get complement {
     return Intl.message(
       'Complement',
-      name: 'clientComplement',
+      name: 'complement',
       desc: '',
       args: [],
     );
@@ -291,10 +291,10 @@ class S {
   }
 
   /// `Payment Type`
-  String get paymentForm {
+  String get paymentType {
     return Intl.message(
       'Payment Type',
-      name: 'paymentForm',
+      name: 'paymentType',
       desc: '',
       args: [],
     );
@@ -330,6 +330,56 @@ class S {
     );
   }
 
+  /// `Settings`
+  String get settings {
+    return Intl.message(
+      'Settings',
+      name: 'settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone`
+  String get phone {
+    return Intl.message(
+      'Phone',
+      name: 'phone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get email {
+    return Intl.message(
+      'Email',
+      name: 'email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get language {
+    return Intl.message(
+      'Language',
+      name: 'language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Support`
+  String get support {
+    return Intl.message(
+      'Support',
+      name: 'support',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Ready`
   String get ready {
     return Intl.message(
@@ -345,6 +395,16 @@ class S {
     return Intl.message(
       'Login',
       name: 'login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logout`
+  String get logout {
+    return Intl.message(
+      'Logout',
+      name: 'logout',
       desc: '',
       args: [],
     );

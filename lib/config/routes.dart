@@ -4,6 +4,7 @@ import 'package:express_delivery/pages/login/login_binding.dart';
 import 'package:express_delivery/pages/login/login_page.dart';
 import 'package:express_delivery/pages/order_details/order_details_binding.dart';
 import 'package:express_delivery/pages/order_details/order_details_page.dart';
+import 'package:express_delivery/pages/settings/settings_page.dart';
 import 'package:express_delivery/pages/splash_screen/splash_screen_page.dart';
 import 'package:get/get.dart';
 
@@ -27,6 +28,10 @@ class RoutesConfig {
       name: OrderDetailsPage.route,
       page: () => const OrderDetailsPage(),
       binding: OrderDetailsBinding(),
+    ),
+    GetPage(
+      name: SettingsPage.route,
+      page: () => const SettingsPage(),
     ),
   ];
 }

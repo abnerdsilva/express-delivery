@@ -89,7 +89,7 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
               child: Container(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  '${S().clientName}:',
+                  '${S().client}:',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -110,7 +110,7 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
               child: Container(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  '${S().clientAddress}:',
+                  '${S().address}:',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -132,7 +132,7 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
               child: Container(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  '${S().clientNeighborhood}:',
+                  '${S().neighborhood}:',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -153,7 +153,7 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
               child: Container(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  '${S().clientComplement}:',
+                  '${S().complement}:',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),

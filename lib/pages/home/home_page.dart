@@ -80,24 +80,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final locale = controller.prefs.localeID ?? 'pt';
-          String codeLocale = 'pt';
-
-          setState(() {
-            switch (locale) {
-              case 'en':
-                codeLocale = 'pt';
-                break;
-              case 'pt':
-              default:
-                codeLocale = 'en';
-                break;
-            }
-
-            S.load(Locale(codeLocale));
-            controller.changeLanguage(codeLocale);
-          });
+        onPressed: () async {
+          await Get.toNamed('/settings');
+          setState(() {});
         },
         child: const Icon(
           Icons.settings_outlined,

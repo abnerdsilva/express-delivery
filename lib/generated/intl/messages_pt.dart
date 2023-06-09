@@ -22,15 +22,18 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "clientAddress": MessageLookupByLibrary.simpleMessage("Endereço"),
-        "clientComplement": MessageLookupByLibrary.simpleMessage("Complemento"),
-        "clientName": MessageLookupByLibrary.simpleMessage("Cliente"),
-        "clientNeighborhood": MessageLookupByLibrary.simpleMessage("Bairro"),
+        "address": MessageLookupByLibrary.simpleMessage("Endereço"),
+        "client": MessageLookupByLibrary.simpleMessage("Cliente"),
+        "complement": MessageLookupByLibrary.simpleMessage("Complemento"),
+        "email": MessageLookupByLibrary.simpleMessage("Email"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("esqueceu a senha?"),
         "items": MessageLookupByLibrary.simpleMessage("Itens"),
+        "language": MessageLookupByLibrary.simpleMessage("Idioma"),
         "login": MessageLookupByLibrary.simpleMessage("Entrar"),
+        "logout": MessageLookupByLibrary.simpleMessage("Sair"),
         "message": MessageLookupByLibrary.simpleMessage("Mensagem"),
+        "neighborhood": MessageLookupByLibrary.simpleMessage("Bairro"),
         "noOrders":
             MessageLookupByLibrary.simpleMessage("Nenhum pedido lançado"),
         "observation": MessageLookupByLibrary.simpleMessage("Observação"),
@@ -51,15 +54,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderWaiting":
             MessageLookupByLibrary.simpleMessage("AGUARDANDO CONFIRMAÇÃO"),
         "password": MessageLookupByLibrary.simpleMessage("Senha"),
-        "paymentForm":
+        "paymentType":
             MessageLookupByLibrary.simpleMessage("Forma de pagamento"),
+        "phone": MessageLookupByLibrary.simpleMessage("Telefone"),
         "price": MessageLookupByLibrary.simpleMessage("Valor"),
         "priceCode": MessageLookupByLibrary.simpleMessage("R\$"),
         "priceExchange": MessageLookupByLibrary.simpleMessage("1.0"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantidade"),
         "ready": MessageLookupByLibrary.simpleMessage("Pronto"),
+        "settings": MessageLookupByLibrary.simpleMessage("Configurações"),
         "statusClosed": MessageLookupByLibrary.simpleMessage("Fechado"),
         "statusOpened": MessageLookupByLibrary.simpleMessage("Aberto"),
+        "support": MessageLookupByLibrary.simpleMessage("Suporte"),
         "title": MessageLookupByLibrary.simpleMessage("ExpressDelivery"),
         "username": MessageLookupByLibrary.simpleMessage("Usuário")
       };
