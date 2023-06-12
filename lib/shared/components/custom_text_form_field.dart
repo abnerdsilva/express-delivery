@@ -26,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
   final InputDecoration? decoration;
   final bool obscureText;
   final bool enabled;
+  final TextInputAction? textInputAction;
 
   const CustomTextFormField({
     Key? key,
@@ -53,6 +54,7 @@ class CustomTextFormField extends StatelessWidget {
     this.enabled = true,
     this.onFieldSubmitted,
     this.backgroundColor,
+    this.textInputAction,
   }) : super(key: key);
 
   @override
@@ -79,7 +81,8 @@ class CustomTextFormField extends StatelessWidget {
                   flex: 1,
                   child: TextFormField(
                     textAlign: textAlign ?? TextAlign.start,
-                    textAlignVertical: textAlignVertical ?? TextAlignVertical.center,
+                    textAlignVertical:
+                        textAlignVertical ?? TextAlignVertical.center,
                     obscureText: obscureText,
                     onChanged: onChanged,
                     initialValue: initialValue,
@@ -93,6 +96,7 @@ class CustomTextFormField extends StatelessWidget {
                     enabled: enabled,
                     inputFormatters: inputFormatters,
                     onFieldSubmitted: onFieldSubmitted,
+                    textInputAction: textInputAction,
                     decoration: decoration ??
                         InputDecoration(
                           border: OutlineInputBorder(
@@ -102,8 +106,10 @@ class CustomTextFormField extends StatelessWidget {
                           ),
                           filled: true,
                           hintText: hintText,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                          hintStyle: TextStyle(color: hintColor ?? Colors.grey[800]),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 10),
+                          hintStyle:
+                              TextStyle(color: hintColor ?? Colors.grey[800]),
                           fillColor: fillColor ?? Colors.white70,
                         ),
                   ),

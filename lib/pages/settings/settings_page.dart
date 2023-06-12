@@ -58,6 +58,13 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  Future<void> logout() async {
+    final prefs = await SharedPrefsRepository.instance;
+    prefs.logout();
+
+    Get.offAllNamed(LoginPage.route);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -220,8 +227,10 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               Expanded(child: Container()),
               ElevatedButton(
-                onPressed: () => Get.offAllNamed(LoginPage.route),
-                style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.black)),
+                onPressed: () => logout(),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => Colors.black)),
                 child: Container(
                   width: MediaQuery.of(context).size.width * .7,
                   alignment: Alignment.center,
