@@ -74,8 +74,9 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 color: setStatusColor(order.statusPedido),
               ),
+              padding: const EdgeInsets.all(4.0),
               child: Text(
-                '${order.statusPedido} - VERIFICAR',
+                order.statusPedido,
                 style: const TextStyle(fontSize: 16),
               ),
             ),

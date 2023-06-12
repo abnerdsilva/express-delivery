@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:express_delivery/config/rest_client.dart';
 import 'package:express_delivery/shared/model/order_details_model.dart';
 import 'package:express_delivery/shared/model/product_order.dart';
 import 'package:express_delivery/shared/repositories/order_repository.dart';
@@ -33,7 +36,28 @@ class OrderDetailsController extends GetxController {
   }
 
   Future<void> findOrderById(int codPedido) async {
-    final orderCompleteTemp = await _orderRepository.getOrderCompleteById(codPedido);
-    order.value = orderCompleteTemp;
+    try {
+      final orderCompleteTemp =
+          await _orderRepository.getOrderCompleteById(codPedido);
+      order.value = orderCompleteTemp;
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> updateOrderStatus(int codPedido) async {
+    try {
+      final status = await _orderRepository.updateOrderStatus(codPedido);
+      if (status) {
+        Get.snackbar('Sucesso', 'Pedido atualizado com sucesso');
+      }
+    } on RestClientException catch (e) {
+      Get.snackbar('Ops', e.message);
+      log(e.message);
+    } on Exception catch (e) {
+      Get.snackbar('Ops',
+          "Não foi possivel atualizar o status do pedido, entre em contato com o administrador");
+      log(e.toString());
+    }
   }
 }

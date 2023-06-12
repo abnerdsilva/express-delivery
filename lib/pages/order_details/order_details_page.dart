@@ -179,17 +179,22 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                   const SizedBox(height: 12),
                   const Divider(),
                   const SizedBox(height: 12),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => Colors.redAccent),
-                      ),
-                      child: Text(S().ready),
-                    ),
-                  ),
+                  controller.order.value.statusPedido != 'Cancelado' &&
+                          controller.order.value.statusPedido != 'Concluido'
+                      ? Align(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton(
+                            onPressed: () => controller.updateOrderStatus(
+                              controller.order.value.codPedido,
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateColor.resolveWith(
+                                  (states) => Colors.redAccent),
+                            ),
+                            child: Text(S().ready),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),
