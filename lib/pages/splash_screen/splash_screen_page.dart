@@ -1,5 +1,6 @@
 import 'package:express_delivery/config/theme_config.dart';
 import 'package:express_delivery/generated/l10n.dart';
+import 'package:express_delivery/pages/home/home_page.dart';
 import 'package:express_delivery/pages/login/login_page.dart';
 import 'package:express_delivery/shared/repositories/shared_preferences_repository.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class _SplashSreenPageState extends State<SplashSreenPage> {
     Future.delayed(const Duration(seconds: 3), () async {
       final prefs = await SharedPrefsRepository.instance;
       final locale = prefs.localeID ?? 'pt';
+      final clientID = prefs.clienteID ?? '';
 
       // setState(() {
       switch (locale) {
@@ -40,7 +42,12 @@ class _SplashSreenPageState extends State<SplashSreenPage> {
       }
       // });
 
-      Get.offAndToNamed(LoginPage.route);
+      if (clientID.isNotEmpty) {
+        Get.offAndToNamed(HomePage.route);
+      } else {
+        Get.offAndToNamed(LoginPage.route);
+      }
+
       // ignore: use_build_context_synchronously
       // Navigator.pushNamedAndRemoveUntil(
       //   context,
