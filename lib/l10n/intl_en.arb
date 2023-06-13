@@ -34,6 +34,11 @@
     "language": "Language",
     "support": "Support",
     "ready": "Ready",
+    "accept": "Accept",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "conclude": "Conclude",
+    "dispatch": "Dispatch",
     "login": "Login",
     "logout": "Logout"
 }

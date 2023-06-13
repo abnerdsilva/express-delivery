@@ -9,6 +9,7 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
   static const statusCancelled = 'CANCELADO';
   static const statusConcluded = 'CONCLUIDO';
   static const statusOpened = 'ABERTO';
+  static const statusConfirmed = 'CONFIRMADO';
 
   String convertDateBR(String value) {
     return '${value.substring(8, 10)}/${value.substring(5, 7)}/${value.substring(0, 4)} ${value.substring(11, 13)}:${value.substring(14, 16)}';
@@ -25,6 +26,9 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
         break;
       case statusCancelled:
         orderStatusColor = const Color(0xffA65454);
+        break;
+      case statusConfirmed:
+        orderStatusColor = const Color.fromARGB(255, 66, 201, 219);
         break;
       default:
         orderStatusColor = const Color(0xffC39D3D);

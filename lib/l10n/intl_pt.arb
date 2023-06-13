@@ -34,6 +34,11 @@
     "language": "Idioma",
     "support": "Suporte",
     "ready": "Pronto",
+    "accept": "Aceitar",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "conclude": "Concluir",
+    "dispatch": "Despachar",
     "login": "Entrar",
     "logout": "Sair"
 }

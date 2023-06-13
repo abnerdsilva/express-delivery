@@ -95,4 +95,30 @@ class OrderRepository {
     }
     return status;
   }
+
+  Future<bool> cancelOrder(int code) async {
+    bool status = false;
+    try {
+      final response = await restClient.get('/order/$code/cancel');
+      if (response.hasError) {
+        String message = response.bodyString!;
+
+        if (response.statusCode == 403) {
+          message = 'Usuário ou senha inválidos';
+        }
+        if (response.statusCode == 404) {
+          message = 'Erro ao autenticar usuário.';
+        }
+        throw RestClientException(message, code: response.statusCode);
+      }
+
+      status = true;
+    } on RestClientException catch (e) {
+      throw RestClientException(e.message, code: e.code);
+    } catch (e) {
+      log(e.toString());
+      throw Exception('Não foi possivel consultar pedido completo');
+    }
+    return status;
+  }
 }

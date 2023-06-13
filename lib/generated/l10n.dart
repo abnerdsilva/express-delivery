@@ -390,6 +390,56 @@ class S {
     );
   }
 
+  /// `Accept`
+  String get accept {
+    return Intl.message(
+      'Accept',
+      name: 'accept',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Conclude`
+  String get conclude {
+    return Intl.message(
+      'Conclude',
+      name: 'conclude',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dispatch`
+  String get dispatch {
+    return Intl.message(
+      'Dispatch',
+      name: 'dispatch',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Login`
   String get login {
     return Intl.message(

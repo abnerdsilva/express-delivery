@@ -49,6 +49,8 @@ class OrderDetailsController extends GetxController {
     try {
       final status = await _orderRepository.updateOrderStatus(codPedido);
       if (status) {
+        await findOrderById(codPedido);
+
         Get.snackbar('Sucesso', 'Pedido atualizado com sucesso');
       }
     } on RestClientException catch (e) {
@@ -57,6 +59,24 @@ class OrderDetailsController extends GetxController {
     } on Exception catch (e) {
       Get.snackbar('Ops',
           "Não foi possivel atualizar o status do pedido, entre em contato com o administrador");
+      log(e.toString());
+    }
+  }
+
+  Future<void> cancelOrder(int codPedido) async {
+    try {
+      final status = await _orderRepository.cancelOrder(codPedido);
+      if (status) {
+        await findOrderById(codPedido);
+
+        Get.snackbar('Sucesso', 'Pedido cancelado com sucesso');
+      }
+    } on RestClientException catch (e) {
+      Get.snackbar('Ops', e.message);
+      log(e.message);
+    } on Exception catch (e) {
+      Get.snackbar('Ops',
+          "Não foi possivel cancelar o pedido, entre em contato com o administrador");
       log(e.toString());
     }
   }

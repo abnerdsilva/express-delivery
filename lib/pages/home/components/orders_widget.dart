@@ -13,6 +13,7 @@ class OrdersWidget extends StatelessWidget {
   static const statusCancelled = 'CANCELADO';
   static const statusConcluded = 'CONCLUIDO';
   static const statusOpened = 'ABERTO';
+  static const statusConfirmed = 'CONFIRMADO';
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +27,12 @@ class OrdersWidget extends StatelessWidget {
         late Color btnTitleColor;
         switch (item.statusPedido.toUpperCase()) {
           case statusOpened:
-            btnTitle = S().orderInProgress;
+            btnTitle = S().orderWaiting;
             btnTitleColor = const Color(0xff3D7BC3);
+            break;
+          case statusConfirmed:
+            btnTitle = S().orderInProgress;
+            btnTitleColor = const Color.fromARGB(255, 66, 201, 219);
             break;
           case statusConcluded:
             btnTitle = S().orderConcluded;
@@ -38,7 +43,7 @@ class OrdersWidget extends StatelessWidget {
             btnTitleColor = const Color(0xffA65454);
             break;
           default:
-            btnTitle = S().orderWaiting;
+            btnTitle = S().orderInProgress;
             btnTitleColor = const Color(0xffC39D3D);
             break;
         }
