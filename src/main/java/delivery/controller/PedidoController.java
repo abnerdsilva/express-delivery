@@ -2,6 +2,7 @@ package delivery.controller;
 
 import delivery.Erro;
 import delivery.model.ClienteDelivery;
+import delivery.model.PagamentoDelivery;
 import delivery.model.PedidoDelivery;
 import delivery.model.PedidoItemDelivery;
 import delivery.model.dao.ClienteDao;
@@ -229,9 +230,9 @@ public class PedidoController {
             itens.add(item.itemDaoToItemDelivery());
         }
 
-        ClienteDao clienteDao = _clienteRepository.loadById(1);
-
         PedidoDao pedidoDao = _pedidoRepository.getOrderById(id);
+
+        ClienteDao clienteDao = _clienteRepository.loadById(pedidoDao.getCodCliente());
 
         PedidoDelivery pedidoDelivery = new PedidoDelivery();
         pedidoDelivery.setCodPedido(id);
@@ -249,14 +250,16 @@ public class PedidoController {
         pedidoDelivery.setReferenciaCurta("");
         pedidoDelivery.setStatusPedido(pedidoDao.getStatusPedido());
 
-//        PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
-//        pagamentoDelivery.setTroco(pedidoDao.getVrTroco());
-//        pagamentoDelivery.setPrePago(false);
-//        pagamentoDelivery.setValor(pedidoDao.getVrTotal());
-//        pagamentoDelivery.setTipo(pedidoDao.getFormaPagamento());
-//        pagamentoDelivery.setNome(pedidoDao.getFormaPagamento());
+        PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
+        pagamentoDelivery.setTroco(pedidoDao.getVrTroco());
+        pagamentoDelivery.setPrePago(false);
+        pagamentoDelivery.setValor(pedidoDao.getVrTotal());
+        pagamentoDelivery.setTipo(pedidoDao.getFormaPagamento());
+        pagamentoDelivery.setNome(pedidoDao.getFormaPagamento());
 
-//        pedidoDelivery.setPagamento(pagamentoDelivery);
+        pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+
+        pedidoDelivery.setPagamento(pagamentoDelivery);
 
         return pedidoDelivery;
     }
