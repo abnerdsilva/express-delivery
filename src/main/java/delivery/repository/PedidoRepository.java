@@ -349,4 +349,33 @@ public class PedidoRepository implements IPedidoRepository {
 
         return order;
     }
+
+    @Override
+    public int updateStatusOrder(int id, String status) {
+        int ret = -1;
+
+        String insertSql = "UPDATE TB_PEDIDO SET STATUS_PEDIDO=? WHERE COD_PEDIDO = ?";
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            PreparedStatement ps = bd.connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, status);
+            ps.setInt(2, id);
+            ps.execute();
+            bd.rs = ps.getGeneratedKeys();
+
+            if (bd.rs.next()) {
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return ret;
+    }
 }

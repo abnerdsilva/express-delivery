@@ -247,6 +247,7 @@ public class PedidoController {
         pedidoDelivery.setTipo(pedidoDao.getTipoPedido());
         pedidoDelivery.setReferencia("");
         pedidoDelivery.setReferenciaCurta("");
+        pedidoDelivery.setStatusPedido(pedidoDao.getStatusPedido());
 
 //        PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
 //        pagamentoDelivery.setTroco(pedidoDao.getVrTroco());
@@ -258,5 +259,55 @@ public class PedidoController {
 //        pedidoDelivery.setPagamento(pagamentoDelivery);
 
         return pedidoDelivery;
+    }
+
+    @RequestMapping("/order/{id}/next")
+    public ResponseEntity<?> updateStatusOrder(@PathVariable String id) {
+        try {
+            PedidoDao pedidoDao = _pedidoRepository.getOrderById(Integer.parseInt(id));
+            String orderStatus = "ABERTO";
+            switch (pedidoDao.getStatusPedido()) {
+                case "ABERTO":
+                    orderStatus = "Confirmado";
+                    break;
+                case "Confirmado":
+                    orderStatus = "Despachado";
+                    break;
+                case "Cancelado":
+                case "Concluido":
+                    return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(new Erro("pedido não pode ser atualizado"));
+                case "Despachado":
+                    orderStatus = "Concluido";
+                    break;
+            }
+
+            int statusOrder = _pedidoRepository.updateStatusOrder(Integer.parseInt(id), orderStatus);
+            if (statusOrder == -1) {
+                throw new Exception("pedido não atualizado, tente novamente");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(e.getMessage()));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @RequestMapping("/order/{id}/cancel")
+    public ResponseEntity<?> cancelOrder(@PathVariable String id) {
+        try {
+            PedidoDao pedidoDao = _pedidoRepository.getOrderById(Integer.parseInt(id));
+            int statusOrder = _pedidoRepository.updateStatusOrder(Integer.parseInt(id), "CANCELADO");
+            if (statusOrder == -1) {
+                throw new Exception("pedido não cancelado, tente novamente");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(e.getMessage()));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

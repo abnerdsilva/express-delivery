@@ -22,4 +22,6 @@ public interface IPedidoRepository {
     List<PedidoDao> getOrdersFromToday();
 
     PedidoDao getOrderById(int id);
+
+    int updateStatusOrder(int id, String status);
 }
