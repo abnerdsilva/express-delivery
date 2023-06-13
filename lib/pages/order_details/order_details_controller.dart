@@ -18,6 +18,7 @@ class OrderDetailsController extends GetxController {
     codCliente: 0,
     tipoPedido: '',
     origem: '',
+    formaPagamento: '',
     vrTotal: 0.0,
     agendado: false,
     vrAdicional: 0.0,

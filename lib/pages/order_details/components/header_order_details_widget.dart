@@ -10,6 +10,7 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
   static const statusConcluded = 'CONCLUIDO';
   static const statusOpened = 'ABERTO';
   static const statusConfirmed = 'CONFIRMADO';
+  static const statusDispatched = 'DESPACHADO';
 
   String convertDateBR(String value) {
     return '${value.substring(8, 10)}/${value.substring(5, 7)}/${value.substring(0, 4)} ${value.substring(11, 13)}:${value.substring(14, 16)}';
@@ -35,6 +36,31 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
         break;
     }
     return orderStatusColor;
+  }
+
+  String getStatusOrder(String status) {
+    late String temp;
+    switch (order.statusPedido.toUpperCase()) {
+      case statusOpened:
+        temp = S().accept;
+        break;
+      case statusConcluded:
+        temp = S().conclude;
+        break;
+      case statusCancelled:
+        temp = S().cancel;
+        break;
+      case statusConfirmed:
+        temp = S().confirm;
+        break;
+      case statusDispatched:
+        temp = S().confirm;
+        break;
+      default:
+        temp = '';
+        break;
+    }
+    return temp;
   }
 
   @override
@@ -63,7 +89,7 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              S().orderStatusDescription,
+              getStatusOrder(order.statusPedido),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],

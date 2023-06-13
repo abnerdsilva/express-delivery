@@ -19,6 +19,7 @@ class OrderDetailsModel {
   final double vrTotal;
   final double vrAdicional;
   final double vrDesconto;
+  final String formaPagamento;
   final Client? client;
   final List<ProductOrder>? itens;
 
@@ -40,6 +41,7 @@ class OrderDetailsModel {
     required this.agendado,
     required this.vrAdicional,
     required this.vrDesconto,
+    required this.formaPagamento,
   });
 
   Map<String, dynamic> toMap() {
@@ -59,6 +61,7 @@ class OrderDetailsModel {
       'vrTotal': vrTotal,
       'vrAdicional': vrAdicional,
       'vrDesconto': vrDesconto,
+      'formaPagamento': formaPagamento,
       'cliente': client,
       'itens': itens?.map((x) => x.toMap()).toList(),
     };
@@ -81,6 +84,7 @@ class OrderDetailsModel {
       vrTotal: map['vrTotal'] ?? 0.0,
       vrAdicional: map['vrAdicional'] ?? 0.0,
       vrDesconto: map['vrDesconto'] ?? 0.0,
+      formaPagamento: map['pagamento']?['nome'] ?? '',
       client: Client.fromMap(map['cliente']),
       itens: map['itens'] != null
           ? List<ProductOrder>.from(

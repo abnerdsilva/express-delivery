@@ -157,7 +157,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                       ),
                     ),
                     const SizedBox(width: 20),
-                    const Text('VERIFICAR'),
+                    Text(controller.order.value.formaPagamento),
                   ],
                 ),
                 const SizedBox(height: 12),
