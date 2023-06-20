@@ -170,6 +170,16 @@ class S {
     );
   }
 
+  /// `ORDER DISPATCHING`
+  String get orderDispatcher {
+    return Intl.message(
+      'ORDER DISPATCHING',
+      name: 'orderDispatcher',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `ORDER`
   String get order {
     return Intl.message(
@@ -440,6 +450,16 @@ class S {
     );
   }
 
+  /// `Status`
+  String get status {
+    return Intl.message(
+      'Status',
+      name: 'status',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Login`
   String get login {
     return Intl.message(
@@ -455,6 +475,76 @@ class S {
     return Intl.message(
       'Logout',
       name: 'logout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sucess to update order`
+  String get sucessOrderUpdated {
+    return Intl.message(
+      'Sucess to update order',
+      name: 'sucessOrderUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sucess to cancel order`
+  String get sucessOrderCancelled {
+    return Intl.message(
+      'Sucess to cancel order',
+      name: 'sucessOrderCancelled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to update order status, contact admin`
+  String get notPossibleUpdateStatusOrderVerifyWithAdministrator {
+    return Intl.message(
+      'Unable to update order status, contact admin',
+      name: 'notPossibleUpdateStatusOrderVerifyWithAdministrator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to cancel order, contact admin`
+  String get notPossibleCancelOrderVerifyWithAdministrator {
+    return Intl.message(
+      'Unable to cancel order, contact admin',
+      name: 'notPossibleCancelOrderVerifyWithAdministrator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sucess`
+  String get sucess {
+    return Intl.message(
+      'Sucess',
+      name: 'sucess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ops`
+  String get ops {
+    return Intl.message(
+      'Ops',
+      name: 'ops',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error`
+  String get error {
+    return Intl.message(
+      'Error',
+      name: 'error',
       desc: '',
       args: [],
     );

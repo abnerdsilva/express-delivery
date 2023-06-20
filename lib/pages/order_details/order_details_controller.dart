@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:express_delivery/config/rest_client.dart';
+import 'package:express_delivery/generated/l10n.dart';
 import 'package:express_delivery/shared/model/order_details_model.dart';
 import 'package:express_delivery/shared/model/product_order.dart';
 import 'package:express_delivery/shared/repositories/order_repository.dart';
@@ -52,14 +53,16 @@ class OrderDetailsController extends GetxController {
       if (status) {
         await findOrderById(codPedido);
 
-        Get.snackbar('Sucesso', 'Pedido atualizado com sucesso');
+        Get.snackbar(S().sucess, S().sucessOrderUpdated);
       }
     } on RestClientException catch (e) {
-      Get.snackbar('Ops', e.message);
+      Get.snackbar(S().ops, e.message);
       log(e.message);
     } on Exception catch (e) {
-      Get.snackbar('Ops',
-          "Não foi possivel atualizar o status do pedido, entre em contato com o administrador");
+      Get.snackbar(
+        S().ops,
+        S().notPossibleUpdateStatusOrderVerifyWithAdministrator,
+      );
       log(e.toString());
     }
   }
@@ -70,14 +73,16 @@ class OrderDetailsController extends GetxController {
       if (status) {
         await findOrderById(codPedido);
 
-        Get.snackbar('Sucesso', 'Pedido cancelado com sucesso');
+        Get.snackbar(S().sucess, S().sucessOrderCancelled);
       }
     } on RestClientException catch (e) {
-      Get.snackbar('Ops', e.message);
+      Get.snackbar(S().ops, e.message);
       log(e.message);
     } on Exception catch (e) {
-      Get.snackbar('Ops',
-          "Não foi possivel cancelar o pedido, entre em contato com o administrador");
+      Get.snackbar(
+        S().ops,
+        S().notPossibleCancelOrderVerifyWithAdministrator,
+      );
       log(e.toString());
     }
   }

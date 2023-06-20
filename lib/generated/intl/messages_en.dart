@@ -31,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "dispatch": MessageLookupByLibrary.simpleMessage("Dispatch"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "error": MessageLookupByLibrary.simpleMessage("Error"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("forgot the passoword?"),
         "items": MessageLookupByLibrary.simpleMessage("Items"),
@@ -40,7 +41,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "message": MessageLookupByLibrary.simpleMessage("message"),
         "neighborhood": MessageLookupByLibrary.simpleMessage("Neighborhood"),
         "noOrders": MessageLookupByLibrary.simpleMessage("No orders released"),
+        "notPossibleCancelOrderVerifyWithAdministrator":
+            MessageLookupByLibrary.simpleMessage(
+                "Unable to cancel order, contact admin"),
+        "notPossibleUpdateStatusOrderVerifyWithAdministrator":
+            MessageLookupByLibrary.simpleMessage(
+                "Unable to update order status, contact admin"),
         "observation": MessageLookupByLibrary.simpleMessage("Observations"),
+        "ops": MessageLookupByLibrary.simpleMessage("Ops"),
         "order": MessageLookupByLibrary.simpleMessage("ORDER"),
         "orderCancelled":
             MessageLookupByLibrary.simpleMessage("ORDER CANCELLED"),
@@ -49,6 +57,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderCreatedAtDescription":
             MessageLookupByLibrary.simpleMessage("Order date"),
         "orderDetails": MessageLookupByLibrary.simpleMessage("Order details"),
+        "orderDispatcher":
+            MessageLookupByLibrary.simpleMessage("ORDER DISPATCHING"),
         "orderID": MessageLookupByLibrary.simpleMessage("ID"),
         "orderInProgress":
             MessageLookupByLibrary.simpleMessage("ORDER IN PROGRESS"),
@@ -65,8 +75,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "quantity": MessageLookupByLibrary.simpleMessage("Qty"),
         "ready": MessageLookupByLibrary.simpleMessage("Ready"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
+        "status": MessageLookupByLibrary.simpleMessage("Status"),
         "statusClosed": MessageLookupByLibrary.simpleMessage("Closed"),
         "statusOpened": MessageLookupByLibrary.simpleMessage("Open"),
+        "sucess": MessageLookupByLibrary.simpleMessage("Sucess"),
+        "sucessOrderCancelled":
+            MessageLookupByLibrary.simpleMessage("Sucess to cancel order"),
+        "sucessOrderUpdated":
+            MessageLookupByLibrary.simpleMessage("Sucess to update order"),
         "support": MessageLookupByLibrary.simpleMessage("Support"),
         "title": MessageLookupByLibrary.simpleMessage("ExpressDelivery"),
         "username": MessageLookupByLibrary.simpleMessage("Username")

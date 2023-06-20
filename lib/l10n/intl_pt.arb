@@ -12,6 +12,7 @@
     "orderConcluded": "PEDIDO FINALIZADO",
     "orderCancelled": "PEDIDO CANCELADO",
     "orderWaiting": "AGUARDANDO CONFIRMAÇÃO",
+    "orderDispatcher": "PEDIDO EM DESPACHO",
     "order": "PEDIDO",
     "orderID": "Nº",
     "orderDetails": "Detalhes do pedido",
@@ -38,7 +39,15 @@
     "confirm": "Confirmar",
     "cancel": "Cancelar",
     "conclude": "Concluir",
+    "status": "Status",
     "dispatch": "Despachar",
     "login": "Entrar",
-    "logout": "Sair"
+    "logout": "Sair",
+    "sucessOrderUpdated": "Pedido atualizado com sucesso",
+    "sucessOrderCancelled": "Pedido cancelado com sucesso",
+    "notPossibleUpdateStatusOrderVerifyWithAdministrator": "Não foi possivel atualizar o status do pedido, entre em contato com o administrador",
+    "notPossibleCancelOrderVerifyWithAdministrator": "Não foi possivel cancelar o pedido, entre em contato com o administrador",
+    "sucess": "Sucesso",
+    "ops": "Ops",
+    "error": "Erro"
 }

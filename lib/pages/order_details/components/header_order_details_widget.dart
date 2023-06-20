@@ -54,7 +54,7 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
         temp = S().confirm;
         break;
       case statusDispatched:
-        temp = S().confirm;
+        temp = S().dispatch;
         break;
       default:
         temp = '';
@@ -89,7 +89,7 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              getStatusOrder(order.statusPedido),
+              S().status,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
@@ -106,7 +106,7 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(4.0),
               child: Text(
-                order.statusPedido,
+                getStatusOrder(order.statusPedido),
                 style: const TextStyle(fontSize: 16),
               ),
             ),

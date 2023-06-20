@@ -43,7 +43,7 @@ class OrdersWidget extends StatelessWidget {
             btnTitleColor = const Color(0xffA65454);
             break;
           default:
-            btnTitle = S().orderInProgress;
+            btnTitle = S().orderDispatcher;
             btnTitleColor = const Color(0xffC39D3D);
             break;
         }

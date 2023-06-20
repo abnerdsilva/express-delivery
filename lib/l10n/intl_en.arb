@@ -12,6 +12,7 @@
     "orderConcluded": "ORDER CONCLUDED",
     "orderCancelled": "ORDER CANCELLED",
     "orderWaiting": "WAITING CONFIRMATION",
+    "orderDispatcher": "ORDER DISPATCHING",
     "order": "ORDER",
     "orderID": "ID",
     "orderDetails": "Order details",
@@ -39,6 +40,14 @@
     "cancel": "Cancel",
     "conclude": "Conclude",
     "dispatch": "Dispatch",
+    "status": "Status",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "sucessOrderUpdated": "Sucess to update order",
+    "sucessOrderCancelled": "Sucess to cancel order",
+    "notPossibleUpdateStatusOrderVerifyWithAdministrator": "Unable to update order status, contact admin",
+    "notPossibleCancelOrderVerifyWithAdministrator": "Unable to cancel order, contact admin",
+    "sucess": "Sucess",
+    "ops": "Ops",
+    "error": "Error"
 }

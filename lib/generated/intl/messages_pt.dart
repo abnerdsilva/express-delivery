@@ -31,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirm": MessageLookupByLibrary.simpleMessage("Confirmar"),
         "dispatch": MessageLookupByLibrary.simpleMessage("Despachar"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "error": MessageLookupByLibrary.simpleMessage("Erro"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("esqueceu a senha?"),
         "items": MessageLookupByLibrary.simpleMessage("Itens"),
@@ -41,7 +42,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "neighborhood": MessageLookupByLibrary.simpleMessage("Bairro"),
         "noOrders":
             MessageLookupByLibrary.simpleMessage("Nenhum pedido lançado"),
+        "notPossibleCancelOrderVerifyWithAdministrator":
+            MessageLookupByLibrary.simpleMessage(
+                "Não foi possivel cancelar o pedido, entre em contato com o administrador"),
+        "notPossibleUpdateStatusOrderVerifyWithAdministrator":
+            MessageLookupByLibrary.simpleMessage(
+                "Não foi possivel atualizar o status do pedido, entre em contato com o administrador"),
         "observation": MessageLookupByLibrary.simpleMessage("Observação"),
+        "ops": MessageLookupByLibrary.simpleMessage("Ops"),
         "order": MessageLookupByLibrary.simpleMessage("PEDIDO"),
         "orderCancelled":
             MessageLookupByLibrary.simpleMessage("PEDIDO CANCELADO"),
@@ -51,6 +59,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Data pedido"),
         "orderDetails":
             MessageLookupByLibrary.simpleMessage("Detalhes do pedido"),
+        "orderDispatcher":
+            MessageLookupByLibrary.simpleMessage("PEDIDO EM DESPACHO"),
         "orderID": MessageLookupByLibrary.simpleMessage("Nº"),
         "orderInProgress":
             MessageLookupByLibrary.simpleMessage("PREPARANDO PEDIDO"),
@@ -68,8 +78,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "quantity": MessageLookupByLibrary.simpleMessage("Quantidade"),
         "ready": MessageLookupByLibrary.simpleMessage("Pronto"),
         "settings": MessageLookupByLibrary.simpleMessage("Configurações"),
+        "status": MessageLookupByLibrary.simpleMessage("Status"),
         "statusClosed": MessageLookupByLibrary.simpleMessage("Fechado"),
         "statusOpened": MessageLookupByLibrary.simpleMessage("Aberto"),
+        "sucess": MessageLookupByLibrary.simpleMessage("Sucesso"),
+        "sucessOrderCancelled": MessageLookupByLibrary.simpleMessage(
+            "Pedido cancelado com sucesso"),
+        "sucessOrderUpdated": MessageLookupByLibrary.simpleMessage(
+            "Pedido atualizado com sucesso"),
         "support": MessageLookupByLibrary.simpleMessage("Suporte"),
         "title": MessageLookupByLibrary.simpleMessage("ExpressDelivery"),
         "username": MessageLookupByLibrary.simpleMessage("Usuário")
