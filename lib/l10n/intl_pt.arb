@@ -43,11 +43,11 @@
     "dispatch": "Despachar",
     "login": "Entrar",
     "logout": "Sair",
-    "sucessOrderUpdated": "Pedido atualizado com sucesso",
-    "sucessOrderCancelled": "Pedido cancelado com sucesso",
+    "successOrderUpdated": "Pedido atualizado com sucesso",
+    "successOrderCancelled": "Pedido cancelado com sucesso",
     "notPossibleUpdateStatusOrderVerifyWithAdministrator": "Não foi possivel atualizar o status do pedido, entre em contato com o administrador",
     "notPossibleCancelOrderVerifyWithAdministrator": "Não foi possivel cancelar o pedido, entre em contato com o administrador",
-    "sucess": "Sucesso",
+    "success": "Sucesso",
     "ops": "Ops",
     "error": "Erro"
 }

@@ -53,7 +53,7 @@ class OrderDetailsController extends GetxController {
       if (status) {
         await findOrderById(codPedido);
 
-        Get.snackbar(S().sucess, S().sucessOrderUpdated);
+        Get.snackbar(S().success, S().successOrderUpdated);
       }
     } on RestClientException catch (e) {
       Get.snackbar(S().ops, e.message);
@@ -73,7 +73,7 @@ class OrderDetailsController extends GetxController {
       if (status) {
         await findOrderById(codPedido);
 
-        Get.snackbar(S().sucess, S().sucessOrderCancelled);
+        Get.snackbar(S().success, S().successOrderCancelled);
       }
     } on RestClientException catch (e) {
       Get.snackbar(S().ops, e.message);

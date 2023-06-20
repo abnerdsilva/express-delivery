@@ -480,21 +480,21 @@ class S {
     );
   }
 
-  /// `Sucess to update order`
-  String get sucessOrderUpdated {
+  /// `Success to update order`
+  String get successOrderUpdated {
     return Intl.message(
-      'Sucess to update order',
-      name: 'sucessOrderUpdated',
+      'Success to update order',
+      name: 'successOrderUpdated',
       desc: '',
       args: [],
     );
   }
 
-  /// `Sucess to cancel order`
-  String get sucessOrderCancelled {
+  /// `Success to cancel order`
+  String get successOrderCancelled {
     return Intl.message(
-      'Sucess to cancel order',
-      name: 'sucessOrderCancelled',
+      'Success to cancel order',
+      name: 'successOrderCancelled',
       desc: '',
       args: [],
     );
@@ -520,11 +520,11 @@ class S {
     );
   }
 
-  /// `Sucess`
-  String get sucess {
+  /// `Success`
+  String get success {
     return Intl.message(
-      'Sucess',
-      name: 'sucess',
+      'Success',
+      name: 'success',
       desc: '',
       args: [],
     );
@@ -557,6 +557,9 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'es'),
+      Locale.fromSubtags(languageCode: 'fr'),
+      Locale.fromSubtags(languageCode: 'it'),
       Locale.fromSubtags(languageCode: 'pt'),
     ];
   }

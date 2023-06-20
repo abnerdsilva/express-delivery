@@ -78,11 +78,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "status": MessageLookupByLibrary.simpleMessage("Status"),
         "statusClosed": MessageLookupByLibrary.simpleMessage("Closed"),
         "statusOpened": MessageLookupByLibrary.simpleMessage("Open"),
-        "sucess": MessageLookupByLibrary.simpleMessage("Sucess"),
-        "sucessOrderCancelled":
-            MessageLookupByLibrary.simpleMessage("Sucess to cancel order"),
-        "sucessOrderUpdated":
-            MessageLookupByLibrary.simpleMessage("Sucess to update order"),
+        "success": MessageLookupByLibrary.simpleMessage("Success"),
+        "successOrderCancelled":
+            MessageLookupByLibrary.simpleMessage("Success to cancel order"),
+        "successOrderUpdated":
+            MessageLookupByLibrary.simpleMessage("Success to update order"),
         "support": MessageLookupByLibrary.simpleMessage("Support"),
         "title": MessageLookupByLibrary.simpleMessage("ExpressDelivery"),
         "username": MessageLookupByLibrary.simpleMessage("Username")

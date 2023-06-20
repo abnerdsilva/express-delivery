@@ -36,12 +36,20 @@ class _SettingsPageState extends State<SettingsPage> {
 
     setState(() {
       switch (itemSelected!.code) {
-        case 'pt':
-          languageSelected = 'pt';
-          break;
         case 'en':
-        default:
           languageSelected = 'en';
+          break;
+        case 'es':
+          languageSelected = 'es';
+          break;
+        case 'fr':
+          languageSelected = 'fr';
+          break;
+        case 'it':
+          languageSelected = 'it';
+          break;
+        default:
+          languageSelected = 'pt';
           break;
       }
 

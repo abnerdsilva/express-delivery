@@ -43,11 +43,11 @@
     "status": "Status",
     "login": "Login",
     "logout": "Logout",
-    "sucessOrderUpdated": "Sucess to update order",
-    "sucessOrderCancelled": "Sucess to cancel order",
+    "successOrderUpdated": "Success to update order",
+    "successOrderCancelled": "Success to cancel order",
     "notPossibleUpdateStatusOrderVerifyWithAdministrator": "Unable to update order status, contact admin",
     "notPossibleCancelOrderVerifyWithAdministrator": "Unable to cancel order, contact admin",
-    "sucess": "Sucess",
+    "success": "Success",
     "ops": "Ops",
     "error": "Error"
 }

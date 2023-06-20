@@ -24,6 +24,21 @@ class MenuItems {
       image: 'assets/images/eua.png',
       code: 'en',
     ),
+    MenuItemModel(
+      text: 'ESP',
+      image: 'assets/images/espanha.png',
+      code: 'es',
+    ),
+    MenuItemModel(
+      text: 'ITA',
+      image: 'assets/images/italia.png',
+      code: 'it',
+    ),
+    MenuItemModel(
+      text: 'FRA',
+      image: 'assets/images/franca.png',
+      code: 'fr',
+    ),
   ];
 
   static Widget buildItem(MenuItemModel item) {
