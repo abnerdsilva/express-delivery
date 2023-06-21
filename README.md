@@ -1,16 +1,5 @@
 # express_delivery
 
-A new Flutter project.
+Trabalho de PI (Projeto interdisciplinar) do 5º semestre referente ao curso de Análise e Desenvolvimento de Sistemas ministrado pela Fatec de Indaiatuba.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Este projeto é o desenvolvimento de uma aplicação mobile para gerenciamento de sistema de delivery desenvolvido durante os semestres corridos.
