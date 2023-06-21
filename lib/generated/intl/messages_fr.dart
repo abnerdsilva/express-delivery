@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "complement": MessageLookupByLibrary.simpleMessage("Complément"),
         "conclude": MessageLookupByLibrary.simpleMessage("Conclure"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirmer"),
+        "delivery": MessageLookupByLibrary.simpleMessage("Livraison"),
         "dispatch": MessageLookupByLibrary.simpleMessage("Expédition"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "error": MessageLookupByLibrary.simpleMessage("Erreur"),
@@ -86,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "successOrderUpdated": MessageLookupByLibrary.simpleMessage(
             "Mise à jour réussie de la commande"),
         "support": MessageLookupByLibrary.simpleMessage("Soutien"),
+        "takeout": MessageLookupByLibrary.simpleMessage("Sortir"),
         "title": MessageLookupByLibrary.simpleMessage("ExpressDelivery"),
         "username": MessageLookupByLibrary.simpleMessage("Utilisateur")
       };

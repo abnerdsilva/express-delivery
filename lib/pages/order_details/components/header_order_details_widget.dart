@@ -1,3 +1,4 @@
+import 'package:express_delivery/config/theme_config.dart';
 import 'package:express_delivery/generated/l10n.dart';
 import 'package:express_delivery/shared/model/order_details_model.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 class HeaderOrderDetailsWidget extends StatelessWidget {
   final OrderDetailsModel order;
   const HeaderOrderDetailsWidget({super.key, required this.order});
+
+  static const orderType = 'ENTREGA';
 
   static const statusCancelled = 'CANCELADO';
   static const statusConcluded = 'CONCLUIDO';
@@ -80,7 +83,25 @@ class HeaderOrderDetailsWidget extends StatelessWidget {
           indent: 30,
           endIndent: 30,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
+        Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+            decoration: BoxDecoration(
+                color: ThemeConfig.kTextSecundaryColor,
+                borderRadius: BorderRadius.circular(10)),
+            child: Text(
+              orderType == order.tipoPedido.toUpperCase()
+                  ? S().delivery
+                  : S().takeout,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

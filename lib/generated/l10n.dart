@@ -530,6 +530,26 @@ class S {
     );
   }
 
+  /// `Delivery`
+  String get delivery {
+    return Intl.message(
+      'Delivery',
+      name: 'delivery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Takeout`
+  String get takeout {
+    return Intl.message(
+      'Takeout',
+      name: 'takeout',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Ops`
   String get ops {
     return Intl.message(

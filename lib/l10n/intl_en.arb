@@ -48,6 +48,8 @@
     "notPossibleUpdateStatusOrderVerifyWithAdministrator": "Unable to update order status, contact admin",
     "notPossibleCancelOrderVerifyWithAdministrator": "Unable to cancel order, contact admin",
     "success": "Success",
+    "delivery": "Delivery",
+    "takeout": "Takeout",
     "ops": "Ops",
     "error": "Error"
 }

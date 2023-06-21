@@ -48,6 +48,8 @@
     "notPossibleUpdateStatusOrderVerifyWithAdministrator": "Impossibile aggiornare lo stato dell'ordine, contattare l'amministratore",
     "notPossibleCancelOrderVerifyWithAdministrator": "Impossibile annullare l'ordine, contattare l'amministratore",
     "success": "Successo",
+    "delivery": "Consegna",
+    "takeout": "Portare fuori",
     "ops": "Ops",
     "error": "Errore"
 }
