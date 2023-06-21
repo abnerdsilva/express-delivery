@@ -240,6 +240,7 @@ public class PedidoController {
         pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
         pedidoDelivery.setDataCriacao(pedidoDao.getDataPedido());
         pedidoDelivery.setVrTotal(pedidoDao.getVrTotal());
+        pedidoDelivery.setVrTroco(pedidoDao.getVrTroco());
         pedidoDelivery.setVrDesconto(pedidoDao.getVrDesconto());
         pedidoDelivery.setVrAdicional(pedidoDao.getVrTaxa());
         pedidoDelivery.setObservacao(pedidoDao.getObservacao());

@@ -32,6 +32,9 @@ public class PedidoDelivery {
     private double vrAdicional;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    private double vrTroco;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private double vrDesconto;
     private String observacao;
     private String origem;
@@ -176,5 +179,13 @@ public class PedidoDelivery {
 
     public String getStatusPedido() {
         return statusPedido;
+    }
+
+    public double getVrTroco() {
+        return vrTroco;
+    }
+
+    public void setVrTroco(double vrTroco) {
+        this.vrTroco = vrTroco;
     }
 }
