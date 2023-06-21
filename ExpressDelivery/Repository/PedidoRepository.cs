@@ -268,7 +268,7 @@ namespace ExpressDelivery.Repository
 
             try
             {
-                var cmdStatus =  $"AND STATUS_PEDIDO = '{status}'";
+                var cmdStatus = $"AND STATUS_PEDIDO = '{status}'";
                 if (status.Equals("TODOS"))
                     cmdStatus = "";
                 _cmd.CommandText =
@@ -430,10 +430,10 @@ namespace ExpressDelivery.Repository
                                 oCommand.CommandText =
                                     $"INSERT INTO TB_PEDIDO (COD_CLIENTE, STATUS_PEDIDO, DATA_PEDIDO, VR_TOTAL, VR_TAXA, VR_TROCO," +
                                     $" LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP, TIPO_PEDIDO, ORIGEM, OBSERVACAO," +
-                                    $" FORMA_PAGAMENTO, IMPRIME_PEDIDO) VALUES ({order.CodCliente}, '{order.StatusPedido}', '{order.DataPedido:yyyy-MM-dd HH:mm:ss}'," +
+                                    $" FORMA_PAGAMENTO, IMPRIME_PEDIDO, ID_USER) VALUES ({order.CodCliente}, '{order.StatusPedido}', '{order.DataPedido:yyyy-MM-dd HH:mm:ss}'," +
                                     $" {order.VrTotal.ToString(nfi)}, {order.VrTaxa.ToString(nfi)}, {order.VrTroco.ToString(nfi)}, '{order.Logradouro}'," +
                                     $" {order.Numero}, '{order.Bairro}', '{order.Cidade}', '{order.Estado}', '{order.CEP}'," +
-                                    $" '{order.TipoPedido}', '{order.Origem}', '{order.Observacao}', '{order.FormaPagamento}', 1);";
+                                    $" '{order.TipoPedido}', '{order.Origem}', '{order.Observacao}', '{order.FormaPagamento}', 1, '{order.IdOperador}');";
                             }
                             else
                             {
@@ -442,7 +442,7 @@ namespace ExpressDelivery.Repository
                                     $" LOGRADOURO='{order.Logradouro}', NUMERO='{order.Numero}', FORMA_PAGAMENTO='{order.FormaPagamento}'," +
                                     $" BAIRRO='{order.Bairro}', CIDADE='{order.Cidade}', ESTADO='{order.Estado}', CEP='{order.CEP}'," +
                                     $" VR_TOTAL='{order.VrTotal.ToString(nfi)}', VR_TAXA='{order.VrTaxa.ToString(nfi)}'," +
-                                    $" VR_TROCO='{order.VrTroco}', TIPO_PEDIDO='{order.TipoPedido}'," +
+                                    $" VR_TROCO='{order.VrTroco.ToString(nfi)}', TIPO_PEDIDO='{order.TipoPedido}'," +
                                     $" DATA_ATUALIZACAO='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', OBSERVACAO='{order.Observacao}'," +
                                     $" IMPRIME_PEDIDO=1" +
                                     $" WHERE COD_PEDIDO={order.Id};";
@@ -453,7 +453,7 @@ namespace ExpressDelivery.Repository
 
                             if (type == "new")
                             {
-                                oCommand.CommandText = "SELECT * FROM TB_PEDIDO";
+                                oCommand.CommandText = "SELECT MAX(COD_PEDIDO) AS COD_PEDIDO FROM TB_PEDIDO";
                                 _dr2 = oCommand.ExecuteReader();
                                 while (_dr2.Read())
                                     nextOrderId = Convert.ToInt16(_dr2["COD_PEDIDO"]);
