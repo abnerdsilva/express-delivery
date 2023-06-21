@@ -10,6 +10,8 @@ namespace ExpressDelivery
 {
     public partial class FormPedido : Form
     {
+        public static Usuario User { get; set; }
+
         public FormPedido()
         {
             InitializeComponent();
@@ -558,6 +560,7 @@ namespace ExpressDelivery
             var order = new Pedido
             {
                 Id = orderId,
+                IdOperador = User.Id,
                 Bairro = _clientSelected.Bairro,
                 Cidade = _clientSelected.Cidade,
                 Estado = _clientSelected.Estado,

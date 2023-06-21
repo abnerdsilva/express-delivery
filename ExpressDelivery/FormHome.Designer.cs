@@ -32,6 +32,8 @@ namespace ExpressDelivery
         private void InitializeComponent()
         {
             this.panelSideMenu = new System.Windows.Forms.Panel();
+            this.lbl_idOperador = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnFormUsuarios = new System.Windows.Forms.Button();
             this.btnSair = new System.Windows.Forms.Button();
             this.btnFormClientes = new System.Windows.Forms.Button();
@@ -43,13 +45,15 @@ namespace ExpressDelivery
             this.panelHomeBody = new System.Windows.Forms.Panel();
             this.panelSideMenu.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelSideMenu
             // 
             this.panelSideMenu.AutoScroll = true;
             this.panelSideMenu.BackColor = System.Drawing.SystemColors.Desktop;
+            this.panelSideMenu.Controls.Add(this.lbl_idOperador);
+            this.panelSideMenu.Controls.Add(this.label1);
             this.panelSideMenu.Controls.Add(this.btnFormUsuarios);
             this.panelSideMenu.Controls.Add(this.btnSair);
             this.panelSideMenu.Controls.Add(this.btnFormClientes);
@@ -58,11 +62,28 @@ namespace ExpressDelivery
             this.panelSideMenu.Controls.Add(this.btnFormDashbord);
             this.panelSideMenu.Controls.Add(this.panel1);
             this.panelSideMenu.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelSideMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panelSideMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.panelSideMenu.Location = new System.Drawing.Point(0, 0);
             this.panelSideMenu.Name = "panelSideMenu";
             this.panelSideMenu.Size = new System.Drawing.Size(200, 729);
             this.panelSideMenu.TabIndex = 0;
+            // 
+            // lbl_idOperador
+            // 
+            this.lbl_idOperador.AutoSize = true;
+            this.lbl_idOperador.Location = new System.Drawing.Point(82, 650);
+            this.lbl_idOperador.Name = "lbl_idOperador";
+            this.lbl_idOperador.Size = new System.Drawing.Size(0, 18);
+            this.lbl_idOperador.TabIndex = 8;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 650);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(64, 18);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Usuário:";
             // 
             // btnFormUsuarios
             // 
@@ -190,11 +211,16 @@ namespace ExpressDelivery
             this.Text = "ExpressDelivery - Sistema de Delivery";
             this.Load += new System.EventHandler(this.FormHome_Load);
             this.panelSideMenu.ResumeLayout(false);
+            this.panelSideMenu.PerformLayout();
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
-
         }
+
+        private System.Windows.Forms.Label lbl_idOperador;
+
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
 
         private System.Windows.Forms.Button btnFormPedido;
 

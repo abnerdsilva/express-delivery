@@ -75,10 +75,13 @@ namespace ExpressDelivery
         private void btnFormPedido_Click(object sender, EventArgs e)
         {
             AbrirFormularios<FormPedido>();
+            FormPedido.User = _usuario;
         }
 
         private void FormHome_Load(object sender, EventArgs e)
         {
+            lbl_idOperador.Text = _usuario.Id.ToString();
+            
             if (_usuario.TipoUsuario.Equals("COMUM"))
             {
                 // btnCadastro.Visible = false;
