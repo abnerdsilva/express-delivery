@@ -35,6 +35,8 @@ namespace ExpressDelivery
 
             ClearClient();
             ClearOrder();
+
+            lbl_notificaPedidoAberto.Text = "";
         }
 
         private void ClearClient()
@@ -619,7 +621,7 @@ namespace ExpressDelivery
             using (var formPedidos = new FormPedidos())
             {
                 formPedidos.ShowDialog();
-                if(formPedidos.PedidoSelecionado != null)
+                if (formPedidos.PedidoSelecionado != null)
                     CarregaPedidoSelecionado(formPedidos.PedidoSelecionado);
             }
         }
@@ -627,7 +629,7 @@ namespace ExpressDelivery
         private void CarregaPedidoSelecionado(Pedido pedido)
         {
             InicializaPedido();
-            
+
             // Carrega dados pedido
             panelOrder.Enabled = true;
             txtQtde.Text = "1";
@@ -638,7 +640,7 @@ namespace ExpressDelivery
             txtObservacaoProduto.Enabled = false;
 
             var vrTotalPedido = pedido.VrTotal + pedido.VrTaxa;
-            
+
             lblNrPedido.Text = pedido.Id.ToString();
             txtVrTotalItens.Text = pedido.VrTotal.ToString("0.00");
             txtVrTroco.Text = pedido.VrTroco.ToString("0.00");
@@ -659,7 +661,7 @@ namespace ExpressDelivery
 
             // Carrega dados cliente
             panelClient.Enabled = false;
-            
+
             var cliente = _clientController.LoadById(pedido.CodCliente.ToString()).First();
             _clientSelected = new Client
             {
@@ -693,7 +695,7 @@ namespace ExpressDelivery
         private void CarregaItensPedidoSelecionado(PedidoItem pedidoItem)
         {
             _productSelected = _products.Find(product => product.Descricao.Equals(pedidoItem.Nome));
-            
+
             var vrTotalItem = pedidoItem.VrUnitario * pedidoItem.Quantidade;
 
             ListViewItem items = new ListViewItem(_productSelected.Id.ToString());
@@ -753,7 +755,6 @@ namespace ExpressDelivery
                             txtTaxaEntrega.Text = bairro.VrTaxa.ToString("0.00");
                             break;
                         }
-                        
                     }
                 }
             }
@@ -761,6 +762,29 @@ namespace ExpressDelivery
             if (txtTaxaEntrega.Text.Equals("0") || txtTaxaEntrega.Text.Equals("0.00"))
             {
                 txtTaxaEntrega.Enabled = true;
+            }
+        }
+
+        private void timer_notificaPedidoAberto_Tick(object sender, EventArgs e)
+        {
+            var pedidoAberto = _pedidoController.LoadPedidosAberto();
+            if (pedidoAberto != null)
+            {
+                if (!pedidoAberto.Equals(""))
+                {
+                    lbl_notificaPedidoAberto.BackColor = Color.OrangeRed;
+                    lbl_notificaPedidoAberto.Text = pedidoAberto;
+                }
+                else
+                {
+                    lbl_notificaPedidoAberto.BackColor = Color.Transparent;
+                    lbl_notificaPedidoAberto.Text = "";
+                }
+            }
+            else
+            {
+                lbl_notificaPedidoAberto.BackColor = Color.Transparent;
+                lbl_notificaPedidoAberto.Text = "";
             }
         }
     }

@@ -365,6 +365,46 @@ namespace ExpressDelivery.Repository
             return pedidos;
         }
 
+        public string LoadPedidosAbertosIntegracao()
+        {
+            var ret = "";
+
+            try
+            {
+                _cmd.CommandText =
+                    $"SELECT COD_PEDIDO, DATA_PEDIDO FROM TB_PEDIDO WHERE STATUS_PEDIDO='ABERTO' AND ORIGEM='IFOOD'" +
+                    $" AND cod_pedido_integracao IS NOT NULL AND DATA_ATUALIZACAO IS NULL ORDER BY DATA_PEDIDO DESC";
+                _cmd.Connection = _con.Connect();
+                _dr = _cmd.ExecuteReader();
+
+                while (_dr.Read())
+                {
+                    var idPedido = Convert.ToInt16(_dr["COD_PEDIDO"]);
+                    var dataPedido = DateTime.Parse(_dr["DATA_PEDIDO"].ToString(), CultureInfo.CurrentCulture);
+
+                    ret = "Ped: " + idPedido + " -> " + dataPedido;
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                return null;
+            }
+            finally
+            {
+                _con.Disconnect();
+            }
+
+            return ret;
+        }
+
         public int SaveOrder(Pedido order, string type)
         {
             var nextOrderId = 0;

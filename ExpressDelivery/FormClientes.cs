@@ -82,7 +82,7 @@ namespace ExpressDelivery
             txtDescricaoPesquisa.Text = "";
             cmbStatusPesquisa.Text = "Ativo";
             cmbTipoPesquisa.Text = "Nome";
-            
+
             listClientes.Clear();
         }
 
@@ -159,39 +159,40 @@ namespace ExpressDelivery
                 MessageBox.Show(@"O campo nome é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+
             if (txtCEP.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo cep é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+
             if (txtEndereco.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo endereço é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+
             if (txtNumero.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo número é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+
             if (txtBairro.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo bairro é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+
             if (txtTelefone.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo telefone é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             var cpf = txtCPF.Text;
             if (!cpf.Equals(""))
-                cpf = Convert.ToUInt64(txtCPF.Text).ToString(@"000\.000\.000\-00");
+                cpf = Convert.ToUInt64(txtCPF.Text.Replace(".", "").Replace("-", "")).ToString(@"000\.000\.000\-00");
 
             var client = new Client
             {

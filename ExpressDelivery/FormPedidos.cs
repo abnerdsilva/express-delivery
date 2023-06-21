@@ -71,8 +71,10 @@ namespace ExpressDelivery
 
                 if (pedido.StatusPedido == "CANCELADO")
                     items.ForeColor = Color.Red;
-                if (pedido.StatusPedido == "BAIXADO")
+                else if (pedido.StatusPedido == "BAIXADO")
                     items.ForeColor = Color.Green;
+                else if (pedido.Origem.Equals("IFOOD") && pedido.StatusPedido.Equals("ABERTO") && pedido.DataAtualizacao.ToString().Contains("00:00:00"))
+                    items.BackColor = Color.OrangeRed;
 
                 listPedidos.Items.Add(items);
             }

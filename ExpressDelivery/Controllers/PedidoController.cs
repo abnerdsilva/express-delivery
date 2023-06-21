@@ -37,7 +37,14 @@ namespace ExpressDelivery.Controllers
             MessageError = _pedidoRepository.Message;
             return resp;
         }
-        
+
+        public string LoadPedidosAberto()
+        {
+            var resp = _pedidoRepository.LoadPedidosAbertosIntegracao();
+            MessageError = _pedidoRepository.Message;
+            return resp;
+        }
+
         public int SaveOrder(Pedido order, string type)
         {
             var resp = _pedidoRepository.SaveOrder(order, type);
