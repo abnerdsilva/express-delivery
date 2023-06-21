@@ -19,6 +19,7 @@ class OrderDetailsModel {
   final double vrTotal;
   final double vrAdicional;
   final double vrDesconto;
+  final double vrTroco;
   final String formaPagamento;
   final Client? client;
   final List<ProductOrder>? itens;
@@ -35,6 +36,7 @@ class OrderDetailsModel {
     required this.tipoPedido,
     required this.origem,
     required this.vrTotal,
+    required this.vrTroco,
     this.referencia,
     this.referenciaCurta,
     this.codPedidoIntegracao,
@@ -61,6 +63,7 @@ class OrderDetailsModel {
       'vrTotal': vrTotal,
       'vrAdicional': vrAdicional,
       'vrDesconto': vrDesconto,
+      'vrTroco': vrTroco,
       'formaPagamento': formaPagamento,
       'cliente': client,
       'itens': itens?.map((x) => x.toMap()).toList(),
@@ -84,6 +87,7 @@ class OrderDetailsModel {
       vrTotal: map['vrTotal'] ?? 0.0,
       vrAdicional: map['vrAdicional'] ?? 0.0,
       vrDesconto: map['vrDesconto'] ?? 0.0,
+      vrTroco: map['vrTroco'] ?? 0.0,
       formaPagamento: map['pagamento']?['nome'] ?? '',
       client: Client.fromMap(map['cliente']),
       itens: map['itens'] != null

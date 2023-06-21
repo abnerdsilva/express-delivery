@@ -24,6 +24,7 @@ class OrderDetailsController extends GetxController {
     agendado: false,
     vrAdicional: 0.0,
     vrDesconto: 0.0,
+    vrTroco: 0.0,
   ).obs;
 
   @override
