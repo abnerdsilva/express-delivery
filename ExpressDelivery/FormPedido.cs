@@ -573,7 +573,7 @@ namespace ExpressDelivery
                 CodCliente = _clientSelected.Id,
                 DataEntrega = DateTime.Now,
                 DataPedido = DateTime.Now,
-                StatusPedido = "ABERTO",
+                StatusPedido = "Confirmado",
                 TipoPedido = "ENTREGA",
                 VrTotal = vrTotal,
                 VrTroco = vrTroco,

@@ -92,6 +92,7 @@ namespace ExpressDelivery
                 // panelCadastros.Visible = false;
 
                 AbrirFormularios<FormPedido>();
+                FormPedido.User = _usuario;
             }
             else
                 AbrirFormularios<FormDashboard>();

@@ -79,7 +79,7 @@ namespace ExpressDelivery
                 listPedidos.Items.Add(items);
             }
             
-            if (_statusPedidoSelecionado.Equals("ABERTO"))
+            if (!_statusPedidoSelecionado.ToUpper().Equals("CONCLUIDO") && !_statusPedidoSelecionado.ToUpper().Equals("CANCELADO"))
             {
                 btnBaixarPedido.Visible = true;
                 btnCancelaPedido.Visible = true;
@@ -185,7 +185,7 @@ namespace ExpressDelivery
                 MessageBox.Show(exception.Message);
             }
             
-            if (_statusPedidoSelecionado.Equals("ABERTO"))
+            if (!_statusPedidoSelecionado.ToUpper().Equals("CONCLUIDO") && !_statusPedidoSelecionado.ToUpper().Equals("CANCELADO"))
             {
                 btnBaixarPedido.Visible = true;
                 btnCancelaPedido.Visible = true;
