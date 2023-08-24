@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'express-delivery-api'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F998865ACA844BFF8EB0F14285DF47BF }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E7B75D25DE3445B997B08FECB8C2B4B3 }}
           package: '*.jar'
