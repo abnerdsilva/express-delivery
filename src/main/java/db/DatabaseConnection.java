@@ -10,10 +10,10 @@ public class DatabaseConnection {
     private final String MSG_ERRO_FALHA_CONEXAO = "Falha na conexão";
 
     private final String DB_PORT = "1433";
-    private final String DB_USER = "sa";
-    private final String DB_PASS = "241180";
-    private final String DB_HOST = "localhost";
-    private final String DB_NAME = "express";
+    private final String DB_USER = "fatecid@srvfatec";
+    private final String DB_PASS = "Fatec@id";
+    private final String DB_HOST = "srvfatec.database.windows.net";
+    private final String DB_NAME = "bdexpressdelivery";
     private final String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     private final String PATH = "jdbc:sqlserver://" + DB_HOST + ":" + DB_PORT + ";databaseName=" + DB_NAME + "";
 
