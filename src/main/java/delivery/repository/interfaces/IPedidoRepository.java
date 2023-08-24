@@ -18,4 +18,10 @@ public interface IPedidoRepository {
     int updateOrderPrinted(int idPedido);
 
     List<PedidoDao> getPedidosParaImprimir();
+
+    List<PedidoDao> getOrdersFromToday();
+
+    PedidoDao getOrderById(int id);
+
+    int updateStatusOrder(int id, String status);
 }

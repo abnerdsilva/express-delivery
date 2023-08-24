@@ -7,6 +7,9 @@ public class Token {
     private int expiresIn;
     private AuthError error;
 
+    public Token() {
+    }
+
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }

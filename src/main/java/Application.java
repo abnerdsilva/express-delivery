@@ -1,8 +1,10 @@
+import delivery.AppDelivery;
 import delivery.controller.ConfigController;
 import delivery.controller.ImprimeController;
 import ifood.AppIfood;
 import log.LoggerInFile;
 import log.MessageDefault;
+import org.springframework.boot.SpringApplication;
 
 import java.sql.SQLException;
 
@@ -30,12 +32,23 @@ public class Application {
 
             boolean permiteModuloImpressao = configController.checkPrinterPermition();
             if (!permiteModuloImpressao) {
-                System.out.println(MessageDefault.msgAccessIntegrationNotGranted);
-                LoggerInFile.printInfo(MessageDefault.msgAccessIntegrationNotGranted);
+                System.out.println(MessageDefault.msgAccessPrnterNotGranted);
+                LoggerInFile.printInfo(MessageDefault.msgAccessPrnterNotGranted);
             } else {
-                LoggerInFile.printInfo(MessageDefault.msgAccessIntegrationGranted);
+                LoggerInFile.printInfo(MessageDefault.msgAccessrPrinterGranted);
                 imprimeController.startPrinter();
             }
+
+            boolean webserverPermition = configController.checkWebserverPermition();
+            if (!webserverPermition) {
+                System.out.println(MessageDefault.msgAccessWebserverNotGranted);
+                LoggerInFile.printInfo(MessageDefault.msgAccessWebserverNotGranted);
+            } else {
+                LoggerInFile.printInfo(MessageDefault.msgAccessrWebserverGranted);
+
+                SpringApplication.run(AppDelivery.class, args);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());

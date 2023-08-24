@@ -1,5 +1,7 @@
 package delivery.model.dao;
 
+import delivery.model.ClienteDelivery;
+
 public class ClienteDao {
     private long codCliente;
     private String nome;
@@ -144,5 +146,23 @@ public class ClienteDao {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    public ClienteDelivery clientDaoToClienteDelivery() {
+        ClienteDelivery clienteDelivery = new ClienteDelivery();
+        clienteDelivery.setCodCliente(Long.valueOf(this.getCodCliente()).intValue());
+        clienteDelivery.setDocumento(this.getCpf());
+        clienteDelivery.setTelefone(this.getTelefone());
+        clienteDelivery.setBairro(this.getBairro());
+        clienteDelivery.setLogradouro(this.getLogradouro());
+        clienteDelivery.setEstado(this.getEstado());
+        clienteDelivery.setCep(this.getCep());
+        clienteDelivery.setCidade(this.getCidade());
+        clienteDelivery.setEmail(this.getEmail());
+        clienteDelivery.setNumero(this.getNumero());
+        clienteDelivery.setNome(this.getNome());
+        clienteDelivery.setObservacao(this.getObservacao());
+
+        return clienteDelivery;
     }
 }

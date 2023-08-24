@@ -51,8 +51,8 @@ public class ImprimeController {
         textToPrint += imprimir.preencheLinha("Cliente: " + pedido.getCliente().getNome(), " ", 60, "E");
         textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
         String infoEndereco = "Pedido para retirar";
-        if (pedido.getCliente().getLogradouro().equals("")) {
-            infoEndereco = pedido.getCliente().getLogradouro();
+        if (!pedido.getCliente().getLogradouro().equals("")) {
+            infoEndereco = pedido.getCliente().getLogradouro() + " - " + pedido.getCliente().getNumero() + ", " + pedido.getCliente().getBairro();
         }
         textToPrint += imprimir.preencheLinha("Endereco: " + infoEndereco, " ", 60, "E");
         textToPrint += imprimir.preencheLinha("\n\n", " ", 60, "D");
@@ -143,7 +143,7 @@ public class ImprimeController {
                         List<PedidoItemDelivery> itens = new ArrayList<>();
                         List<PedidoItemDao> itensPedido = pedidoRepository.loadItensByCode(p.getCodPedido());
                         for (PedidoItemDao it : itensPedido) {
-                            ProdutoDao produtoDao = produtoRepository.loadById(it.getCodProduto());
+                            ProdutoDao produtoDao = produtoRepository.loadById(String.valueOf(it.getCodProduto()));
 
                             PedidoItemDelivery item = new PedidoItemDelivery();
                             item.setNome(produtoDao.getNome());

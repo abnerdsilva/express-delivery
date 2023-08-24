@@ -22,4 +22,10 @@ public interface IOrderRepository {
     List<PedidoDao> getOrdersToConfirmProduction();
 
     List<PedidoDao> getOrdersToDispatch();
+
+    boolean hasOrderLaunched(String code);
+
+    boolean updateStatusSyncOrder(String code);
+
+    int updateStatusOrderCancelled(String code);
 }

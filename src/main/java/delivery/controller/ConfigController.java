@@ -14,6 +14,9 @@ public class ConfigController {
     public String statusModuloImpressao = "";
     public String NOME_IMPRESSORA = "";
 
+    private final String CONFIG_USA_WEBSERVER = "USA_WEBSERVER";
+    public String statusWebserverPermition = "";
+
     ConfigRepository configRepository = new ConfigRepository();
 
     /**
@@ -51,5 +54,16 @@ public class ConfigController {
             }
         }
         return ret;
+    }
+
+    public boolean checkWebserverPermition() throws SQLException {
+        ConfigDao config = configRepository.load(CONFIG_USA_WEBSERVER);
+        if (config != null) {
+            if (config.getFlag1().equals(permitionGranted)) {
+                statusWebserverPermition = config.getFlag1();
+                return true;
+            }
+        }
+        return false;
     }
 }

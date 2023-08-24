@@ -1,24 +1,51 @@
 package delivery.controller;
 
+import delivery.Erro;
 import delivery.model.ClienteDelivery;
+import delivery.model.PagamentoDelivery;
 import delivery.model.PedidoDelivery;
+import delivery.model.PedidoItemDelivery;
 import delivery.model.dao.ClienteDao;
 import delivery.model.dao.PedidoDao;
 import delivery.model.dao.PedidoItemDao;
 import delivery.model.dao.ProdutoDao;
+import delivery.repository.ClienteRepository;
 import delivery.repository.PedidoRepository;
 import delivery.repository.ProdutoRepository;
 import log.LoggerInFile;
 import log.MessageDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
+@RestController
 public class PedidoController {
-    PedidoRepository pedidoRepository = new PedidoRepository();
-    ProdutoRepository produtoRepository = new ProdutoRepository();
-    ClienteController clienteController = new ClienteController();
+    private static PedidoController instance;
+
+    PedidoRepository _pedidoRepository;
+    ProdutoRepository _produtoRepository;
+    ClienteRepository _clienteRepository;
+
+    private PedidoController() {
+        _pedidoRepository = new PedidoRepository();
+        _produtoRepository = new ProdutoRepository();
+        _clienteRepository = new ClienteRepository();
+    }
+
+    public static PedidoController getInstance() {
+        if (instance == null) {
+            instance = new PedidoController();
+        }
+        return instance;
+    }
 
     /**
      * trata dados do pedido e solicita salvar no banco de dados
@@ -29,8 +56,10 @@ public class PedidoController {
      */
     public int savePedido(PedidoDelivery pedidoDelivery) throws SQLException {
         try {
-            long idCliente = clienteController.checkClientExists(pedidoDelivery.getCliente().getCodCliente());
-            if (idCliente == -1) {
+            long idCliente = -99;
+
+            ClienteDao clienteDao = _clienteRepository.loadById(pedidoDelivery.getCliente().getCodCliente());
+            if (clienteDao == null || clienteDao.getCodCliente() == 0) {
                 idCliente = addCliente(pedidoDelivery.getCliente());
                 if (idCliente <= 0) {
                     LoggerInFile.printError(MessageDefault.msgErrorAddClient);
@@ -68,17 +97,25 @@ public class PedidoController {
 
             pedido.setObservacao(observacao);
 
-            int orderId = pedidoRepository.saveOrder(pedido);
+            int orderId = _pedidoRepository.saveOrder(pedido);
             if (orderId <= 0) {
                 return -1;
             }
 
             for (var item : pedidoDelivery.getItens()) {
-                int codProdutoExterno = Integer.parseInt(item.getCodExterno());
+                if (item.getCodExterno() == null) {
+                    LoggerInFile.printError("Produto " + item.getId() + " não possui codigo externo");
+                    continue;
+                }
 
-                ProdutoDao produto = produtoRepository.loadById(codProdutoExterno);
+                String codProdutoExterno = "0";
+                if (!item.getCodExterno().equals("0") && !item.getCodExterno().equals("")) {
+                    codProdutoExterno = item.getCodExterno();
+                }
+
+                ProdutoDao produto = _produtoRepository.loadById(codProdutoExterno);
                 if (produto == null || produto.getCodProduto() == 0) {
-                    LoggerInFile.printError("Produto não encontrado");
+                    LoggerInFile.printError("Produto [COD_EXTERNO = " + codProdutoExterno + "] não encontrado");
                     continue;
                 }
 
@@ -90,7 +127,7 @@ public class PedidoController {
                 pedidoItem.setVrUnitario(item.getVrUnit());
                 pedidoItem.setVrTotal(item.getVrTotal());
 
-                int statusSaveOrderItem = pedidoRepository.saveOrderItem(pedidoItem);
+                int statusSaveOrderItem = _pedidoRepository.saveOrderItem(pedidoItem);
                 if (statusSaveOrderItem <= 0) {
                     LoggerInFile.printError("Erro ao incluir pedido item");
                 }
@@ -134,6 +171,147 @@ public class PedidoController {
         cliente.setDataAtualizacao(now.format(dtf));
         cliente.setObservacao(clienteDelivery.getObservacao());
 
-        return clienteController.addCliente(cliente);
+        int clientId = Long.valueOf(cliente.getCodCliente()).intValue();
+        clientId = _clienteRepository.hasClient(clientId, cliente.getTelefone());
+        if (clientId > 0) {
+            return clientId;
+        }
+        return _clienteRepository.save(cliente);
+    }
+
+    /**
+     * Endpoint para consulta de pedidos do dia atual
+     *
+     * @return - lista de pedidos
+     */
+    @RequestMapping("/orders")
+    public ResponseEntity getOrders() {
+        List<PedidoDelivery> orders = new ArrayList<>();
+        List<PedidoDao> pedidoDao = _pedidoRepository.getOrdersFromToday();
+        for (var ped : pedidoDao) {
+            PedidoDelivery pedidoDelivery = new PedidoDelivery();
+            try {
+                ClienteDao clienteDao = _clienteRepository.loadById(ped.getCodCliente());
+
+                if (clienteDao == null) {
+                    throw new Exception("cliente não encontrado");
+                }
+
+                pedidoDelivery.setCodPedido(ped.getCodPedido());
+                pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+                pedidoDelivery.setDataCriacao(ped.getDataPedido());
+                pedidoDelivery.setVrTotal(ped.getVrTotal());
+                pedidoDelivery.setVrDesconto(ped.getVrDesconto());
+                pedidoDelivery.setVrAdicional(ped.getVrTaxa());
+                pedidoDelivery.setObservacao(ped.getObservacao());
+                pedidoDelivery.setCodPedidoIntegracao(ped.getCodPedidoIntegracao());
+                pedidoDelivery.setOrigem(ped.getOrigem());
+                pedidoDelivery.setTipo(ped.getTipoPedido());
+                pedidoDelivery.setStatusPedido(ped.getStatusPedido());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(e.getMessage()));
+            }
+
+            orders.add(pedidoDelivery);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(orders);
+    }
+
+    @RequestMapping("/order/{id}")
+    public PedidoDelivery getOrderFromId(@PathVariable int id) throws SQLException {
+        List<PedidoItemDelivery> itens = new ArrayList<>();
+        List<PedidoItemDao> itensDao = _pedidoRepository.loadItensByCode(id);
+
+        for (var item : itensDao) {
+            itens.add(item.itemDaoToItemDelivery());
+        }
+
+        PedidoDao pedidoDao = _pedidoRepository.getOrderById(id);
+
+        ClienteDao clienteDao = _clienteRepository.loadById(pedidoDao.getCodCliente());
+
+        PedidoDelivery pedidoDelivery = new PedidoDelivery();
+        pedidoDelivery.setCodPedido(id);
+        pedidoDelivery.setItens(itens);
+        pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+        pedidoDelivery.setDataCriacao(pedidoDao.getDataPedido());
+        pedidoDelivery.setVrTotal(pedidoDao.getVrTotal());
+        pedidoDelivery.setVrTroco(pedidoDao.getVrTroco());
+        pedidoDelivery.setVrDesconto(pedidoDao.getVrDesconto());
+        pedidoDelivery.setVrAdicional(pedidoDao.getVrTaxa());
+        pedidoDelivery.setObservacao(pedidoDao.getObservacao());
+        pedidoDelivery.setCodPedidoIntegracao(pedidoDao.getCodPedidoIntegracao());
+        pedidoDelivery.setOrigem(pedidoDao.getOrigem());
+        pedidoDelivery.setTipo(pedidoDao.getTipoPedido());
+        pedidoDelivery.setReferencia("");
+        pedidoDelivery.setReferenciaCurta("");
+        pedidoDelivery.setStatusPedido(pedidoDao.getStatusPedido());
+
+        PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
+        pagamentoDelivery.setTroco(pedidoDao.getVrTroco());
+        pagamentoDelivery.setPrePago(false);
+        pagamentoDelivery.setValor(pedidoDao.getVrTotal());
+        pagamentoDelivery.setTipo(pedidoDao.getFormaPagamento());
+        pagamentoDelivery.setNome(pedidoDao.getFormaPagamento());
+
+        pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+
+        pedidoDelivery.setPagamento(pagamentoDelivery);
+
+        return pedidoDelivery;
+    }
+
+    @RequestMapping("/order/{id}/next")
+    public ResponseEntity<?> updateStatusOrder(@PathVariable String id) {
+        try {
+            PedidoDao pedidoDao = _pedidoRepository.getOrderById(Integer.parseInt(id));
+            String orderStatus = "ABERTO";
+            switch (pedidoDao.getStatusPedido()) {
+                case "ABERTO":
+                    orderStatus = "Confirmado";
+                    break;
+                case "Confirmado":
+                    orderStatus = "Despachado";
+                    break;
+                case "Cancelado":
+                case "Concluido":
+                    return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(new Erro("pedido não pode ser atualizado"));
+                case "Despachado":
+                    orderStatus = "Concluido";
+                    break;
+            }
+
+            int statusOrder = _pedidoRepository.updateStatusOrder(Integer.parseInt(id), orderStatus);
+            if (statusOrder == -1) {
+                throw new Exception("pedido não atualizado, tente novamente");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(e.getMessage()));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @RequestMapping("/order/{id}/cancel")
+    public ResponseEntity<?> cancelOrder(@PathVariable String id) {
+        try {
+            PedidoDao pedidoDao = _pedidoRepository.getOrderById(Integer.parseInt(id));
+            int statusOrder = _pedidoRepository.updateStatusOrder(Integer.parseInt(id), "CANCELADO");
+            if (statusOrder == -1) {
+                throw new Exception("pedido não cancelado, tente novamente");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(e.getMessage()));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

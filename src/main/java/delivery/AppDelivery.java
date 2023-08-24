@@ -7,6 +7,7 @@ import delivery.model.PagamentoDelivery;
 import delivery.model.PedidoDelivery;
 import delivery.model.PedidoItemDelivery;
 import log.LoggerInFile;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -14,13 +15,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@SpringBootApplication
 public class AppDelivery {
-    private static final PedidoController pedidoController = new PedidoController();
-    private static final ImprimeController imprimeController = new ImprimeController();
+    private static PedidoController pedidoController;
+    private static ImprimeController imprimeController;
+
+    public AppDelivery() {
+        pedidoController = PedidoController.getInstance();
+        imprimeController = new ImprimeController();
+    }
 
     /**
      * inicia, salva e imprime pedido de exemplo
-     * @param args
+     *
+     * @param args - argumento inicial do main
      */
     public static void main(String[] args) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");

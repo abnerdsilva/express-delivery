@@ -1,5 +1,7 @@
 package delivery.model.dao;
 
+import delivery.model.PedidoItemDelivery;
+
 public class PedidoItemDao {
     private int codPedidoItem;
     private int codPedido;
@@ -8,6 +10,7 @@ public class PedidoItemDao {
     private double vrUnitario;
     private double vrTotal;
     private String observacao;
+    private String nome;
 
     public PedidoItemDao() {
     }
@@ -66,5 +69,25 @@ public class PedidoItemDao {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public PedidoItemDelivery itemDaoToItemDelivery() {
+        PedidoItemDelivery itemDelivery = new PedidoItemDelivery();
+        itemDelivery.setId(this.getCodProduto());
+        itemDelivery.setVrUnit(this.getVrUnitario());
+        itemDelivery.setQuantidade(this.getQuantidade());
+        itemDelivery.setObservacao(this.getObservacao());
+        itemDelivery.setVrTotal(this.getVrTotal());
+        itemDelivery.setNome(this.getNome());
+
+        return itemDelivery;
     }
 }

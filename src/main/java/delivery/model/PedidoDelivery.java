@@ -1,23 +1,45 @@
 package delivery.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 
 public class PedidoDelivery {
     private int codPedido;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String referencia;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String referenciaCurta;
     private String dataCriacao;
+    private String statusPedido;
     private boolean agendado;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String dataEntrega;
     private String tipo;
     private ClienteDelivery cliente;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private PagamentoDelivery pagamento;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<PedidoItemDelivery> itens;
     private double vrTotal;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private double vrAdicional;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private double vrTroco;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private double vrDesconto;
     private String observacao;
     private String origem;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String codPedidoIntegracao;
 
     public PedidoDelivery() {
@@ -149,5 +171,21 @@ public class PedidoDelivery {
 
     public void setCodPedidoIntegracao(String codPedidoIntegracao) {
         this.codPedidoIntegracao = codPedidoIntegracao;
+    }
+
+    public void setStatusPedido(String statusPedido) {
+        this.statusPedido = statusPedido;
+    }
+
+    public String getStatusPedido() {
+        return statusPedido;
+    }
+
+    public double getVrTroco() {
+        return vrTroco;
+    }
+
+    public void setVrTroco(double vrTroco) {
+        this.vrTroco = vrTroco;
     }
 }

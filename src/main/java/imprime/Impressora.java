@@ -47,7 +47,7 @@ public class Impressora {
      * Imprime texto informado
      *
      * @param texto - dados passados para impressão
-     * @return - returna status da impressão
+     * @throws PrintException - exceção de impressão quando ocorre erro
      */
     public synchronized boolean imprime(String texto) throws PrintException {
         if (impressora == null) {

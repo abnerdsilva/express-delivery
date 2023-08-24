@@ -23,8 +23,17 @@ public class PedidoDao {
     private String dataAtualizacao;
     private String formaPagamento;
     private String codPedidoIntegracao;
+    private int codUsuario;
 
     public PedidoDao() {
+    }
+
+    public int getCodUsuario() {
+        return codUsuario;
+    }
+
+    public void setCodUsuario(int codUsuario) {
+        this.codUsuario = codUsuario;
     }
 
     public void setCliente(ClienteDao cliente) {
