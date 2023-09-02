@@ -1,4 +1,5 @@
 import delivery.AppDelivery;
+import delivery.model.PropertiesEnv;
 import delivery.controller.ConfigController;
 import delivery.controller.ImprimeController;
 import ifood.AppIfood;
@@ -19,6 +20,8 @@ public class Application {
      */
     public static void main(String[] args) {
         LoggerInFile.start();
+
+        PropertiesEnv.start();
 
         try {
             boolean statusIntegration = configController.checkIntegrationPermition();

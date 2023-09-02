@@ -84,7 +84,7 @@ public class PedidoController {
             pedido.setVrTaxa(pedidoDelivery.getVrAdicional());
             pedido.setVrTotal(pedidoDelivery.getVrTotal());
             pedido.setVrDesconto(pedidoDelivery.getVrDesconto());
-            pedido.setVrTroco(0);
+            pedido.setVrTroco(pedidoDelivery.getVrTroco());
             pedido.setCodPedidoIntegracao(pedidoDelivery.getCodPedidoIntegracao());
 
             String observacao = pedidoDelivery.getObservacao();

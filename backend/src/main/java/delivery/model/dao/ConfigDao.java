@@ -1,7 +1,7 @@
 package delivery.model.dao;
 
 public class ConfigDao {
-    private int codConfiguracao;
+    private String codConfiguracao;
     private String item;
     private String flag1;
     private String flag2;
@@ -12,11 +12,11 @@ public class ConfigDao {
     public ConfigDao() {
     }
 
-    public void setCodConfiguracao(int codConfiguracao) {
+    public void setCodConfiguracao(String codConfiguracao) {
         this.codConfiguracao = codConfiguracao;
     }
 
-    public int getCodConfiguracao() {
+    public String getCodConfiguracao() {
         return codConfiguracao;
     }
 

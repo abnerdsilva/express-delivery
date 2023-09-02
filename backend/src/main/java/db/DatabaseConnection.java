@@ -1,5 +1,6 @@
 package db;
 
+import delivery.model.PropertiesEnv;
 import log.LoggerInFile;
 
 import java.sql.*;
@@ -9,13 +10,13 @@ public class DatabaseConnection {
     private final String MSG_ERRO_DRIVER_NAO_ENCONTRADO = "Driver não encontrado";
     private final String MSG_ERRO_FALHA_CONEXAO = "Falha na conexão";
 
-    private final String DB_PORT = "1433";
-    private final String DB_USER = "fatecid@srvfatec";
-    private final String DB_PASS = "Fatec@id";
-    private final String DB_HOST = "srvfatec.database.windows.net";
-    private final String DB_NAME = "bdexpressdelivery";
-    private final String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    private final String PATH = "jdbc:sqlserver://" + DB_HOST + ":" + DB_PORT + ";databaseName=" + DB_NAME + "";
+    private final String DB_PORT =  PropertiesEnv.getPort();
+    private final String DB_USER = PropertiesEnv.getUsername();
+    private final String DB_PASS = PropertiesEnv.getPassword();
+    private final String DB_HOST = PropertiesEnv.getHostname();
+    private final String DB_NAME = PropertiesEnv.getDatabase();
+    private final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    private final String PATH = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "";
 
     public Connection connection;
     public PreparedStatement st = null;
