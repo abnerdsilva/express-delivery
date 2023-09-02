@@ -30,7 +30,7 @@ public class ConfigRepository implements IConfigRepository {
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 config = new ConfigDao();
-                config.setCodConfiguracao(bd.rs.getInt(1));
+                config.setCodConfiguracao(bd.rs.getString(1));
                 config.setItem(bd.rs.getString(2));
                 config.setFlag1(bd.rs.getString(3));
                 config.setFlag2(bd.rs.getString(4));

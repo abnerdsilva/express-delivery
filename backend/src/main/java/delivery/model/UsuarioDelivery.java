@@ -1,11 +1,10 @@
 package delivery.model;
 
-import delivery.model.dao.UsuarioDao;
-
 public class UsuarioDelivery {
-    private int id;
+    private String id;
     private String username;
     private String status;
+    private String type;
 
     public String getStatus() {
         return status;
@@ -23,20 +22,18 @@ public class UsuarioDelivery {
         this.type = type;
     }
 
-    private String type;
-
-    public UsuarioDelivery(int id, String username, String type, String status) {
+    public UsuarioDelivery(String id, String username, String type, String status) {
         this.id = id;
         this.username = username;
         this.type = type;
         this.status = status;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
