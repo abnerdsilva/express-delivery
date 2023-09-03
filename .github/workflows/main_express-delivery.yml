@@ -9,9 +9,18 @@ on:
       - main
   workflow_dispatch:
 
+    # env:
+    #   working-directory: ./backend
+
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
 
     steps:
       - uses: actions/checkout@v2
@@ -28,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: '${{ github.workspace }}/backend/target/*.jar'
+          path: '${{ github.workspace }}/target/*.jar'
 
   deploy:
     runs-on: ubuntu-latest
