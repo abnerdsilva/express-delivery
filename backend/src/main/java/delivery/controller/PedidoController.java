@@ -30,14 +30,14 @@ import java.util.List;
 public class PedidoController {
     private static PedidoController instance;
 
-    PedidoRepository _pedidoRepository = new PedidoRepository();
-    ProdutoRepository _produtoRepository = new ProdutoRepository();
-    ClienteRepository _clienteRepository = new ClienteRepository();
+    PedidoRepository _pedidoRepository;
+    ProdutoRepository _produtoRepository;
+    ClienteRepository _clienteRepository;
 
     private PedidoController() {
-//        _pedidoRepository = new PedidoRepository();
-//        _produtoRepository = new ProdutoRepository();
-//        _clienteRepository = new ClienteRepository();
+        _pedidoRepository = new PedidoRepository();
+        _produtoRepository = new ProdutoRepository();
+        _clienteRepository = new ClienteRepository();
     }
 
     public static PedidoController getInstance() {
