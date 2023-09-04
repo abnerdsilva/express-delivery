@@ -43,6 +43,8 @@ public class Application {
             }
 
             boolean webserverPermition = configController.checkWebserverPermition();
+            System.out.println(webserverPermition);
+            System.out.println("-------*********");
             if (!webserverPermition) {
                 System.out.println(MessageDefault.msgAccessWebserverNotGranted);
                 LoggerInFile.printInfo(MessageDefault.msgAccessWebserverNotGranted);
