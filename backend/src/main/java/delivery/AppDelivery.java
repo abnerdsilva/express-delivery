@@ -18,9 +18,9 @@ import java.util.List;
 
 @SpringBootApplication
 public class AppDelivery {
-    private static final ConfigController configController = new ConfigController();
-    private static final PedidoController pedidoController = PedidoController.getInstance();
-    private static final ImprimeController imprimeController = new ImprimeController();
+    private static ConfigController configController;
+    private static PedidoController pedidoController;
+    private static ImprimeController imprimeController;
 
     /**
      * inicia aplicação - verifica permissão de modulo de integração com ifood e impressão
@@ -28,6 +28,10 @@ public class AppDelivery {
      * @param args - argumentos de inicio do projeto
      */
     public static void main(String[] args) {
+        configController = new ConfigController();
+        pedidoController = PedidoController.getInstance();
+        imprimeController = new ImprimeController();
+
         LoggerInFile.start();
 
         PropertiesEnv.start();
