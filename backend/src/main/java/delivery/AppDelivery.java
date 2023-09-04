@@ -18,11 +18,11 @@ import java.util.List;
 @SpringBootApplication
 public class AppDelivery {
     private static PedidoController pedidoController = PedidoController.getInstance();
-    private static ImprimeController imprimeController;
+    private static ImprimeController imprimeController = new ImprimeController();
 
     public AppDelivery() {
-        pedidoController = PedidoController.getInstance();
-        imprimeController = new ImprimeController();
+//        pedidoController = PedidoController.getInstance();
+//        imprimeController = new ImprimeController();
     }
 
     /**
