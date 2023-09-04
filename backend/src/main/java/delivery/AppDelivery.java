@@ -17,7 +17,7 @@ import java.util.List;
 
 @SpringBootApplication
 public class AppDelivery {
-    private static PedidoController pedidoController;
+    private static PedidoController pedidoController = PedidoController.getInstance();
     private static ImprimeController imprimeController;
 
     public AppDelivery() {
