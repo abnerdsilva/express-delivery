@@ -19,6 +19,7 @@ public class TokenService {
                 .withIssuer("auth-api")
                 .withSubject(usuario.getUsuario())
                 .withClaim("id", usuario.getId())
+                .withClaim("type", usuario.getTipoUsuario())
                 .withExpiresAt(getExpirationDate())
                 .sign(Algorithm.HMAC256(SECRET_KEY));
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExpressDelivery.Models;
 
@@ -9,13 +10,13 @@ namespace ExpressDelivery
     {
         private Usuario _usuario;
         
-        public FormHome(Usuario usuario)
+        public FormHome(Task<Usuario> usuario)
         {
             InitializeComponent();
 
             CustomizeDesign();
             
-            _usuario = usuario;
+            _usuario = usuario.Result;
         }
 
         private void CustomizeDesign()

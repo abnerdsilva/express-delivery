@@ -1,6 +1,11 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using ExpressDelivery.Models;
 using MySqlConnector;
+using Newtonsoft.Json;
 
 namespace ExpressDelivery.Repository
 {
@@ -60,6 +65,70 @@ namespace ExpressDelivery.Repository
             finally
             {
                 _con.Disconnect();
+            }
+
+            return usuario;
+        }
+
+        public async Task<Usuario> Login(string username, string password)
+        {
+            var usuario = new Usuario();
+
+            var userTemp = new LoginUsuario();
+            userTemp.Username = username;
+            userTemp.Password = password;
+
+            var json = JsonConvert.SerializeObject(userTemp);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = ConfigHttp.client.PostAsync(ConfigHttp.BaseUrl + "/auth/login2", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                var tokenLogin = JsonConvert.DeserializeObject<TokenLogin>(result);
+                if (tokenLogin == null)
+                {
+                    throw new Exception("falha ao gerar token");
+                }
+
+                ConfigHttp.setHeader(tokenLogin.Token);
+
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(tokenLogin.Token);
+                var tokenS = jsonToken as JwtSecurityToken;
+
+                if (tokenS == null)
+                {
+                    throw new Exception("falha na leitura do token");
+                }
+
+                foreach (var claim in tokenS.Claims)
+                {
+                    switch (claim.Type)
+                    {
+                        case "id":
+                            usuario.Id = claim.Value;
+                            break;
+                        case "sub":
+                            usuario.Login = claim.Value;
+                            break;
+                        case "type":
+                            usuario.TipoUsuario = claim.Value;
+                            break;
+                    }
+                }
+
+                usuario.Status = 1;
+
+                Status = true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                Status = false;
+                throw;
             }
 
             return usuario;
