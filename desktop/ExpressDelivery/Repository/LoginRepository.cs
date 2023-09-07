@@ -1,6 +1,6 @@
 using System;
 using ExpressDelivery.Models;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
 
 namespace ExpressDelivery.Repository
 {
@@ -9,14 +9,14 @@ namespace ExpressDelivery.Repository
         public bool Status;
         public string Message = "";
 
-        private readonly SqlCommand _cmd = new SqlCommand();
+        private readonly MySqlCommand _cmd = new MySqlCommand();
         private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
-        private SqlDataReader _dr;
-        
+        private MySqlDataReader _dr;
+
         public Usuario VerificaLogin(string login, string password)
         {
             var usuario = new Usuario();
-            
+
             _cmd.CommandText = $"SELECT * FROM TB_USUARIO WHERE USUARIO = @LOGIN_USER AND SENHA = @PASS AND STATUS_USUARIO=1;";
             _cmd.Parameters.AddWithValue("@LOGIN_USER", login);
             _cmd.Parameters.AddWithValue("@PASS", password);
@@ -31,7 +31,7 @@ namespace ExpressDelivery.Repository
                     {
                         usuario = new Usuario
                         {
-                            Id = Convert.ToInt16(_dr["ID_USER"]),
+                            Id = _dr.GetString("ID_USER"),
                             Login = _dr["USUARIO"].ToString(),
                             Senha = _dr["SENHA"].ToString(),
                             TipoUsuario = _dr["TIPO_USUARIO"].ToString(),
@@ -45,7 +45,7 @@ namespace ExpressDelivery.Repository
                     Message = "Usuário e/ou senha inválidos";
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
@@ -61,7 +61,7 @@ namespace ExpressDelivery.Repository
             {
                 _con.Disconnect();
             }
-            
+
             return usuario;
         }
     }

@@ -28,8 +28,8 @@ namespace ExpressDelivery
             listUsuarios.LabelEdit = true;
 
             listUsuarios.Columns.Add("ID Produto", 80, HorizontalAlignment.Left);
-            listUsuarios.Columns.Add("Usuário", 250, HorizontalAlignment.Left);
-            listUsuarios.Columns.Add("Tipo Usuário", 120, HorizontalAlignment.Left);
+            listUsuarios.Columns.Add("Usuï¿½rio", 250, HorizontalAlignment.Left);
+            listUsuarios.Columns.Add("Tipo Usuï¿½rio", 120, HorizontalAlignment.Left);
 
             var statusPesquisa = 0;
             if (cmbStatusPesquisa.Text == "Ativo")
@@ -39,7 +39,7 @@ namespace ExpressDelivery
                 _users = _usuarioController.LoadAll();
             else
             {
-                if (cmbTipoPesquisa.Text == "Usuário")
+                if (cmbTipoPesquisa.Text == "Usuï¿½rio")
                     _users = _usuarioController.LoadByName(txtDescricaoPesquisa.Text);
                 else
                     _users = _usuarioController.LoadById(txtDescricaoPesquisa.Text);
@@ -95,19 +95,19 @@ namespace ExpressDelivery
         {
             if (txtUsuario.Text.Equals(""))
             {
-                MessageBox.Show(@"O campo usuário é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"O campo usuï¿½rio ï¿½ obrigatï¿½rio.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (txtSenha.Text.Equals(""))
             {
-                MessageBox.Show(@"O campo senha é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"O campo senha ï¿½ obrigatï¿½rio.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (cmbTipoUsuario.Text.Equals(""))
             {
-                MessageBox.Show(@"O campo tipo usuário é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"O campo tipo usuï¿½rio ï¿½ obrigatï¿½rio.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -115,9 +115,9 @@ namespace ExpressDelivery
             if (radioAtivo.Checked)
                 status = 1;
 
-            var idUser = _usuarioController.LastUserId() + 1;
+            var idUser = (_usuarioController.LastUserId() + 1).ToString();
             if (!txtIdUsuario.Text.Equals("0"))
-                idUser = Convert.ToInt16(txtIdUsuario.Text);
+                idUser = txtIdUsuario.Text;
 
             var user = new Usuario
             {
@@ -132,7 +132,7 @@ namespace ExpressDelivery
 
             if (!_usuarioController.MessageError.Equals(""))
             {
-                MessageBox.Show($@"Erro ao salvar usuário. {_usuarioController.MessageError}");
+                MessageBox.Show($@"Erro ao salvar usuï¿½rio. {_usuarioController.MessageError}");
                 return;
             }
 
@@ -163,7 +163,7 @@ namespace ExpressDelivery
             var user = new Usuario();
             foreach (var c in _users)
             {
-                if (c.Id != int.Parse(idUser)) continue;
+                if (c.Id != int.Parse(idUser).ToString()) continue;
                 user = c;
                 break;
             }

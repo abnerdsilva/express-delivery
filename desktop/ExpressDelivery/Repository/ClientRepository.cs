@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExpressDelivery.Models;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
 
 namespace ExpressDelivery.Repository
 {
@@ -9,9 +9,9 @@ namespace ExpressDelivery.Repository
     {
         public string Message = "";
 
-        private readonly SqlCommand _cmd = new SqlCommand();
+        private readonly MySqlCommand _cmd = new MySqlCommand();
         private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
-        private SqlDataReader _dr;
+        private MySqlDataReader _dr;
 
         public List<Client> LoadAll()
         {
@@ -47,7 +47,7 @@ namespace ExpressDelivery.Repository
                     clients.Add(client);
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
@@ -92,7 +92,7 @@ namespace ExpressDelivery.Repository
                     clients.Add(client);
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
@@ -137,7 +137,7 @@ namespace ExpressDelivery.Repository
                     clients.Add(client);
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
@@ -186,7 +186,7 @@ namespace ExpressDelivery.Repository
                     client.Observacao = _dr["OBSERVACAO"].ToString();
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
@@ -223,7 +223,7 @@ namespace ExpressDelivery.Repository
                         lastId = Convert.ToInt16(_dr["LAST_ID"]);
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
@@ -269,7 +269,7 @@ namespace ExpressDelivery.Repository
                 _cmd.Connection = _con.Connect();
                 return _cmd.ExecuteNonQuery();
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;

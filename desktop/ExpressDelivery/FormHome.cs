@@ -80,7 +80,8 @@ namespace ExpressDelivery
 
         private void FormHome_Load(object sender, EventArgs e)
         {
-            lbl_idOperador.Text = _usuario.Id.ToString();
+            lbl_idOperador.Text = _usuario.Id;
+            lbl_idOperador.Visible = false;
             
             if (_usuario.TipoUsuario.Equals("COMUM"))
             {

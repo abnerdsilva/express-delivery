@@ -1,18 +1,18 @@
 using System.Configuration;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
 
 namespace ExpressDelivery.Repository
 {
     public class ConnectionDbRepository
     {
-        private readonly SqlConnection _con = new SqlConnection();
+        private readonly MySqlConnection _con = new MySqlConnection();
         
         public ConnectionDbRepository()
         {
             _con.ConnectionString = ConfigurationManager.ConnectionStrings["DatabaseConnectionString"].ConnectionString;
         }
 
-        public SqlConnection Connect()
+        public MySqlConnection Connect()
         {
             if (_con.State == System.Data.ConnectionState.Closed)
             {

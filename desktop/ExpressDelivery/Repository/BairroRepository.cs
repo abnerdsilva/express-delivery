@@ -1,7 +1,7 @@
 ﻿using ExpressDelivery.Models;
-using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using MySqlConnector;
 
 namespace ExpressDelivery.Repository
 {
@@ -9,9 +9,9 @@ namespace ExpressDelivery.Repository
     {
         public string Message = "";
 
-        private readonly SqlCommand _cmd = new SqlCommand();
+        private readonly MySqlCommand _cmd = new MySqlCommand();
         private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
-        private SqlDataReader _dr;
+        private MySqlDataReader _dr;
 
         public List<Bairro> LoadAll()
         {
@@ -37,7 +37,7 @@ namespace ExpressDelivery.Repository
                     bairros.Add(bairro);
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
@@ -75,7 +75,7 @@ namespace ExpressDelivery.Repository
                 _cmd.Connection = _con.Connect();
                 return _cmd.ExecuteNonQuery();
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
