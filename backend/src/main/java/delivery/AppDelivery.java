@@ -1,12 +1,13 @@
 package delivery;
 
+import delivery.controller.ConfigController;
 import delivery.controller.ImprimeController;
 import delivery.controller.PedidoController;
-import delivery.model.ClienteDelivery;
-import delivery.model.PagamentoDelivery;
-import delivery.model.PedidoDelivery;
-import delivery.model.PedidoItemDelivery;
+import delivery.model.*;
+import ifood.AppIfood;
 import log.LoggerInFile;
+import log.MessageDefault;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.SQLException;
@@ -17,20 +18,63 @@ import java.util.List;
 
 @SpringBootApplication
 public class AppDelivery {
-    private static PedidoController pedidoController = PedidoController.getInstance();
+    private static ConfigController configController;
+    private static PedidoController pedidoController;
     private static ImprimeController imprimeController;
 
-    public AppDelivery() {
+    /**
+     * inicia aplicação - verifica permissão de modulo de integração com ifood e impressão
+     *
+     * @param args - argumentos de inicio do projeto
+     */
+    public static void main(String[] args) {
+        configController = new ConfigController();
         pedidoController = PedidoController.getInstance();
         imprimeController = new ImprimeController();
+
+        LoggerInFile.start();
+
+        PropertiesEnv.start();
+
+        try {
+            boolean statusIntegration = configController.checkIntegrationPermition();
+            if (!statusIntegration) {
+                System.out.println(MessageDefault.msgAccessIntegrationNotGranted);
+                LoggerInFile.printInfo(MessageDefault.msgAccessIntegrationNotGranted);
+            } else {
+                LoggerInFile.printInfo(MessageDefault.msgAccessIntegrationGranted);
+                AppIfood.start();
+            }
+
+            boolean permiteModuloImpressao = configController.checkPrinterPermition();
+            if (!permiteModuloImpressao) {
+                System.out.println(MessageDefault.msgAccessPrnterNotGranted);
+                LoggerInFile.printInfo(MessageDefault.msgAccessPrnterNotGranted);
+            } else {
+                LoggerInFile.printInfo(MessageDefault.msgAccessrPrinterGranted);
+                imprimeController.startPrinter();
+            }
+
+            boolean webserverPermition = configController.checkWebserverPermition();
+            if (!webserverPermition) {
+                System.out.println(MessageDefault.msgAccessWebserverNotGranted);
+                LoggerInFile.printInfo(MessageDefault.msgAccessWebserverNotGranted);
+            } else {
+                LoggerInFile.printInfo(MessageDefault.msgAccessrWebserverGranted);
+
+                SpringApplication.run(AppDelivery.class, args);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        }
     }
 
     /**
      * inicia, salva e imprime pedido de exemplo
-     *
-     * @param args - argumento inicial do main
      */
-    public static void main(String[] args) {
+    public static void saveOrderTest() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
 
