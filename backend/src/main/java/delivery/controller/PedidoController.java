@@ -113,8 +113,8 @@ public class PedidoController {
                     codProdutoExterno = item.getCodExterno();
                 }
 
-                ProdutoDao produto = _produtoRepository.loadById(codProdutoExterno);
-                if (produto == null || produto.getCodProduto() == 0) {
+                ProdutoDao produto = _produtoRepository.loadByCode(codProdutoExterno);
+                if (produto == null || produto.getCodProduto().equals("0")) {
                     LoggerInFile.printError("Produto [COD_EXTERNO = " + codProdutoExterno + "] não encontrado");
                     continue;
                 }

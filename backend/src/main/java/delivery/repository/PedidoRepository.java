@@ -38,7 +38,7 @@ public class PedidoRepository implements IPedidoRepository {
                 PedidoItemDao item = new PedidoItemDao();
                 item.setCodPedido(bd.rs.getInt("cod_pedido"));
                 item.setCodPedidoItem(bd.rs.getInt("cod_pedido_item"));
-                item.setCodProduto(bd.rs.getInt("cod_produto"));
+                item.setCodProduto(bd.rs.getString("cod_produto"));
                 item.setObservacao(bd.rs.getString("observacao"));
                 item.setQuantidade(bd.rs.getInt("quantidade"));
                 item.setVrTotal(bd.rs.getDouble("vr_total"));
@@ -153,7 +153,7 @@ public class PedidoRepository implements IPedidoRepository {
         try {
             bd.st = bd.connection.prepareStatement(sql);
             bd.st.setInt(1, item.getCodPedido());
-            bd.st.setInt(2, item.getCodProduto());
+            bd.st.setString(2, item.getCodProduto());
             bd.st.setInt(3, item.getQuantidade());
             bd.st.setDouble(4, item.getVrUnitario());
             bd.st.setDouble(5, item.getVrTotal());

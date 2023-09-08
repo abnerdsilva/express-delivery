@@ -1,7 +1,7 @@
 package delivery.model;
 
 public class PedidoItemDelivery {
-    private int id;
+    private String id;
     private String nome;
     private int quantidade;
     private double vrUnit;
@@ -14,11 +14,11 @@ public class PedidoItemDelivery {
     public PedidoItemDelivery() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -5,7 +5,7 @@ import delivery.model.PedidoItemDelivery;
 public class PedidoItemDao {
     private int codPedidoItem;
     private int codPedido;
-    private int codProduto;
+    private String codProduto;
     private int quantidade;
     private double vrUnitario;
     private double vrTotal;
@@ -31,11 +31,11 @@ public class PedidoItemDao {
         this.codPedido = codPedido;
     }
 
-    public int getCodProduto() {
+    public String getCodProduto() {
         return codProduto;
     }
 
-    public void setCodProduto(int codProduto) {
+    public void setCodProduto(String codProduto) {
         this.codProduto = codProduto;
     }
 

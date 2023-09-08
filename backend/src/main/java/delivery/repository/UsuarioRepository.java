@@ -75,7 +75,7 @@ public class UsuarioRepository implements IUsuarioRepository {
     }
 
     public int save(UsuarioDao user) {
-        String sql = "SET IDENTITY_INSERT TB_USUARIO ON INSERT INTO TB_USUARIO (ID_USER, USUARIO, SENHA, TIPO_USUARIO, STATUS_USUARIO) VALUES (?,?,?,?,?)SET IDENTITY_INSERT TB_USUARIO OFF";
+        String sql = "INSERT INTO TB_USUARIO (ID_USER, USUARIO, SENHA, TIPO_USUARIO, STATUS_USUARIO) VALUES (?,?,?,?,?)";
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
