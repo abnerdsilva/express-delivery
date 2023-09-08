@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ExpressDelivery.Models;
 using MySqlConnector;
+using Newtonsoft.Json;
 
 namespace ExpressDelivery.Repository
 {
@@ -13,52 +15,28 @@ namespace ExpressDelivery.Repository
         private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
         private MySqlDataReader _dr;
         
-        public List<Product> LoadAll()
+        public async Task<List<Product>> LoadAll()
         {
             var products = new List<Product>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_PRODUTO WHERE STATUS_PRODUTO=1;";
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + "/v1/products").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var productsJson = JsonConvert.DeserializeObject<List<Product>>(result);
+                if (productsJson == null)
                 {
-                    var product = new Product
-                    {
-                        Id = Convert.ToInt16(_dr["COD_PRODUTO"]),
-                        Status = Convert.ToInt16(_dr["STATUS_PRODUTO"]),
-                        CodBarras = _dr["COD_BARRAS"].ToString(),
-                        Descricao = _dr["NOME"].ToString(),
-                        Categoria = _dr["CATEGORIA"].ToString(),
-                        PrecoCompra = Convert.ToDouble(_dr["VR_COMPRA"]),
-                        PrecoVenda = Convert.ToDouble(_dr["VR_UNITARIO"]),
-                        MargemLucro = Convert.ToDouble(_dr["MARGEM_LUCRO"]),
-                        UnMedida = _dr["UN_MEDIDA"].ToString(),
-                        Localizacao = _dr["LOCALIZACAO"].ToString(),
-                        Observacao = _dr["OBSERVACAO"].ToString(),
-                    };
-
-                    products.Add(product);
+                    throw new Exception("falha na conversão dos produtos");
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+
+                products.AddRange(productsJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
                 throw;
-            }
-            finally
-            {
-                _con.Disconnect();
             }
 
             return products;
@@ -79,7 +57,7 @@ namespace ExpressDelivery.Repository
                 {
                     var product = new Product
                     {
-                        Id = Convert.ToInt16(_dr["COD_PRODUTO"]),
+                        Uid = Convert.ToString(_dr["COD_PRODUTO"]),
                         Descricao = _dr["NOME"].ToString(),
                         PrecoCompra = Convert.ToDouble(_dr["VR_COMPRA"]),
                         UnMedida = _dr["UN_MEDIDA"].ToString(),
@@ -125,7 +103,7 @@ namespace ExpressDelivery.Repository
                 {
                     var product = new Product
                     {
-                        Id = Convert.ToInt16(_dr["COD_PRODUTO"]),
+                        Uid = Convert.ToString(_dr["COD_PRODUTO"]),
                         Status = Convert.ToInt16(_dr["STATUS_PRODUTO"]),
                         Descricao = _dr["NOME"].ToString(),
                         PrecoCompra = Convert.ToDouble(_dr["VR_COMPRA"]),
@@ -202,8 +180,8 @@ namespace ExpressDelivery.Repository
             if (type == "new")
             {
                 _cmd.CommandText =
-                    $"INSERT INTO TB_PRODUTO (NOME, CATEGORIA, VR_COMPRA, VR_UNITARIO, LOCALIZACAO, STATUS_PRODUTO," +
-                    $" MARGEM_LUCRO, UN_MEDIDA, OBSERVACAO, COD_BARRAS) VALUES ('{product.Descricao}'," +
+                    $"INSERT INTO TB_PRODUTO (COD_PRODUTO, NOME, CATEGORIA, VR_COMPRA, VR_UNITARIO, LOCALIZACAO, STATUS_PRODUTO," +
+                    $" MARGEM_LUCRO, UN_MEDIDA, OBSERVACAO, COD_BARRAS) VALUES (UUID(), '{product.Descricao}'," +
                     $" '{product.Categoria}', {precoCompra}, {vrUnitario}, '{product.Localizacao}'," +
                     $" {product.Status}, {margemLucro}, '{product.UnMedida}', '{product.Observacao}'," +
                     $" '{product.CodBarras}');";
@@ -215,7 +193,7 @@ namespace ExpressDelivery.Repository
                     $" VR_COMPRA={precoCompra}, VR_UNITARIO={vrUnitario}, LOCALIZACAO='{product.Localizacao}'," +
                     $" STATUS_PRODUTO={product.Status}, MARGEM_LUCRO={margemLucro}, UN_MEDIDA='{product.UnMedida}'," +
                     $" OBSERVACAO='{product.Observacao}', COD_BARRAS='{product.CodBarras}'," +
-                    $" DATA_ATUALIZACAO='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' WHERE COD_PRODUTO={product.Id};";
+                    $" DATA_ATUALIZACAO='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' WHERE COD_PRODUTO={product.Uid};";
             }
 
             try

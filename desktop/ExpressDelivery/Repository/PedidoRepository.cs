@@ -96,7 +96,7 @@ namespace ExpressDelivery.Repository
                         {
                             Id = Convert.ToInt16(_dr2["COD_PEDIDO_ITEM"]),
                             CodPedido = Convert.ToInt16(_dr2["COD_PEDIDO"]),
-                            CodProduto = Convert.ToInt16(_dr2["COD_PRODUTO"]),
+                            CodProduto = Convert.ToString(_dr2["COD_PRODUTO"]),
                             Nome = _dr2["NOME"].ToString(),
                             Observacao = _dr2["OBSERVACAO"].ToString(),
                             VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
@@ -201,7 +201,7 @@ namespace ExpressDelivery.Repository
                         {
                             Id = Convert.ToInt16(_dr2["COD_PEDIDO_ITEM"]),
                             CodPedido = Convert.ToInt16(_dr2["COD_PEDIDO"]),
-                            CodProduto = Convert.ToInt16(_dr2["COD_PRODUTO"]),
+                            CodProduto = Convert.ToString(_dr2["COD_PRODUTO"]),
                             Nome = _dr2["NOME"].ToString(),
                             Observacao = _dr2["OBSERVACAO"].ToString(),
                             VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
@@ -305,7 +305,7 @@ namespace ExpressDelivery.Repository
                         {
                             Id = Convert.ToInt16(_dr2["COD_PEDIDO_ITEM"]),
                             CodPedido = Convert.ToInt16(_dr2["COD_PEDIDO"]),
-                            CodProduto = Convert.ToInt16(_dr2["COD_PRODUTO"]),
+                            CodProduto = Convert.ToString(_dr2["COD_PRODUTO"]),
                             Nome = _dr2["NOME"].ToString(),
                             Observacao = _dr2["OBSERVACAO"].ToString(),
                             VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),

@@ -33,7 +33,7 @@ namespace ExpressDelivery.Models
     {
         public int Id { get; set; }
         public int CodPedido { get; set; }
-        public int CodProduto { get; set; }
+        public string CodProduto { get; set; }
         public string Nome { get; set; }
         public double Quantidade { get; set; }
         public double VrUnitario { get; set; }

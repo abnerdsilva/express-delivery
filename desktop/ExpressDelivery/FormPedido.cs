@@ -483,7 +483,7 @@ namespace ExpressDelivery
             var qtde = Convert.ToInt16(txtQtde.Text);
             var vrTotalItem = _productSelected.PrecoVenda * qtde;
 
-            ListViewItem items = new ListViewItem(_productSelected.Id.ToString());
+            ListViewItem items = new ListViewItem(_productSelected.Uid);
             // items.SubItems.Add(_productSelected.Id.ToString());
             items.SubItems.Add(_productSelected.Descricao);
             items.SubItems.Add(_productSelected.UnMedida);
@@ -493,7 +493,7 @@ namespace ExpressDelivery
 
             var item = new PedidoItem
             {
-                CodProduto = _productSelected.Id,
+                CodProduto = _productSelected.Uid,
                 VrUnitario = _productSelected.PrecoVenda,
                 Quantidade = qtde,
                 Observacao = txtObservacaoProduto.Text,
@@ -698,7 +698,7 @@ namespace ExpressDelivery
 
             var vrTotalItem = pedidoItem.VrUnitario * pedidoItem.Quantidade;
 
-            ListViewItem items = new ListViewItem(_productSelected.Id.ToString());
+            ListViewItem items = new ListViewItem(_productSelected.Uid);
             // items.SubItems.Add(_productSelected.Id.ToString());
             items.SubItems.Add(_productSelected.Descricao);
             items.SubItems.Add(_productSelected.UnMedida);
@@ -708,7 +708,7 @@ namespace ExpressDelivery
 
             var item = new PedidoItem
             {
-                CodProduto = _productSelected.Id,
+                CodProduto = _productSelected.Uid,
                 VrUnitario = _productSelected.PrecoVenda,
                 Quantidade = pedidoItem.Quantidade,
                 Observacao = txtObservacaoProduto.Text,

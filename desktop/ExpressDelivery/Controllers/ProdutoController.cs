@@ -12,7 +12,7 @@ namespace ExpressDelivery.Controllers
 
         public List<Product> LoadAll()
         {
-            var products = _produtoRepository.LoadAll();
+            var products = _produtoRepository.LoadAll().Result;
             MessageError = _produtoRepository.Message;
             return products;
         }

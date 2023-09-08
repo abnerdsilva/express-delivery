@@ -52,7 +52,7 @@ namespace ExpressDelivery
 
         private void AddItemLista(Product product)
         {
-            ListViewItem items = new ListViewItem(product.Id.ToString());
+            ListViewItem items = new ListViewItem(product.Uid);
             items.SubItems.Add(product.Descricao);
             items.SubItems.Add(product.PrecoCompra.ToString("0.00"));
             items.SubItems.Add(product.UnMedida);
@@ -118,7 +118,7 @@ namespace ExpressDelivery
             var product = new Product();
             foreach (var c in _products)
             {
-                if (c.Id != int.Parse(idProduct)) continue;
+                if (c.Uid != idProduct) continue;
                 product = c;
                 break;
             }
@@ -185,7 +185,7 @@ namespace ExpressDelivery
                 PrecoVenda = ConvertToDouble(txtPrecoVenda.Text),
                 Status = status,
                 MargemLucro = ConvertToDouble(txtMargemLucro.Text),
-                Id = idProduct,
+                Uid = "idProduct",
             };
             
             _produtoController.Save(product, txtIdProduto.Text.Equals("0") ? "new" : "edit");
