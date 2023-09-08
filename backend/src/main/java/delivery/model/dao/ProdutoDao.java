@@ -86,6 +86,9 @@ public class ProdutoDao {
     }
 
     public void setLocalizacao(String localizacao) {
+        if (localizacao == null) {
+            localizacao = "";
+        }
         this.localizacao = localizacao;
     }
 
@@ -118,6 +121,9 @@ public class ProdutoDao {
     }
 
     public void setObservacao(String observacao) {
+        if (observacao == null) {
+            observacao = "";
+        }
         this.observacao = observacao;
     }
 }

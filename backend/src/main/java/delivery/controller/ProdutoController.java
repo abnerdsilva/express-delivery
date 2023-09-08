@@ -66,7 +66,7 @@ public class ProdutoController {
         try {
             var productExists = produtoRepository.loadByBarCode(data.cod_barras());
             if (productExists != null) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new Erro("product already exists"));
             }
 
             var productTemp = new ProdutoDao();
