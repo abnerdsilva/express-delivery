@@ -22,6 +22,8 @@ namespace ExpressDelivery
             listProdutos.Clear();
             _products.Clear();
 
+            lbl_loading_produto.Visible = true;
+
             listProdutos.View = View.Details;
             listProdutos.FullRowSelect = true;
             listProdutos.GridLines = true;
@@ -34,20 +36,22 @@ namespace ExpressDelivery
             listProdutos.Columns.Add("Preço Venda", 120, HorizontalAlignment.Left);
 
             var statusPesquisa = 0;
-            if (cmbStatusPesquisa.Text == "Ativo")
+            if (cmbStatusPesquisa.Text == @"Ativo")
                 statusPesquisa = 1;
 
             if (txtDescricao.Text.Equals(""))
                 _products = _produtoController.LoadAll();
             else
             {
-                if (cmbTipoPesquisa.Text == "Descrição")
+                if (cmbTipoPesquisa.Text == @"Descrição")
                     _products = _produtoController.LoadByName(txtDescricao.Text);
                 else
                     _products = _produtoController.LoadById(txtDescricao.Text);
             }
 
             _products.FindAll(c => c.Status == statusPesquisa).ForEach(AddItemLista);
+
+            lbl_loading_produto.Visible = false;
         }
 
         private void AddItemLista(Product product)

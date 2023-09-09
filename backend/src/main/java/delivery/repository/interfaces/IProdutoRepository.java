@@ -8,7 +8,8 @@ public interface IProdutoRepository {
     ProdutoDao loadByCode(String code);
     ProdutoDao loadByBarCode(String code);
     ProdutoDao loadById(int id);
-    ProdutoDao loadByName(String name);
+    List<ProdutoDao> loadProductsByName(String name);
+    ProdutoDao loadProductByName(String name);
     int lastProductSaved();
     List<ProdutoDao> loadAll();
     int create(ProdutoDao item);

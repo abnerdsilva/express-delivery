@@ -133,10 +133,51 @@ public class ProdutoRepository implements IProdutoRepository {
     }
 
     @Override
-    public ProdutoDao loadByName(String name) {
+    public List<ProdutoDao> loadProductsByName(String name) {
+        String sql = "SELECT * FROM TB_PRODUTO WHERE NOME like '%" + name + "%'";
+
+        List<ProdutoDao> products = new ArrayList<>();
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+
+            while (bd.rs.next()) {
+                var product = new ProdutoDao();
+                product.setCodProduto(bd.rs.getString("cod_produto"));
+                product.setCodBarras(bd.rs.getString("cod_barras"));
+                product.setNome(bd.rs.getString("nome"));
+                product.setCategoria(bd.rs.getString("categoria"));
+                product.setUnMedida(bd.rs.getString("un_medida"));
+                product.setVrCompra(bd.rs.getDouble("vr_compra"));
+                product.setVrUnitario(bd.rs.getDouble("vr_unitario"));
+                product.setMargemLucro(bd.rs.getDouble("margem_lucro"));
+                product.setLocalizacao(bd.rs.getString("localizacao"));
+                product.setStatusProduto(bd.rs.getInt("status_produto"));
+                product.setDataCadastro(bd.rs.getString("data_cadastro"));
+                product.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                product.setObservacao(bd.rs.getString("observacao"));
+
+                products.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return products;
+    }
+
+    @Override
+    public ProdutoDao loadProductByName(String name) {
         String sql = "SELECT * FROM TB_PRODUTO WHERE NOME=?";
 
-        ProdutoDao produto = null;
+        ProdutoDao product = null;
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
@@ -147,20 +188,20 @@ public class ProdutoRepository implements IProdutoRepository {
             bd.rs = bd.st.executeQuery();
 
             if (bd.rs.next()) {
-                produto = new ProdutoDao();
-                produto.setCodProduto(bd.rs.getString("cod_produto"));
-                produto.setCodBarras(bd.rs.getString("cod_barras"));
-                produto.setNome(bd.rs.getString("nome"));
-                produto.setCategoria(bd.rs.getString("categoria"));
-                produto.setUnMedida(bd.rs.getString("un_medida"));
-                produto.setVrCompra(bd.rs.getDouble("vr_compra"));
-                produto.setVrUnitario(bd.rs.getDouble("vr_unitario"));
-                produto.setMargemLucro(bd.rs.getDouble("margem_lucro"));
-                produto.setLocalizacao(bd.rs.getString("localizacao"));
-                produto.setStatusProduto(bd.rs.getInt("status_produto"));
-                produto.setDataCadastro(bd.rs.getString("data_cadastro"));
-                produto.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
-                produto.setObservacao(bd.rs.getString("observacao"));
+                product = new ProdutoDao();
+                product.setCodProduto(bd.rs.getString("cod_produto"));
+                product.setCodBarras(bd.rs.getString("cod_barras"));
+                product.setNome(bd.rs.getString("nome"));
+                product.setCategoria(bd.rs.getString("categoria"));
+                product.setUnMedida(bd.rs.getString("un_medida"));
+                product.setVrCompra(bd.rs.getDouble("vr_compra"));
+                product.setVrUnitario(bd.rs.getDouble("vr_unitario"));
+                product.setMargemLucro(bd.rs.getDouble("margem_lucro"));
+                product.setLocalizacao(bd.rs.getString("localizacao"));
+                product.setStatusProduto(bd.rs.getInt("status_produto"));
+                product.setDataCadastro(bd.rs.getString("data_cadastro"));
+                product.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                product.setObservacao(bd.rs.getString("observacao"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,7 +210,7 @@ public class ProdutoRepository implements IProdutoRepository {
             bd.close();
         }
 
-        return produto;
+        return product;
     }
 
     @Override

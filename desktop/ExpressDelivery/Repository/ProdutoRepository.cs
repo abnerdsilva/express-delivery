@@ -42,93 +42,55 @@ namespace ExpressDelivery.Repository
             return products;
         }
 
-        public List<Product> LoadByName(string name)
+        public async Task<List<Product>> LoadByName(string name)
         {
             List<Product> products = new List<Product>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_PRODUTO WHERE NOME LIKE '%{name}%';";
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync($"{ConfigHttp.BaseUrl}/v1/products?name={name}").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var productsJson = JsonConvert.DeserializeObject<List<Product>>(result);
+                if (productsJson == null)
                 {
-                    var product = new Product
-                    {
-                        Uid = Convert.ToString(_dr["COD_PRODUTO"]),
-                        Descricao = _dr["NOME"].ToString(),
-                        PrecoCompra = Convert.ToDouble(_dr["VR_COMPRA"]),
-                        UnMedida = _dr["UN_MEDIDA"].ToString(),
-                        PrecoVenda = Convert.ToDouble(_dr["VR_UNITARIO"]),
-                        Status = Convert.ToInt16(_dr["STATUS_PRODUTO"]),
-                    };
-
-                    products.Add(product);
+                    throw new Exception("falha na conversão dos produtos");
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+
+                products.AddRange(productsJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
                 throw;
-            }
-            finally
-            {
-                _con.Disconnect();
             }
 
             return products;
         }
 
-        public List<Product> LoadById(string id)
+        public async Task<List<Product>> LoadById(string id)
         {
             var products = new List<Product>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_PRODUTO WHERE COD_PRODUTO LIKE '%{id}%';";
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync($"{ConfigHttp.BaseUrl}/v1/product/{id}").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var productsJson = JsonConvert.DeserializeObject<Product>(result);
+                if (productsJson == null)
                 {
-                    var product = new Product
-                    {
-                        Uid = Convert.ToString(_dr["COD_PRODUTO"]),
-                        Status = Convert.ToInt16(_dr["STATUS_PRODUTO"]),
-                        Descricao = _dr["NOME"].ToString(),
-                        PrecoCompra = Convert.ToDouble(_dr["VR_COMPRA"]),
-                        UnMedida = _dr["UN_MEDIDA"].ToString(),
-                        PrecoVenda = Convert.ToDouble(_dr["VR_UNITARIO"]),
-                    };
-
-                    products.Add(product);
+                    return products;
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+
+                products.Add(productsJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
                 throw;
-            }
-            finally
-            {
-                _con.Disconnect();
             }
 
             return products;

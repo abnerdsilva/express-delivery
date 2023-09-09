@@ -9,14 +9,35 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 public class ProdutoController {
 
     ProdutoRepository produtoRepository = new ProdutoRepository();
 
     @GetMapping("/v1/products")
-    public ResponseEntity<?> LoadAll() {
+    public ResponseEntity<?> LoadProducts(@RequestParam(value = "name", required = false) String name,
+                                          @RequestParam(value = "mode", required = false) String mode) {
         try {
+            if (mode != null && mode.equals("lastProduct")) {
+                var lastProductId = produtoRepository.lastProductSaved();
+                var product = produtoRepository.loadById(lastProductId);
+                if (product == null) {
+                    return ResponseEntity.noContent().build();
+                }
+                return ResponseEntity.ok(product);
+            }
+
+            if (name != null) {
+                var products = new ArrayList<ProdutoDao>();
+                var productsTemp = produtoRepository.loadProductsByName(name);
+                if (productsTemp != null && productsTemp.size() > 0) {
+                    products.addAll(productsTemp);
+                }
+                return ResponseEntity.ok(products);
+            }
+
             var products = produtoRepository.loadAll();
             return ResponseEntity.ok(products);
         } catch (Exception e) {
@@ -38,27 +59,27 @@ public class ProdutoController {
     }
 
     @GetMapping("/v1/product")
-    public ResponseEntity<?> LoadByParam(@RequestParam(value = "name", required = false) String name,
-                                         @RequestParam(value = "mode", required = false) String mode) {
+    public ResponseEntity<?> LoadProducByParam(@RequestParam(value = "name", required = false) String name,
+                                               @RequestParam(value = "mode", required = false) String mode) {
         try {
-            ProdutoDao product = null;
-
             if (mode != null && mode.equals("lastProduct")) {
                 var lastProductId = produtoRepository.lastProductSaved();
-                product = produtoRepository.loadById(lastProductId);
+                var product = produtoRepository.loadById(lastProductId);
+                if (product == null) {
+                    return ResponseEntity.noContent().build();
+                }
+                return ResponseEntity.ok(product);
             }
 
             if (name != null) {
-                product = produtoRepository.loadByName(name);
+                var product = produtoRepository.loadProductByName(name);
+                return ResponseEntity.ok(product);
             }
-
-            if (product == null) {
-                return ResponseEntity.noContent().build();
-            }
-            return ResponseEntity.ok(product);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/v1/product")

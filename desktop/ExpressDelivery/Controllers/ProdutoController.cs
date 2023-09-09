@@ -19,14 +19,14 @@ namespace ExpressDelivery.Controllers
 
         public List<Product> LoadByName(string name)
         {
-            var products = _produtoRepository.LoadByName(name);
+            var products = _produtoRepository.LoadByName(name).Result;
             MessageError = _produtoRepository.Message;
             return products;
         }
 
         public List<Product> LoadById(string name)
         {
-            var products = _produtoRepository.LoadById(name);
+            var products = _produtoRepository.LoadById(name).Result;
             MessageError = _produtoRepository.Message;
             return products;
         }
