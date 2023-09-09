@@ -143,15 +143,11 @@ namespace ExpressDelivery
                 radioProdutoInativo.Checked = true;
         }
 
-        private void btnSalvarProduto_Click(object sender, EventArgs e)
+        private async void btnSalvarProduto_Click(object sender, EventArgs e)
         {
             var status = 0;
             if (radioProdutoAtivo.Checked)
                 status = 1;
-
-            var idProduct = _produtoController.LastProductId() + 1;
-            if (!txtIdProduto.Text.Equals("0"))
-                idProduct = Convert.ToInt16(txtIdProduto.Text);
 
             if (txtCodBarras.Text.Equals(""))
             {
@@ -176,6 +172,8 @@ namespace ExpressDelivery
                 MessageBox.Show(@"O campo preço de venda é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            lbl_loading_produto.Visible = true;
             
             var product = new Product
             {
@@ -189,21 +187,23 @@ namespace ExpressDelivery
                 PrecoVenda = ConvertToDouble(txtPrecoVenda.Text),
                 Status = status,
                 MargemLucro = ConvertToDouble(txtMargemLucro.Text),
-                Uid = "idProduct",
+                Uid = txtIdProduto.Text,
             };
             
-            _produtoController.Save(product, txtIdProduto.Text.Equals("0") ? "new" : "edit");
-            
+            var item = await _produtoController.Save(product, txtIdProduto.Text.Equals("0") ? "new" : "edit");
             if (!_produtoController.MessageError.Equals(""))
             {
                 MessageBox.Show($@"Erro ao salvar produto. {_produtoController.MessageError}");
+                lbl_loading_produto.Visible = false;
                 return;
             }
-            
-            _products.Add(product);
-            
-            txtIdProduto.Text = idProduct.ToString();
-            
+
+            if (txtIdProduto.Text.Equals("0"))
+                _products.Add(product);
+
+            txtIdProduto.Text = item.Uid;
+            lbl_loading_produto.Visible = false;
+
             MessageBox.Show(@"Salvo com sucesso!","Sucesso", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using ExpressDelivery.Models;
 using MySqlConnector;
@@ -96,28 +98,22 @@ namespace ExpressDelivery.Repository
             return products;
         }
         
-        public int LastProductId()
+        public async Task<Product> LastProductId()
         {
-            _cmd.CommandText = $"SELECT MAX(COD_PRODUTO) AS LAST_ID FROM TB_PRODUTO;";
-
-            var lastId = 0;
+            var product = new Product();
 
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync($"{ConfigHttp.BaseUrl}/v1/product?mode=lastProduct").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var productJson = JsonConvert.DeserializeObject<Product>(result);
+                if (productJson == null)
                 {
-                    if (_dr["LAST_ID"] != DBNull.Value)
-                        lastId = Convert.ToInt16(_dr["LAST_ID"]);
+                    return product;
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+
+                product = productJson;
             }
             catch (Exception e)
             {
@@ -125,49 +121,28 @@ namespace ExpressDelivery.Repository
                 Message = e.Message;
                 throw;
             }
-            finally
-            {
-                _con.Disconnect();
-            }
 
-            return lastId;
+            return product;
         }
         
-        public int Save(Product product, string type)
+        public async Task<Product> Create(Product product)
         {
-            var precoCompra = product.PrecoCompra.ToString().Replace(",", ".");
-            var vrUnitario = product.PrecoVenda.ToString().Replace(",", ".");
-            var margemLucro = product.MargemLucro.ToString().Replace(",", ".");
-
-            if (type == "new")
-            {
-                _cmd.CommandText =
-                    $"INSERT INTO TB_PRODUTO (COD_PRODUTO, NOME, CATEGORIA, VR_COMPRA, VR_UNITARIO, LOCALIZACAO, STATUS_PRODUTO," +
-                    $" MARGEM_LUCRO, UN_MEDIDA, OBSERVACAO, COD_BARRAS) VALUES (UUID(), '{product.Descricao}'," +
-                    $" '{product.Categoria}', {precoCompra}, {vrUnitario}, '{product.Localizacao}'," +
-                    $" {product.Status}, {margemLucro}, '{product.UnMedida}', '{product.Observacao}'," +
-                    $" '{product.CodBarras}');";
-            }
-            else
-            {
-                _cmd.CommandText =
-                    $"UPDATE TB_PRODUTO SET NOME='{product.Descricao}', CATEGORIA='{product.Categoria}'," +
-                    $" VR_COMPRA={precoCompra}, VR_UNITARIO={vrUnitario}, LOCALIZACAO='{product.Localizacao}'," +
-                    $" STATUS_PRODUTO={product.Status}, MARGEM_LUCRO={margemLucro}, UN_MEDIDA='{product.UnMedida}'," +
-                    $" OBSERVACAO='{product.Observacao}', COD_BARRAS='{product.CodBarras}'," +
-                    $" DATA_ATUALIZACAO='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' WHERE COD_PRODUTO={product.Uid};";
-            }
-
+            Product newProduct;
             try
             {
-                _cmd.Connection = _con.Connect();
-                return _cmd.ExecuteNonQuery();
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+                var json = JsonConvert.SerializeObject(product);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+            
+                var response = ConfigHttp.client.PostAsync($"{ConfigHttp.BaseUrl}/v1/product", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                var productJson = JsonConvert.DeserializeObject<Product>(result);
+                if (productJson == null)
+                {
+                    return null;
+                }
+
+                newProduct = productJson;
             }
             catch (Exception e)
             {
@@ -175,11 +150,38 @@ namespace ExpressDelivery.Repository
                 Message = e.Message;
                 throw;
             }
-            finally
-            {
-                _con.Disconnect();
-            }
+            
+            return newProduct;
         }
 
+        public async Task<Product> Update(Product product)
+        {
+            Product editedProduct;
+
+            try
+            {
+                var json = JsonConvert.SerializeObject(product);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+            
+                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/product/{product.Uid}", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                var productJson = JsonConvert.DeserializeObject<Product>(result);
+                if (productJson == null)
+                {
+                    return null;
+                }
+
+                editedProduct = productJson;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                throw;
+            }
+
+            return editedProduct;
+        }
     }
 }

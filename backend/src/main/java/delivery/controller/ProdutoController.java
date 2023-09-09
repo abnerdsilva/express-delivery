@@ -85,22 +85,22 @@ public class ProdutoController {
     @PostMapping("/v1/product")
     public ResponseEntity<?> createProduct(@RequestBody @Valid ProdutoResponseDTO data) {
         try {
-            var productExists = produtoRepository.loadByBarCode(data.cod_barras());
+            var productExists = produtoRepository.loadByBarCode(data.codBarras());
             if (productExists != null) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new Erro("product already exists"));
             }
 
             var productTemp = new ProdutoDao();
-            productTemp.setCodBarras(data.cod_barras());
+            productTemp.setCodBarras(data.codBarras());
             productTemp.setNome(data.nome());
             productTemp.setObservacao(data.observacao());
             productTemp.setLocalizacao(data.localizacao());
             productTemp.setCategoria(data.categoria());
-            productTemp.setStatusProduto(data.status_produto());
-            productTemp.setVrUnitario(data.vr_unitario());
-            productTemp.setVrCompra(data.vr_compra());
-            productTemp.setUnMedida(data.un_medida());
-            productTemp.setMargemLucro(data.margem_lucro());
+            productTemp.setStatusProduto(data.statusProduto());
+            productTemp.setVrUnitario(data.vrUnitario());
+            productTemp.setVrCompra(data.vrCompra());
+            productTemp.setUnMedida(data.unMedida());
+            productTemp.setMargemLucro(data.margemLucro());
 
             var productId = produtoRepository.create(productTemp);
             if (productId == -1) {
@@ -124,16 +124,16 @@ public class ProdutoController {
 
             var productTemp = new ProdutoDao();
             productTemp.setCodProduto(code);
-            productTemp.setCodBarras(data.cod_barras());
+            productTemp.setCodBarras(data.codBarras());
             productTemp.setNome(data.nome());
             productTemp.setObservacao(data.observacao());
             productTemp.setLocalizacao(data.localizacao());
             productTemp.setCategoria(data.categoria());
-            productTemp.setStatusProduto(data.status_produto());
-            productTemp.setVrUnitario(data.vr_unitario());
-            productTemp.setVrCompra(data.vr_compra());
-            productTemp.setUnMedida(data.un_medida());
-            productTemp.setMargemLucro(data.margem_lucro());
+            productTemp.setStatusProduto(data.statusProduto());
+            productTemp.setVrUnitario(data.vrUnitario());
+            productTemp.setVrCompra(data.vrCompra());
+            productTemp.setUnMedida(data.unMedida());
+            productTemp.setMargemLucro(data.margemLucro());
 
             var productId = produtoRepository.update(productTemp);
             if (productId == -1) {
