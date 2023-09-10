@@ -102,7 +102,7 @@ public class AppDelivery {
 
         ClienteDelivery clienteDelivery = new ClienteDelivery();
         clienteDelivery.setNome("Abner Silva");
-        clienteDelivery.setCodCliente(1006);
+        clienteDelivery.setCodCliente("1006");
         clienteDelivery.setDocumento("");
         clienteDelivery.setBairro("Jardim Xpto");
         clienteDelivery.setLogradouro("Rua Xpto");

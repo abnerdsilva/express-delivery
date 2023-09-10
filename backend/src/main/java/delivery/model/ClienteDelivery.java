@@ -1,7 +1,7 @@
 package delivery.model;
 
 public class ClienteDelivery {
-    private  int codCliente;
+    private String codCliente;
     private String nome;
     private String telefone;
     private String email;
@@ -17,11 +17,11 @@ public class ClienteDelivery {
     public ClienteDelivery() {
     }
 
-    public int getCodCliente() {
+    public String getCodCliente() {
         return codCliente;
     }
 
-    public void setCodCliente(int codCliente) {
+    public void setCodCliente(String codCliente) {
         this.codCliente = codCliente;
     }
 

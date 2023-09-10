@@ -2,7 +2,7 @@ package delivery.model.dao;
 
 public class PedidoDao {
     private int codPedido;
-    private int codCliente;
+    private String codCliente;
     private ClienteDao cliente;
     private String statusPedido;
     private String dataPedido;
@@ -48,11 +48,11 @@ public class PedidoDao {
         this.codPedido = codPedido;
     }
 
-    public int getCodCliente() {
+    public String getCodCliente() {
         return codCliente;
     }
 
-    public void setCodCliente(int codCliente) {
+    public void setCodCliente(String codCliente) {
         this.codCliente = codCliente;
     }
 

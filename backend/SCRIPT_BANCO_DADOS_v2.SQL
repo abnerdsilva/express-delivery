@@ -111,7 +111,8 @@ CREATE TABLE TB_PEDIDO
     DATA_ATUALIZACAO      DATETIME,
     FORMA_PAGAMENTO       VARCHAR(20)  NOT NULL,
     COD_PEDIDO_INTEGRACAO VARCHAR(50),
-    IMPRIME_PEDIDO        int          not null default 0
+    IMPRIME_PEDIDO        int          not null default 0,
+    COD_USUARIO           varchar(36)  NOT NULL REFERENCES TB_USUARIO (ID_USER)
 );
 
 

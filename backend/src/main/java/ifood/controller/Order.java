@@ -167,7 +167,7 @@ public class Order {
 
         ClienteDelivery clienteDelivery = new ClienteDelivery();
         clienteDelivery.setNome(order.getCustomer().getName());
-        clienteDelivery.setCodCliente(1006);
+        clienteDelivery.setCodCliente("1006");
         clienteDelivery.setDocumento(order.getCustomer().getDocumentNumber());
         String logradouro = "";
         String bairro = "";

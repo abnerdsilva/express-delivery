@@ -158,10 +158,10 @@ public class ImprimeController {
                             itens.add(item);
                         }
 
-                        ClienteDao clienteDao = clienteRepository.loadById(p.getCodCliente());
+                        ClienteDao clienteDao = clienteRepository.loadByCode(p.getCodCliente());
                         ClienteDelivery clienteDelivery = new ClienteDelivery();
                         clienteDelivery.setNome(clienteDao.getNome());
-                        clienteDelivery.setCodCliente((int) clienteDao.getCodCliente());
+                        clienteDelivery.setCodCliente(clienteDao.getCodCliente());
                         clienteDelivery.setDocumento(clienteDao.getCpf());
                         clienteDelivery.setBairro(clienteDao.getBairro());
                         clienteDelivery.setLogradouro(clienteDao.getLogradouro());

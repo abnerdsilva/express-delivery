@@ -8,9 +8,19 @@ import java.util.List;
 public interface IClienteRepository {
     List<ClienteDao> loadAll() throws SQLException;
 
-    ClienteDao loadById(int idClient) throws SQLException;
+    ClienteDao loadByCode(String code) throws SQLException;
+
+    ClienteDao loadByPhone(String phone) throws SQLException;
+
+    ClienteDao loadById(int id) throws SQLException;
+
+    List<ClienteDao> loadClientsByPhone(String phone);
+
+    List<ClienteDao> loadClientsByName(String name);
 
     int loadMaxClientId() throws SQLException;
 
-    int save(ClienteDao client) throws SQLException;
+    int create(ClienteDao client) throws SQLException;
+
+    int update(ClienteDao client) throws SQLException;
 }

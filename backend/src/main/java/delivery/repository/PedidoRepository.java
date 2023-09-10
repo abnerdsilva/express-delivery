@@ -95,14 +95,14 @@ public class PedidoRepository implements IPedidoRepository {
     public int saveOrder(PedidoDao pedido) {
         String sql = "INSERT INTO TB_PEDIDO (COD_CLIENTE, DATA_PEDIDO, DATA_ENTREGA, VR_TOTAL, VR_TAXA, VR_TROCO," +
                 " LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP, TIPO_PEDIDO, ORIGEM, OBSERVACAO, FORMA_PAGAMENTO," +
-                " cod_pedido_integracao, ID_USER) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                " cod_pedido_integracao, COD_USUARIO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
         try {
             bd.connection.beginRequest();
             bd.st = bd.connection.prepareStatement(sql);
-            bd.st.setInt(1, pedido.getCodCliente());
+            bd.st.setString(1, pedido.getCodCliente());
             bd.st.setString(2, pedido.getDataPedido());
             bd.st.setString(3, pedido.getDataEntrega());
             bd.st.setDouble(4, pedido.getVrTotal());
@@ -119,7 +119,7 @@ public class PedidoRepository implements IPedidoRepository {
             bd.st.setString(15, pedido.getObservacao());
             bd.st.setString(16, pedido.getFormaPagamento());
             bd.st.setString(17, pedido.getCodPedidoIntegracao());
-            bd.st.setInt(18, 1);
+            bd.st.setString(18, "VERIFICAR");
             int resultInsert = bd.st.executeUpdate();
             if (resultInsert > 0) {
                 int maxOrderId = loadMaxOrder();
@@ -238,7 +238,7 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setObservacao(bd.rs.getString("observacao"));
                 pedido.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
                 pedido.setFormaPagamento(bd.rs.getString("forma_pagamento"));
-                pedido.setCodCliente(bd.rs.getInt("cod_cliente"));
+                pedido.setCodCliente(bd.rs.getString("cod_cliente"));
                 pedido.setVrTotal(bd.rs.getDouble("vr_total"));
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
@@ -257,7 +257,7 @@ public class PedidoRepository implements IPedidoRepository {
 
     @Override
     public List<PedidoDao> getOrdersFromToday() {
-        String sql = "SELECT * FROM TB_PEDIDO WHERE DATA_PEDIDO > CAST(GETDATE() AS Date)";
+        String sql = "SELECT * FROM TB_PEDIDO WHERE DATA_PEDIDO > CURRENT_DATE()";
 
         List<PedidoDao> pedidos = new ArrayList<>();
 
@@ -284,7 +284,7 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setObservacao(bd.rs.getString("observacao"));
                 pedido.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
                 pedido.setFormaPagamento(bd.rs.getString("forma_pagamento"));
-                pedido.setCodCliente(bd.rs.getInt("cod_cliente"));
+                pedido.setCodCliente(bd.rs.getString("cod_cliente"));
                 pedido.setVrTotal(bd.rs.getDouble("vr_total"));
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
@@ -332,7 +332,7 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setObservacao(bd.rs.getString("observacao"));
                 pedido.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
                 pedido.setFormaPagamento(bd.rs.getString("forma_pagamento"));
-                pedido.setCodCliente(bd.rs.getInt("cod_cliente"));
+                pedido.setCodCliente(bd.rs.getString("cod_cliente"));
                 pedido.setVrTotal(bd.rs.getDouble("vr_total"));
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));

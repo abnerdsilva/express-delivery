@@ -56,16 +56,16 @@ public class PedidoController {
      */
     public int savePedido(PedidoDelivery pedidoDelivery) throws SQLException {
         try {
-            long idCliente = -99;
-
-            ClienteDao clienteDao = _clienteRepository.loadById(pedidoDelivery.getCliente().getCodCliente());
-            if (clienteDao == null || clienteDao.getCodCliente() == 0) {
-                idCliente = addCliente(pedidoDelivery.getCliente());
-                if (idCliente <= 0) {
+            ClienteDao clienteDao = _clienteRepository.loadByCode(pedidoDelivery.getCliente().getCodCliente());
+            if (clienteDao == null || clienteDao.getCodCliente().equals("")) {
+                var idCliente = addCliente(pedidoDelivery.getCliente());
+                if (idCliente.equals("-1")) {
                     LoggerInFile.printError(MessageDefault.msgErrorAddClient);
                     return -1;
                 }
             }
+
+            clienteDao = _clienteRepository.loadByCode(pedidoDelivery.getCliente().getCodCliente());
 
             PedidoDao pedido = new PedidoDao();
             pedido.setDataPedido(pedidoDelivery.getDataCriacao());
@@ -76,7 +76,7 @@ public class PedidoController {
             pedido.setCidade(pedidoDelivery.getCliente().getCidade());
             pedido.setCep(Integer.toString(pedidoDelivery.getCliente().getCep()));
             pedido.setDataPedido(pedidoDelivery.getDataCriacao());
-            pedido.setCodCliente((int) idCliente);
+            pedido.setCodCliente(clienteDao.getCodCliente());
             pedido.setDataEntrega(pedidoDelivery.getDataEntrega());
             pedido.setFormaPagamento(pedidoDelivery.getPagamento().getNome() + "-" + pedidoDelivery.getPagamento().getTipo());
             pedido.setTipoPedido(pedidoDelivery.getTipo());
@@ -149,7 +149,7 @@ public class PedidoController {
      * @return - retorna id do cliente cadastrado
      * @throws SQLException - retorna exceção quando ocorre erro de SQL
      */
-    private int addCliente(ClienteDelivery clienteDelivery) throws SQLException {
+    private String addCliente(ClienteDelivery clienteDelivery) throws SQLException {
         ClienteDao cliente = new ClienteDao();
         cliente.setCodCliente(clienteDelivery.getCodCliente());
         cliente.setNome(clienteDelivery.getNome());
@@ -171,12 +171,14 @@ public class PedidoController {
         cliente.setDataAtualizacao(now.format(dtf));
         cliente.setObservacao(clienteDelivery.getObservacao());
 
-        int clientId = Long.valueOf(cliente.getCodCliente()).intValue();
+        var clientId = cliente.getCodCliente();
         clientId = _clienteRepository.hasClient(clientId, cliente.getTelefone());
-        if (clientId > 0) {
+        if (!clientId.equals("-1")) {
             return clientId;
         }
-        return _clienteRepository.save(cliente);
+        var clientIdTemp = _clienteRepository.create(cliente);
+        var client = _clienteRepository.loadById(clientIdTemp);
+        return client.getCodCliente();
     }
 
     /**
@@ -191,7 +193,7 @@ public class PedidoController {
         for (var ped : pedidoDao) {
             PedidoDelivery pedidoDelivery = new PedidoDelivery();
             try {
-                ClienteDao clienteDao = _clienteRepository.loadById(ped.getCodCliente());
+                ClienteDao clienteDao = _clienteRepository.loadByCode(ped.getCodCliente());
 
                 if (clienteDao == null) {
                     throw new Exception("cliente não encontrado");
@@ -232,7 +234,7 @@ public class PedidoController {
 
         PedidoDao pedidoDao = _pedidoRepository.getOrderById(id);
 
-        ClienteDao clienteDao = _clienteRepository.loadById(pedidoDao.getCodCliente());
+        ClienteDao clienteDao = _clienteRepository.loadByCode(pedidoDao.getCodCliente());
 
         PedidoDelivery pedidoDelivery = new PedidoDelivery();
         pedidoDelivery.setCodPedido(id);
