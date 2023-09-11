@@ -153,6 +153,49 @@ public class ClienteRepository implements IClienteRepository {
     }
 
     @Override
+    public ClienteDao loadByName(String name) throws SQLException {
+        String sql = "SELECT * FROM TB_CLIENTE WHERE NOME=?";
+
+        ClienteDao client = null;
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.st.setString(1, name);
+            bd.rs = bd.st.executeQuery();
+
+            if (bd.rs.next()) {
+                client = new ClienteDao();
+                client.setCodCliente(bd.rs.getString("cod_cliente"));
+                client.setNome(bd.rs.getString("nome"));
+                client.setTelefone(bd.rs.getString("telefone"));
+                client.setEmail(bd.rs.getString("email"));
+                client.setCpf(bd.rs.getString("cpf"));
+                client.setRg(bd.rs.getString("rg"));
+                client.setLogradouro(bd.rs.getString("logradouro"));
+                client.setNumero(bd.rs.getInt("numero"));
+                client.setBairro(bd.rs.getString("bairro"));
+                client.setCidade(bd.rs.getString("cidade"));
+                client.setEstado(bd.rs.getString("estado"));
+                client.setCep(bd.rs.getInt("cep"));
+                client.setStatusCliente(bd.rs.getInt("status_cliente"));
+                client.setDataCadastro(bd.rs.getString("data_cadastro"));
+                client.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                client.setObservacao(bd.rs.getString("observacao"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return client;
+    }
+
+    @Override
     public ClienteDao loadById(int id) throws SQLException {
         String sql = "SELECT * FROM TB_CLIENTE WHERE ID=?";
 
@@ -199,14 +242,13 @@ public class ClienteRepository implements IClienteRepository {
     public List<ClienteDao> loadClientsByPhone(String phone) {
         List<ClienteDao> clients = new ArrayList<>();
 
-        String sql = "SELECT * FROM TB_CLIENTE WHERE TELEFONE=?";
+        String sql = "SELECT * FROM TB_CLIENTE WHERE TELEFONE like '%" + phone + "%'";
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
 
         try {
             bd.st = bd.connection.prepareStatement(sql);
-            bd.st.setString(1, phone);
             bd.rs = bd.st.executeQuery();
 
             while (bd.rs.next()) {

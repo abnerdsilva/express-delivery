@@ -57,6 +57,32 @@ public class ClienteController {
         }
     }
 
+    @GetMapping("/v1/client")
+    public ResponseEntity<?> LoadClient(@RequestParam(value = "name", required = false) String name,
+                                         @RequestParam(value = "phone", required = false) String phone) {
+        try {
+            if (phone != null && !phone.equals("")) {
+                var client = clienteRepository.loadByPhone(phone);
+                if (client == null) {
+                    return ResponseEntity.noContent().build();
+                }
+                return ResponseEntity.ok(client);
+            }
+
+            if (name != null && !name.equals("")) {
+                var client = clienteRepository.loadByName(name);
+                if (client == null) {
+                    return ResponseEntity.noContent().build();
+                }
+                return ResponseEntity.ok(client);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
     @PostMapping("/v1/client")
     public ResponseEntity<?> createClient(@RequestBody @Valid ClientDTO data) {
         try {
@@ -72,7 +98,7 @@ public class ClienteController {
             clientTemp.setBairro(data.bairro());
             clientTemp.setCep(data.cep());
             clientTemp.setCidade(data.cidade());
-            clientTemp.setStatusCliente(data.status());
+            clientTemp.setStatusCliente(data.statusCliente());
             clientTemp.setEmail(data.email());
             clientTemp.setEstado(data.estado());
             clientTemp.setLogradouro(data.logradouro());
@@ -109,7 +135,7 @@ public class ClienteController {
             clientTemp.setBairro(data.bairro());
             clientTemp.setCep(data.cep());
             clientTemp.setCidade(data.cidade());
-            clientTemp.setStatusCliente(data.status());
+            clientTemp.setStatusCliente(data.statusCliente());
             clientTemp.setEmail(data.email());
             clientTemp.setEstado(data.estado());
             clientTemp.setLogradouro(data.logradouro());

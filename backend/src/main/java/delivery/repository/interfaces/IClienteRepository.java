@@ -12,6 +12,8 @@ public interface IClienteRepository {
 
     ClienteDao loadByPhone(String phone) throws SQLException;
 
+    ClienteDao loadByName(String name) throws SQLException;
+
     ClienteDao loadById(int id) throws SQLException;
 
     List<ClienteDao> loadClientsByPhone(String phone);
