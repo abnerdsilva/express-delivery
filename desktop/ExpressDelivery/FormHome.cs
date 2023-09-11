@@ -10,13 +10,13 @@ namespace ExpressDelivery
     {
         private Usuario _usuario;
         
-        public FormHome(Task<Usuario> usuario)
+        public FormHome(Usuario usuario)
         {
             InitializeComponent();
 
             CustomizeDesign();
             
-            _usuario = usuario.Result;
+            _usuario = usuario;
         }
 
         private void CustomizeDesign()

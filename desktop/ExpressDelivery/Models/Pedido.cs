@@ -6,7 +6,7 @@ namespace ExpressDelivery.Models
     public class Pedido
     {
         public int Id { get; set; }
-        public int CodCliente { get; set; }
+        public string CodCliente { get; set; }
         public string Nome { get; set; }
         public string StatusPedido { get; set; }
         public DateTime DataPedido { get; set; }

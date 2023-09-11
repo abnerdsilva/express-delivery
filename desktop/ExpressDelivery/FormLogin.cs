@@ -21,7 +21,7 @@ namespace ExpressDelivery
             }
 
             LoginController controle = new LoginController();
-            var usuario = controle.Acessar(txtLoginUsuario.Text, txtLoginSenha.Text);
+            var usuario = controle.Acessar(txtLoginUsuario.Text, txtLoginSenha.Text).Result;
             if (usuario == null)
             {
                 MessageBox.Show(controle.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);

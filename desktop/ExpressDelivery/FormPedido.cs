@@ -150,9 +150,9 @@ namespace ExpressDelivery
         private void LoadClientByPhone()
         {
             _clientSelected = _clientController.LoadByPhone(txtTelefone.Text.Replace("\r", "").Replace("\n", ""));
-            if (_clientSelected != null && _clientSelected.Id != 0)
+            if (_clientSelected != null && _clientSelected.Id != "")
             {
-                txtIdCliente.Text = _clientSelected.Id.ToString();
+                txtIdCliente.Text = _clientSelected.Id;
                 txtNome.Text = _clientSelected.Nome;
                 txtEndereco.Text = _clientSelected.Endereco;
                 cmbBairro.Text = _clientSelected.Bairro;
@@ -244,7 +244,7 @@ namespace ExpressDelivery
         {
             if (!VerificaCamposObrigatorios()) return;
 
-            var clientId = 0;
+            var clientId = "";
             var city = "";
             var state = "";
             var email = "";
@@ -252,7 +252,7 @@ namespace ExpressDelivery
             var rg = "";
             var status = 1;
 
-            if (_clientSelected != null && _clientSelected.Id > 0)
+            if (_clientSelected != null && _clientSelected.Id != "")
             {
                 clientId = _clientSelected.Id;
                 city = _clientSelected.Cidade;
@@ -281,7 +281,7 @@ namespace ExpressDelivery
                 Observacao = txtObservacaoCliente.Text
             };
 
-            _clientController.Save(client, client.Id == 0 ? "new" : "edit");
+            _clientController.Save(client, client.Id == "" ? "new" : "edit");
             if (!_clientController.MessageError.Equals(""))
             {
                 MessageBox.Show(_clientController.MessageError, @"Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);

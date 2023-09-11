@@ -110,7 +110,7 @@ namespace ExpressDelivery.Repository
                     pedido = new Pedido
                     {
                         Id = Convert.ToInt16(_dr["COD_PEDIDO"]),
-                        CodCliente = Convert.ToInt16(_dr["COD_CLIENTE"]),
+                        CodCliente = _dr["COD_CLIENTE"].ToString(),
                         Nome = _dr["NOME"].ToString(),
                         Origem = _dr["ORIGEM"].ToString(),
                         TipoPedido = _dr["TIPO_PEDIDO"].ToString(),
@@ -215,7 +215,7 @@ namespace ExpressDelivery.Repository
                     pedido = new Pedido
                     {
                         Id = Convert.ToInt16(_dr["COD_PEDIDO"]),
-                        CodCliente = Convert.ToInt16(_dr["COD_CLIENTE"]),
+                        CodCliente = _dr["COD_CLIENTE"].ToString(),
                         Nome = _dr["NOME"].ToString(),
                         Origem = _dr["ORIGEM"].ToString(),
                         TipoPedido = _dr["TIPO_PEDIDO"].ToString(),
@@ -319,7 +319,7 @@ namespace ExpressDelivery.Repository
                     pedido = new Pedido
                     {
                         Id = Convert.ToInt16(_dr["COD_PEDIDO"]),
-                        CodCliente = Convert.ToInt16(_dr["COD_CLIENTE"]),
+                        CodCliente = _dr["COD_CLIENTE"].ToString(),
                         Nome = _dr["NOME"].ToString(),
                         Origem = _dr["ORIGEM"].ToString(),
                         TipoPedido = _dr["TIPO_PEDIDO"].ToString(),
