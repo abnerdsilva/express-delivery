@@ -28,7 +28,7 @@ CREATE TABLE TB_USUARIO
 );
 
 insert into TB_USUARIO (ID_USER, usuario, senha, tipo_usuario)
-values (uuid(), 'admin', '123', 'ADMIN');
+values (uuid(), 'admin', '$2a$10$PuD/X99cttb.dDfF0pNSOuw5Nc61FltZ5WAdFASfjmj4hGe6zOqCa', 'ADMIN');
 
 
 CREATE TABLE TB_CLIENTE
