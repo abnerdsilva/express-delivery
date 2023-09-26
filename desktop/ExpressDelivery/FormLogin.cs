@@ -22,7 +22,7 @@ namespace ExpressDelivery
 
             LoginController controle = new LoginController();
             var usuario = controle.Acessar(txtLoginUsuario.Text, txtLoginSenha.Text).Result;
-            if (usuario == null)
+            if (usuario == null || controle.Message != "")
             {
                 MessageBox.Show(controle.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

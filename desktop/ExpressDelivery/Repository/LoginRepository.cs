@@ -87,9 +87,9 @@ namespace ExpressDelivery.Repository
                 var result = await response.Content.ReadAsStringAsync();
 
                 var tokenLogin = JsonConvert.DeserializeObject<TokenLogin>(result);
-                if (tokenLogin == null)
+                if (tokenLogin == null || (tokenLogin.Error != null))
                 {
-                    throw new Exception("falha ao gerar token");
+                    throw new Exception(tokenLogin.Error);
                 }
 
                 ConfigHttp.setHeader(tokenLogin.Token);

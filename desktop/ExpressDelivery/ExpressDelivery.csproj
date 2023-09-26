@@ -92,7 +92,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>820CA0D32C86C4F70B21DDCEE52196FF7F165527</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>0DF56F2EF603C1540BBD7E4A3BACC909BA093404</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>ExpressDelivery_TemporaryKey.pfx</ManifestKeyFile>
