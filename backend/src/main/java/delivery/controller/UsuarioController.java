@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -64,11 +63,14 @@ public class UsuarioController {
     @PostMapping("/auth/login2")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
         try {
-            var authenticationToken = new UsernamePasswordAuthenticationToken(data.username(), data.password());
-            var auth = this.authenticationManager.authenticate(authenticationToken);
-            var usuario = (UsuarioDao) auth.getPrincipal();
-            var token = tokenService.generateToken(usuario);
-            System.out.println(auth.getPrincipal());
+//            var authenticationToken = new UsernamePasswordAuthenticationToken(data.username(), data.password());
+//            var auth = this.authenticationManager.authenticate(authenticationToken);
+//            var usuario = (UsuarioDao) auth.getPrincipal();
+//            var token = tokenService.generateToken(usuario);
+//            System.out.println(auth.getPrincipal());
+            UsuarioDao user = usuarioRepository.findByLogin(data.username());
+            var token = tokenService.generateToken(user);
+
             return ResponseEntity.ok(new LoginResponseDTO(token));
         } catch (UsernameNotFoundException e) {
             e.printStackTrace();
