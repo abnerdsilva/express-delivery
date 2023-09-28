@@ -1,7 +1,9 @@
 ﻿using ExpressDelivery.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MySqlConnector;
+using Newtonsoft.Json;
 
 namespace ExpressDelivery.Repository
 {
@@ -13,46 +15,28 @@ namespace ExpressDelivery.Repository
         private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
         private MySqlDataReader _dr;
 
-        public List<Usuario> LoadAll()
+        public async Task<List<Usuario>> LoadAll()
         {
-            List<Usuario> users = new List<Usuario>();
-
-            _cmd.CommandText = $"SELECT * FROM TB_USUARIO;";
+            var users = new List<Usuario>();
 
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + "/v1/users").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var itemJson = JsonConvert.DeserializeObject<List<Usuario>>(result);
+                if (itemJson == null)
                 {
-                    var user = new Usuario
-                    {
-                        Id = _dr.GetString("ID_USER"),
-                        Status = Convert.ToInt16(_dr["STATUS_USUARIO"]),
-                        Login = _dr["USUARIO"].ToString(),
-                        Senha = _dr["SENHA"].ToString(),
-                        TipoUsuario = _dr["TIPO_USUARIO"].ToString(),
-                    };
-
-                    users.Add(user);
+                    throw new Exception("falha na conversão dos usuários");
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                return null;
+
+                users.AddRange(itemJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                return null;
-            }
-            finally
-            {
-                _con.Disconnect();
+                throw;
             }
 
             return users;

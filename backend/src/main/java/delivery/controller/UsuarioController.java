@@ -1,10 +1,7 @@
 package delivery.controller;
 
 import delivery.Erro;
-import delivery.domain.user.AuthenticationDTO;
-import delivery.domain.user.ErrorResponseDTO;
-import delivery.domain.user.LoginResponseDTO;
-import delivery.domain.user.RegisterDTO;
+import delivery.domain.user.*;
 import delivery.model.UsuarioDelivery;
 import delivery.model.dao.UsuarioDao;
 import delivery.repository.UsuarioRepository;
@@ -18,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @RestController
@@ -42,6 +40,88 @@ public class UsuarioController {
             instance = new UsuarioController();
         }
         return instance;
+    }
+
+    @GetMapping("/v1/users")
+    public ResponseEntity<?> LoadUsers(@RequestParam(value = "name", required = false) String name) {
+        try {
+            var clients = new ArrayList<UsuarioDelivery>();
+
+            if (name != null && !name.isEmpty()) {
+                var usersTemp = usuarioRepository.loadClientsByName(name);
+                if (usersTemp != null && !usersTemp.isEmpty()) {
+                    for (var user: usersTemp) {
+                        clients.add(user.usuarioDaoToDelivery());
+                    }
+                }
+                return ResponseEntity.ok(clients);
+            }
+
+            var temp = usuarioRepository.loadAll();
+            for (var user: temp) {
+                clients.add(user.usuarioDaoToDelivery());
+            }
+            return ResponseEntity.ok(clients);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/v1/user/{uid}")
+    public ResponseEntity<?> LoadById(@PathVariable("uid") String code) {
+        try {
+            var user = usuarioRepository.loadByCode(code);
+            if (user == null) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(user.usuarioDaoToDelivery());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/v1/user")
+    public ResponseEntity<?> LoadUser(@RequestParam(value = "name", required = false) String name) {
+        try {
+            if (name != null && !name.isEmpty()) {
+                var client = usuarioRepository.loadByName(name);
+                if (client == null) {
+                    return ResponseEntity.noContent().build();
+                }
+                return ResponseEntity.ok(client.usuarioDaoToDelivery());
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/v1/user/{uid}")
+    public ResponseEntity<?> update(@RequestBody @Valid UserDTO data,
+                                    @PathVariable("uid") String code) {
+        try {
+            var userExists = usuarioRepository.loadByCode(code);
+            if (userExists == null) {
+                return ResponseEntity.badRequest().body(new Erro("user not found"));
+            }
+
+            var userTemp = new UsuarioDao();
+            userTemp.setId(code);
+            userTemp.setUsuario(data.usuario());
+            userTemp.setStatusUsuario(data.statusUsuario());
+            userTemp.setTipoUsuario(data.tipoUsuario());
+            userTemp.setSenha(data.senha());
+
+            var userId = usuarioRepository.update(userTemp);
+            if (userId == -1) {
+                return ResponseEntity.badRequest().build();
+            }
+            var product = usuarioRepository.loadByCode(userTemp.getId());
+            return ResponseEntity.ok(product.usuarioDaoToDelivery());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST)

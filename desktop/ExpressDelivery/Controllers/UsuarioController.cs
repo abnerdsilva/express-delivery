@@ -12,7 +12,7 @@ namespace ExpressDelivery.Controllers
 
         public List<Usuario> LoadAll()
         {
-            var resp = _usuarioRepository.LoadAll();
+            var resp = _usuarioRepository.LoadAll().Result;
             MessageError = _usuarioRepository.Message;
             return resp;
         }

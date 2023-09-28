@@ -5,11 +5,132 @@ import delivery.model.dao.UsuarioDao;
 import delivery.repository.interfaces.IUsuarioRepository;
 import log.LoggerInFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UsuarioRepository implements IUsuarioRepository {
     private final DatabaseConnection bd;
 
     public UsuarioRepository() {
         bd = new DatabaseConnection();
+    }
+
+    @Override
+    public UsuarioDao loadByCode(String code) {
+        String sql = "SELECT * FROM TB_USUARIO WHERE ID_USER=?";
+
+        UsuarioDao usuario = null;
+
+        try {
+            bd.getConnection();
+            bd.st = bd.connection.prepareStatement(sql);
+
+            bd.st.setString(1, code);
+            bd.rs = bd.st.executeQuery();
+            if (bd.rs.next()) {
+                usuario = new UsuarioDao();
+                usuario.setId(bd.rs.getString("ID_USER"));
+                usuario.setUsuario(bd.rs.getString("USUARIO"));
+                usuario.setStatusUsuario(bd.rs.getInt("STATUS_USUARIO"));
+                usuario.setTipoUsuario(bd.rs.getString("TIPO_USUARIO"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return usuario;
+    }
+
+    @Override
+    public List<UsuarioDao> loadClientsByName(String name) {
+        String sql = "SELECT * FROM TB_USUARIO WHERE USUARIO like '%" + name + "%'";
+
+        List<UsuarioDao> users = new ArrayList<>();;
+
+        try {
+            bd.getConnection();
+            bd.st = bd.connection.prepareStatement(sql);
+
+            bd.rs = bd.st.executeQuery();
+            while (bd.rs.next()) {
+                UsuarioDao user = new UsuarioDao();
+                user.setId(bd.rs.getString("ID_USER"));
+                user.setUsuario(bd.rs.getString("USUARIO"));
+                user.setStatusUsuario(bd.rs.getInt("STATUS_USUARIO"));
+                user.setTipoUsuario(bd.rs.getString("TIPO_USUARIO"));
+
+                users.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return users;
+    }
+
+    @Override
+    public UsuarioDao loadByName(String name) {
+        String sql = "SELECT * FROM TB_USUARIO WHERE USUARIO=?";
+
+        UsuarioDao usuario = null;
+
+        try {
+            bd.getConnection();
+            bd.st = bd.connection.prepareStatement(sql);
+
+            bd.st.setString(1, name);
+            bd.rs = bd.st.executeQuery();
+            if (bd.rs.next()) {
+                usuario = new UsuarioDao();
+                usuario.setId(bd.rs.getString("ID_USER"));
+                usuario.setUsuario(bd.rs.getString("USUARIO"));
+                usuario.setStatusUsuario(bd.rs.getInt("STATUS_USUARIO"));
+                usuario.setTipoUsuario(bd.rs.getString("TIPO_USUARIO"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return usuario;
+    }
+
+    @Override
+    public List<UsuarioDao> loadAll() {
+        String sql = "SELECT * FROM TB_USUARIO";
+
+        List<UsuarioDao> users = new ArrayList<>();;
+
+        try {
+            bd.getConnection();
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+
+            while (bd.rs.next()) {
+                UsuarioDao user = new UsuarioDao();
+                user.setId(bd.rs.getString("ID_USER"));
+                user.setUsuario(bd.rs.getString("USUARIO"));
+                user.setStatusUsuario(bd.rs.getInt("STATUS_USUARIO"));
+                user.setTipoUsuario(bd.rs.getString("TIPO_USUARIO"));
+
+                users.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return users;
     }
 
     @Override
@@ -56,11 +177,9 @@ public class UsuarioRepository implements IUsuarioRepository {
             bd.st.setString(1, username);
             bd.rs = bd.st.executeQuery();
             if (bd.rs.next()) {
-                System.out.println(bd.rs);
                 usuarioDao = new UsuarioDao();
                 usuarioDao.setId(bd.rs.getString(1));
                 usuarioDao.setUsuario(bd.rs.getString(2));
-                usuarioDao.setSenha(bd.rs.getString(3));
                 usuarioDao.setTipoUsuario(bd.rs.getString(4));
                 usuarioDao.setStatusUsuario(bd.rs.getByte(5));
             }
