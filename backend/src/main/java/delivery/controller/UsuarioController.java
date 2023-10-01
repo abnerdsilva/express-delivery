@@ -106,12 +106,24 @@ public class UsuarioController {
                 return ResponseEntity.badRequest().body(new Erro("user not found"));
             }
 
+            var passwordMatches = new BCryptPasswordEncoder().matches(data.currentPassword(), userExists.getSenha());
+            if (!passwordMatches) {
+                return ResponseEntity.badRequest().body(new Erro("usuário e/ou senha inválido"));
+            }
+
+            int status = 0;
+            if(data.status().equals("ATIVO")){
+                status=1;
+            }
+
+            var encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+
             var userTemp = new UsuarioDao();
             userTemp.setId(code);
-            userTemp.setUsuario(data.usuario());
-            userTemp.setStatusUsuario(data.statusUsuario());
-            userTemp.setTipoUsuario(data.tipoUsuario());
-            userTemp.setSenha(data.senha());
+            userTemp.setUsuario(data.username());
+            userTemp.setStatusUsuario(status);
+            userTemp.setTipoUsuario(data.type());
+            userTemp.setSenha(encryptedPassword);
 
             var userId = usuarioRepository.update(userTemp);
             if (userId == -1) {
@@ -120,7 +132,7 @@ public class UsuarioController {
             var product = usuarioRepository.loadByCode(userTemp.getId());
             return ResponseEntity.ok(product.usuarioDaoToDelivery());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new Erro(e.getMessage()));
         }
     }
 

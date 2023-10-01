@@ -119,7 +119,7 @@ namespace ExpressDelivery.Repository
                     }
                 }
 
-                usuario.Status = 1;
+                usuario.Status = "ATIVO";
 
                 Status = true;
             }

@@ -1,6 +1,9 @@
 ﻿using ExpressDelivery.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using Newtonsoft.Json;
@@ -10,10 +13,6 @@ namespace ExpressDelivery.Repository
     class UsuarioRepository
     {
         public string Message = "";
-
-        private readonly MySqlCommand _cmd = new MySqlCommand();
-        private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
-        private MySqlDataReader _dr;
 
         public async Task<List<Usuario>> LoadAll()
         {
@@ -42,169 +41,124 @@ namespace ExpressDelivery.Repository
             return users;
         }
 
-        public List<Usuario> LoadByName(string name)
+        public async Task<List<Usuario>> LoadByName(string name)
         {
-            List<Usuario> users = new List<Usuario>();
-
-            _cmd.CommandText = $"SELECT * FROM TB_USUARIO WHERE USUARIO LIKE '%{name}%';";
+            var users = new List<Usuario>();
 
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + $"/v1/users?name={name}").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var itemJson = JsonConvert.DeserializeObject<List<Usuario>>(result);
+                if (itemJson == null)
                 {
-                    var user = new Usuario
-                    {
-                        Id = _dr.GetString("ID_USER"),
-                        Status = Convert.ToInt16(_dr["STATUS_USUARIO"]),
-                        Login = _dr["USUARIO"].ToString(),
-                        Senha = _dr["SENHA"].ToString(),
-                        TipoUsuario = _dr["TIPO_USUARIO"].ToString(),
-                    };
-
-                    users.Add(user);
+                    throw new Exception("falha na conversão dos usuários");
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                return null;
+
+                users.AddRange(itemJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                return null;
-            }
-            finally
-            {
-                _con.Disconnect();
+                throw;
             }
 
             return users;
         }
 
-        public List<Usuario> LoadById(string id)
+        public async Task<List<Usuario>> LoadById(string id)
         {
-            List<Usuario> users = new List<Usuario>();
-
-            _cmd.CommandText = $"SELECT * FROM TB_USUARIO WHERE ID_USER LIKE '%{id}%';";
+            var users = new List<Usuario>();
 
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + $"/v1/users?code{id}").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var itemJson = JsonConvert.DeserializeObject<List<Usuario>>(result);
+                if (itemJson == null)
                 {
-                    var user = new Usuario
-                    {
-                        Id = _dr.GetString("ID_USER"),
-                        Status = Convert.ToInt16(_dr["STATUS_USUARIO"]),
-                        Login = _dr["USUARIO"].ToString(),
-                        Senha = _dr["SENHA"].ToString(),
-                        TipoUsuario = _dr["TIPO_USUARIO"].ToString(),
-                    };
-
-                    users.Add(user);
+                    throw new Exception("falha na conversão dos usuários");
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                return null;
+
+                users.AddRange(itemJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                return null;
-            }
-            finally
-            {
-                _con.Disconnect();
+                throw;
             }
 
             return users;
         }
 
-        public int LastUserId()
+        public async Task<Usuario> Create(Usuario user)
         {
-            _cmd.CommandText = $"SELECT MAX(ID_USER) AS LAST_ID FROM TB_USUARIO;";
-
-            var lastId = 0;
-
+            Usuario newUser;
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var json = JsonConvert.SerializeObject(user);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-                while (_dr.Read())
+                var response = ConfigHttp.client.PostAsync($"{ConfigHttp.BaseUrl}/v1/user", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                var userJson = JsonConvert.DeserializeObject<Usuario>(result);
+                if (userJson == null)
                 {
-                    if (_dr["LAST_ID"] != DBNull.Value)
-                        lastId = Convert.ToInt16(_dr["LAST_ID"]);
+                    return null;
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                return -1;
+
+                newUser = userJson;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                return -1;
-            }
-            finally
-            {
-                _con.Disconnect();
+                throw;
             }
 
-            return lastId;
+            return newUser;
         }
-
-        public int Save(Usuario user, string type)
+        
+        public async Task<Usuario> Update(Usuario user)
         {
-            if (type == "new")
-            {
-                _cmd.CommandText =
-                    $"INSERT INTO TB_USUARIO (USUARIO, SENHA, TIPO_USUARIO, STATUS_USUARIO)" +
-                    $" VALUES ('{user.Login}', '{user.Senha}', '{user.TipoUsuario}', {user.Status});";
-            }
-            else
-            {
-                _cmd.CommandText =
-                    $"UPDATE TB_USUARIO SET USUARIO='{user.Login}', SENHA='{user.Senha}', STATUS_USUARIO={user.Status}," +
-                    $" TIPO_USUARIO='{user.TipoUsuario}' WHERE ID_USER={user.Id};";
-            }
-
+            Message = "";
+            Usuario editedUser;
             try
             {
-                _cmd.Connection = _con.Connect();
-                return _cmd.ExecuteNonQuery();
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                return -1;
+                var json = JsonConvert.SerializeObject(user);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/user/{user.Id}", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    var error = JsonConvert.DeserializeObject<Error>(result);
+                    Message = error.Message;
+                    return null;
+                }
+
+                var userJson = JsonConvert.DeserializeObject<Usuario>(result);
+                if (userJson == null)
+                {
+                    return null;
+                }
+
+                editedUser = userJson;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                return -1;
+                throw;
             }
-            finally
-            {
-                _con.Disconnect();
-            }
+
+            return editedUser;
         }
     }
 }

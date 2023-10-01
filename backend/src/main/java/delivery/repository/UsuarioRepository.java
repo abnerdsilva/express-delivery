@@ -33,6 +33,7 @@ public class UsuarioRepository implements IUsuarioRepository {
                 usuario.setUsuario(bd.rs.getString("USUARIO"));
                 usuario.setStatusUsuario(bd.rs.getInt("STATUS_USUARIO"));
                 usuario.setTipoUsuario(bd.rs.getString("TIPO_USUARIO"));
+                usuario.setSenha(bd.rs.getString("SENHA"));
             }
         } catch (Exception e) {
             e.printStackTrace();
