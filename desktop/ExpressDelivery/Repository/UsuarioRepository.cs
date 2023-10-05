@@ -118,6 +118,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
@@ -140,6 +141,7 @@ namespace ExpressDelivery.Repository
                 {
                     var error = JsonConvert.DeserializeObject<Error>(result);
                     Message = error.Message;
+                    GeraLog.PrintError(error.Message);
                     return null;
                 }
 
@@ -155,6 +157,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 

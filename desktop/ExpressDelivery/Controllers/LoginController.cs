@@ -19,6 +19,7 @@ namespace ExpressDelivery.Controllers
                 if (!loginDao.Message.Equals("") && !loginDao.Status)
                 {
                     Message = "Usuário e/ou senha inválido";
+                    GeraLog.PrintError(Message);
                     return null;
                 }
 
@@ -27,7 +28,7 @@ namespace ExpressDelivery.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                GeraLog.PrintError(e.Message);
                 Message = e.Message;
                 return null;
             }

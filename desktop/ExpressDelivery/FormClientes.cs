@@ -157,36 +157,42 @@ namespace ExpressDelivery
             if (txtNome.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo nome é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo nome é obrigatório.");
                 return;
             }
 
             if (txtCEP.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo cep é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo cep é obrigatório.");
                 return;
             }
 
             if (txtEndereco.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo endereço é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo endereço é obrigatório.");
                 return;
             }
 
             if (txtNumero.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo número é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo número é obrigatório.");
                 return;
             }
 
             if (txtBairro.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo bairro é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo bairro é obrigatório.");
                 return;
             }
 
             if (txtTelefone.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo telefone é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo telefone é obrigatório.");
                 return;
             }
 
@@ -219,6 +225,7 @@ namespace ExpressDelivery
             if (!_clientController.MessageError.Equals(""))
             {
                 MessageBox.Show($@"Erro ao salvar cliente. {_clientController.MessageError}");
+                GeraLog.PrintError(_clientController.MessageError);
                 return;
             }
 

@@ -54,12 +54,14 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             finally
@@ -128,6 +130,7 @@ namespace ExpressDelivery.Repository
                 Console.WriteLine(e);
                 Message = e.Message;
                 Status = false;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 

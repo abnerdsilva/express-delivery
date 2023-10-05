@@ -39,12 +39,14 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
             finally
@@ -141,12 +143,14 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             finally
@@ -246,12 +250,14 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             finally
@@ -349,12 +355,14 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             finally
@@ -389,12 +397,14 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             finally
@@ -464,12 +474,14 @@ namespace ExpressDelivery.Repository
                         catch (MySqlException e)
                         {
                             Message = e.Message;
+                            GeraLog.PrintError(e.Message);
                             return -1;
                         }
                         catch (Exception e)
                         {
                             oTransaction.Rollback();
                             Message = e.Message;
+                            GeraLog.PrintError(e.Message);
                             return -1;
                         }
                         finally
@@ -502,12 +514,14 @@ namespace ExpressDelivery.Repository
                         catch (MySqlException e)
                         {
                             Message = e.Message;
+                            GeraLog.PrintError(e.Message);
                             return -1;
                         }
                         catch (Exception e)
                         {
                             oTransaction.Rollback();
                             Message = e.Message;
+                            GeraLog.PrintError(e.Message);
                             return -1;
                         }
                         finally
@@ -536,12 +550,14 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return -1;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return -1;
             }
             finally

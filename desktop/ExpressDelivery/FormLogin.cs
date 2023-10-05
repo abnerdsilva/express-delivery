@@ -17,6 +17,7 @@ namespace ExpressDelivery
             {
                 txtLoginSenha.Focus();
                 MessageBox.Show(@"Usuário e/ou senha inválido(s)", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("Usuário e/ou senha inválido(s)");
                 return;
             }
 
@@ -25,6 +26,7 @@ namespace ExpressDelivery
             if (usuario == null || controle.Message != "")
             {
                 MessageBox.Show(controle.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError(controle.Message);
                 return;
             }
 

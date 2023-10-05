@@ -152,24 +152,28 @@ namespace ExpressDelivery
             if (txtCodBarras.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo códico de barras é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo códico de barras é obrigatório.");
                 return;
             }
             
             if (txtNome.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo nome é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo nome é obrigatório.");
                 return;
             }
 
             if (cmbUnMedida.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo unidade de medida é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo unidade de medida é obrigatório.");
                 return;
             }
             
             if (txtPrecoVenda.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo preço de venda é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo preço de venda é obrigatório.");
                 return;
             }
 
@@ -195,6 +199,7 @@ namespace ExpressDelivery
             {
                 MessageBox.Show($@"Erro ao salvar produto. {_produtoController.MessageError}");
                 lbl_loading_produto.Visible = false;
+                GeraLog.PrintError(_produtoController.MessageError);
                 return;
             }
 

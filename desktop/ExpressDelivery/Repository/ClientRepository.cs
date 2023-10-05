@@ -38,6 +38,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
@@ -65,6 +66,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
@@ -92,6 +94,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
@@ -119,6 +122,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
@@ -145,6 +149,7 @@ namespace ExpressDelivery.Repository
             catch (MySqlException e)
             {
                 Console.WriteLine(e);
+                GeraLog.PrintError(e.Message);
                 Message = e.Message;
                 throw;
             }
@@ -152,6 +157,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
             finally
@@ -185,6 +191,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
@@ -215,6 +222,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 

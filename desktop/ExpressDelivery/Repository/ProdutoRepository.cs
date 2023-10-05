@@ -29,6 +29,7 @@ namespace ExpressDelivery.Repository
                 var productsJson = JsonConvert.DeserializeObject<List<Product>>(result);
                 if (productsJson == null)
                 {
+                    GeraLog.PrintError("falha na conversão dos produtos");
                     throw new Exception("falha na conversão dos produtos");
                 }
 
@@ -38,6 +39,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
@@ -65,6 +67,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
@@ -92,6 +95,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
@@ -119,6 +123,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
@@ -148,6 +153,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
             
@@ -178,6 +184,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
 
