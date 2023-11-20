@@ -12,14 +12,14 @@ namespace ExpressDelivery.Controllers
 
         public List<Bairro> LoadAll()
         {
-            var resp = _bairroRepository.LoadAll();
+            var resp = _bairroRepository.LoadAll().Result;
             MessageError = _bairroRepository.Message;
             return resp;
         }
 
-        public int Save(Bairro bairro, string type)
+        public string Save(Bairro bairro, string type)
         {
-            var result = _bairroRepository.Save(bairro, type);
+            var result = _bairroRepository.Save(bairro, type).Result;
             MessageError = _bairroRepository.Message;
             return result;
         }

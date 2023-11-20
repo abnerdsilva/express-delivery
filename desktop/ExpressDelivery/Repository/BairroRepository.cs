@@ -1,7 +1,10 @@
 ﻿using ExpressDelivery.Models;
 using System;
 using System.Collections.Generic;
-using MySqlConnector;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ExpressDelivery.Repository
 {
@@ -9,91 +12,54 @@ namespace ExpressDelivery.Repository
     {
         public string Message = "";
 
-        private readonly MySqlCommand _cmd = new MySqlCommand();
-        private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
-        private MySqlDataReader _dr;
-
-        public List<Bairro> LoadAll()
+        public async Task<List<Bairro>> LoadAll()
         {
             List<Bairro> bairros = new List<Bairro>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_DELIVERY_BAIRRO;";
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + $"/v1/districts").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
-                {
-                    var bairro = new Bairro
-                    {
-                        Id = Convert.ToInt16(_dr["ID_BAIRRO"]),
-                        Status = Convert.ToInt16(_dr["STATUS_BAIRRO"]),
-                        Nome = _dr["NOME"].ToString(),
-                        VrTaxa = Convert.ToDouble(_dr["VR_TAXA"]),
-                    };
+                var itemJson = JsonConvert.DeserializeObject<List<Bairro>>(result);
+                if (itemJson == null)
+                    throw new Exception("falha ao listar pedidos");
 
-                    bairros.Add(bairro);
-                }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                GeraLog.PrintError(e.Message);
-                return null;
+                bairros.AddRange(itemJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
                 GeraLog.PrintError(e.Message);
-                return null;
-            }
-            finally
-            {
-                _con.Disconnect();
+                return bairros;
             }
 
             return bairros;
         }
 
-        public int Save(Bairro bairro, string type)
+        public async Task<String> Save(Bairro bairro, string type)
         {
-            if (type == "new")
-            {
-                _cmd.CommandText =
-                    $"INSERT INTO TB_DELIVERY_BAIRRO (NOME, VR_TAXA) VALUES ('{bairro.Nome}', {bairro.VrTaxa});";
-            }
-            else
-            {
-                _cmd.CommandText =
-                    $"UPDATE TB_DELIVERY_BAIRRO SET NOME='{bairro.Nome}', VR_TAXA={bairro.VrTaxa} WHERE ID_BAIRRO={bairro.Id};";
-            }
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                return _cmd.ExecuteNonQuery();
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                GeraLog.PrintError(e.Message);
-                return -1;
+                var json = JsonConvert.SerializeObject(bairro);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = ConfigHttp.client.PostAsync(ConfigHttp.BaseUrl + "/v1/district", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                var itemJson = JsonConvert.DeserializeObject<Bairro>(result);
+                if (itemJson == null || itemJson.Id == "")
+                    return "-1";
+
+                return itemJson.Id;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
                 GeraLog.PrintError(e.Message);
-                return -1;
-            }
-            finally
-            {
-                _con.Disconnect();
+                return "-1";
             }
         }
     }
