@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ExpressDelivery.Models;
 using ExpressDelivery.Repository;
@@ -10,44 +11,55 @@ namespace ExpressDelivery.Controllers
 
         public string MessageError = "";
 
-        public int LoadLastOrderId()
+        public Pedido LoadLastOrderId()
         {
-            var resp = _pedidoRepository.LoadLastOrderId();
-            MessageError = _pedidoRepository.Message;
-            return resp;
+            try
+            {
+                var resp = _pedidoRepository.LoadLastOrderId().Result;
+                MessageError = _pedidoRepository.Message;
+                return resp;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                MessageError = e.Message;
+                throw;
+            }
         }
         
         public List<Pedido> LoadAll()
         {
-            var resp = _pedidoRepository.LoadAll();
+            MessageError = "";
+            var resp = _pedidoRepository.LoadAll().Result;
             MessageError = _pedidoRepository.Message;
             return resp;
         }
         
         public List<Pedido> LoadByCode(int code, string status)
         {
-            var resp = _pedidoRepository.LoadByCode(code, status);
+            MessageError = "";
+            var resp = _pedidoRepository.LoadByCode(code, status).Result;
             MessageError = _pedidoRepository.Message;
             return resp;
         }
         
         public List<Pedido> LoadByDate(string inicio, string fim, string status)
         {
-            var resp = _pedidoRepository.LoadByDate(inicio, fim, status);
+            var resp = _pedidoRepository.LoadByDate(inicio, fim, status).Result;
             MessageError = _pedidoRepository.Message;
             return resp;
         }
 
         public string LoadPedidosAberto()
         {
-            var resp = _pedidoRepository.LoadPedidosAbertosIntegracao();
+            var resp = _pedidoRepository.LoadPedidosAbertosIntegracao().Result;
             MessageError = _pedidoRepository.Message;
             return resp;
         }
 
         public int SaveOrder(Pedido order, string type)
         {
-            var resp = _pedidoRepository.SaveOrder(order, type);
+            var resp = _pedidoRepository.SaveOrder(order, type).Result;
             MessageError = _pedidoRepository.Message;
             return resp;
         }

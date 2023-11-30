@@ -109,11 +109,11 @@ namespace ExpressDelivery
         {
             switch (e.KeyChar)
             {
-                case (char) Keys.Enter:
+                case (char)Keys.Enter:
                     txtTelefone.Focus();
                     break;
-                case (char) Keys.Back:
-                case (char) Keys.Delete:
+                case (char)Keys.Back:
+                case (char)Keys.Delete:
                     break;
                 default:
                     if (!char.IsNumber(e.KeyChar))
@@ -130,10 +130,10 @@ namespace ExpressDelivery
         {
             switch (e.KeyChar)
             {
-                case (char) Keys.Back:
-                case (char) Keys.Delete:
+                case (char)Keys.Back:
+                case (char)Keys.Delete:
                     break;
-                case (char) Keys.Enter:
+                case (char)Keys.Enter:
                     LoadClientByPhone();
                     break;
                 default:
@@ -180,18 +180,18 @@ namespace ExpressDelivery
 
         private void txtNome_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char) Keys.Enter) txtCEP.Focus();
+            if (e.KeyChar == (char)Keys.Enter) txtCEP.Focus();
         }
 
         private void txtCEP_KeyPress(object sender, KeyPressEventArgs e)
         {
             switch (e.KeyChar)
             {
-                case (char) Keys.Enter:
+                case (char)Keys.Enter:
                     txtNumero.Focus();
                     break;
-                case (char) Keys.Back:
-                case (char) Keys.Delete:
+                case (char)Keys.Back:
+                case (char)Keys.Delete:
                     break;
                 default:
                     if (!char.IsNumber(e.KeyChar))
@@ -208,11 +208,11 @@ namespace ExpressDelivery
         {
             switch (e.KeyChar)
             {
-                case (char) Keys.Enter:
+                case (char)Keys.Enter:
                     txtEndereco.Focus();
                     break;
-                case (char) Keys.Back:
-                case (char) Keys.Delete:
+                case (char)Keys.Back:
+                case (char)Keys.Delete:
                     break;
                 default:
                     if (!char.IsNumber(e.KeyChar))
@@ -227,17 +227,17 @@ namespace ExpressDelivery
 
         private void txtEndereco_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char) Keys.Enter) cmbBairro.Focus();
+            if (e.KeyChar == (char)Keys.Enter) cmbBairro.Focus();
         }
 
         private void cmbBairro_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char) Keys.Enter) txtObservacaoCliente.Focus();
+            if (e.KeyChar == (char)Keys.Enter) txtObservacaoCliente.Focus();
         }
 
         private void txtObservacaoCliente_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char) Keys.Enter) btnSalvarCliente.Focus();
+            if (e.KeyChar == (char)Keys.Enter) btnSalvarCliente.Focus();
         }
 
         private void btnSalvarCliente_Click(object sender, EventArgs e)
@@ -254,12 +254,12 @@ namespace ExpressDelivery
 
             if (_clientSelected != null && _clientSelected.Id != "")
             {
-                clientId = _clientSelected.Id;
-                city = _clientSelected.Cidade;
-                state = _clientSelected.Estado;
-                email = _clientSelected.Email;
-                cpf = _clientSelected.CPF;
-                rg = _clientSelected.RG;
+                clientId = _clientSelected.Id ?? "";
+                city = _clientSelected.Cidade ?? "Indaiatuba";
+                state = _clientSelected.Estado ?? "SP";
+                email = _clientSelected.Email ?? "";
+                cpf = _clientSelected.CPF ?? "";
+                rg = _clientSelected.RG ?? "";
                 status = _clientSelected.Status;
             }
 
@@ -292,6 +292,12 @@ namespace ExpressDelivery
             _products.ForEach(product => cmbDescricaoProduto.Items.Add(product.Descricao));
 
             var clienteCadastrado = _clientController.LoadByPhone(client.Telefone);
+            if (clienteCadastrado.Id == null || clienteCadastrado.Id.Equals(""))
+            {
+                MessageBox.Show("não foi possivel cadastrar cliente", @"Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             _clientSelected = clienteCadastrado;
             txtIdCliente.Text = clienteCadastrado.Id.ToString();
 
@@ -380,10 +386,10 @@ namespace ExpressDelivery
         {
             switch (e.KeyChar)
             {
-                case (char) Keys.Back:
-                case (char) Keys.Delete:
+                case (char)Keys.Back:
+                case (char)Keys.Delete:
                     break;
-                case (char) Keys.Enter:
+                case (char)Keys.Enter:
                     if (txtCodBarras.Text.Equals(""))
                     {
                         cmbDescricaoProduto.Focus();
@@ -430,7 +436,7 @@ namespace ExpressDelivery
 
         private void cmbDescricaoProduto_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar != (char) Keys.Enter) return;
+            if (e.KeyChar != (char)Keys.Enter) return;
             if (cmbDescricaoProduto.Text.Equals(""))
             {
                 txtQtde.Enabled = false;
@@ -448,16 +454,16 @@ namespace ExpressDelivery
 
         private void txtObservacaoProduto_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char) Keys.Enter) txtQtde.Focus();
+            if (e.KeyChar == (char)Keys.Enter) txtQtde.Focus();
         }
 
         private void txtQtde_KeyPress(object sender, KeyPressEventArgs e)
         {
             switch (e.KeyChar)
             {
-                case (char) Keys.Enter:
-                case (char) Keys.Back:
-                case (char) Keys.Delete:
+                case (char)Keys.Enter:
+                case (char)Keys.Back:
+                case (char)Keys.Delete:
                     e.Handled = true;
                     break;
                 default:
@@ -476,49 +482,57 @@ namespace ExpressDelivery
                 return;
             }
 
-            var orderId = _pedidoController.LoadLastOrderId() + 1;
-            if (!lblNrPedido.Text.Equals("0"))
-                orderId = Convert.ToInt16(lblNrPedido.Text);
-
-            var qtde = Convert.ToInt16(txtQtde.Text);
-            var vrTotalItem = _productSelected.PrecoVenda * qtde;
-
-            ListViewItem items = new ListViewItem(_productSelected.Uid);
-            // items.SubItems.Add(_productSelected.Id.ToString());
-            items.SubItems.Add(_productSelected.Descricao);
-            items.SubItems.Add(_productSelected.UnMedida);
-            items.SubItems.Add(qtde.ToString());
-            items.SubItems.Add(_productSelected.PrecoVenda.ToString("0.00"));
-            items.SubItems.Add(vrTotalItem.ToString("0.00"));
-
-            var item = new PedidoItem
+            try
             {
-                CodProduto = _productSelected.Uid,
-                VrUnitario = _productSelected.PrecoVenda,
-                Quantidade = qtde,
-                Observacao = txtObservacaoProduto.Text,
-                VrTotal = vrTotalItem,
-                CodPedido = orderId,
-            };
+                var lastOrder = _pedidoController.LoadLastOrderId();
+                if (!lblNrPedido.Text.Equals("0"))
+                    lastOrder.Id = Convert.ToInt16(lblNrPedido.Text);
 
-            _pedidoItens.Add(item);
+                var qtde = Convert.ToInt16(txtQtde.Text);
+                var vrTotalItem = _productSelected.PrecoVenda * qtde;
 
-            listProdutos.Items.Add(items);
+                ListViewItem items = new ListViewItem(_productSelected.Uid);
+                // items.SubItems.Add(_productSelected.Id.ToString());
+                items.SubItems.Add(_productSelected.Descricao);
+                items.SubItems.Add(_productSelected.UnMedida);
+                items.SubItems.Add(qtde.ToString());
+                items.SubItems.Add(_productSelected.PrecoVenda.ToString("0.00"));
+                items.SubItems.Add(vrTotalItem.ToString("0.00"));
 
-            var vrTotalSemTaxa = 0.00;
-            var vrTotalTaxa = Convert.ToDouble(txtVrTaxaEntrega.Text);
-            _pedidoItens.ForEach(i => vrTotalSemTaxa += i.VrTotal);
-            _vrTotalPedido = vrTotalSemTaxa + vrTotalTaxa;
+                var item = new PedidoItem
+                {
+                    CodProduto = _productSelected.Uid,
+                    VrUnitario = _productSelected.PrecoVenda,
+                    Quantidade = qtde,
+                    Observacao = txtObservacaoProduto.Text,
+                    VrTotal = vrTotalItem,
+                    CodPedido = lastOrder.CodPedido,
+                };
 
-            txtVrTotalItens.Text = vrTotalSemTaxa.ToString("0.00");
-            txtVrTaxaEntrega.Text = vrTotalTaxa.ToString("0.00");
-            txtVrTotalPedido.Text = _vrTotalPedido.ToString("0.00");
+                _pedidoItens.Add(item);
 
-            txtVrTrocoPara.Enabled = true;
-            txtQtde.Enabled = false;
-            txtObservacaoProduto.Enabled = false;
-            txtCodBarras.Focus();
-            LimpaCamposProdutoLancado();
+                listProdutos.Items.Add(items);
+
+                var vrTotalSemTaxa = 0.00;
+                var vrTotalTaxa = Convert.ToDouble(txtVrTaxaEntrega.Text);
+                _pedidoItens.ForEach(i => vrTotalSemTaxa += i.VrTotal);
+                _vrTotalPedido = vrTotalSemTaxa + vrTotalTaxa;
+
+                txtVrTotalItens.Text = vrTotalSemTaxa.ToString("0.00");
+                txtVrTaxaEntrega.Text = vrTotalTaxa.ToString("0.00");
+                txtVrTotalPedido.Text = _vrTotalPedido.ToString("0.00");
+
+                txtVrTrocoPara.Enabled = true;
+                txtQtde.Enabled = false;
+                txtObservacaoProduto.Enabled = false;
+                txtCodBarras.Focus();
+                LimpaCamposProdutoLancado();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LimpaCamposProdutoLancado()
@@ -606,7 +620,7 @@ namespace ExpressDelivery
 
         private void txtVrTrocoPara_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char) Keys.Enter)
+            if (e.KeyChar == (char)Keys.Enter)
             {
                 txtVrTroco.Text = (Convert.ToDouble(txtVrTrocoPara.Text) - _vrTotalPedido).ToString("0.00");
                 cmbFormaPagamento.Focus();

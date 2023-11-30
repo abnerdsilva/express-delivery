@@ -73,12 +73,13 @@ namespace ExpressDelivery
                     items.ForeColor = Color.Red;
                 else if (pedido.StatusPedido == "BAIXADO")
                     items.ForeColor = Color.Green;
-                else if (pedido.Origem.Equals("IFOOD") && pedido.StatusPedido.Equals("ABERTO") && pedido.DataAtualizacao.ToString().Contains("00:00:00"))
+                else if (pedido.Origem.Equals("IFOOD") && pedido.StatusPedido.Equals("ABERTO") &&
+                         pedido.DataAtualizacao.ToString().Contains("00:00:00"))
                     items.BackColor = Color.OrangeRed;
 
                 listPedidos.Items.Add(items);
             }
-            
+
             if (!_statusPedidoSelecionado.ToUpper().Equals("CONCLUIDO") && !_statusPedidoSelecionado.ToUpper().Equals("CANCELADO"))
             {
                 btnBaixarPedido.Visible = true;
@@ -119,7 +120,7 @@ namespace ExpressDelivery
         private void btnBuscarTodosDoDia_Click(object sender, EventArgs e)
         {
             listPedidos.Clear();
-            _pedidos.Clear();
+            _pedidos?.Clear();
             _localBusca = "GERAL";
 
             CarregaDadosPedidos();
@@ -127,7 +128,7 @@ namespace ExpressDelivery
 
         private void CarregaDadosPedidos()
         {
-            _pedidos.Clear();
+            _pedidos?.Clear();
             listPedidos.Clear();
 
             if (_localBusca.Equals("DATA"))
@@ -137,8 +138,8 @@ namespace ExpressDelivery
                 _pedidos = _pedidoController.LoadByCode(Convert.ToInt16(txtCodigoPedido.Text), cmbStatusPedidoCodigo.Text);
             else
                 _pedidos = _pedidoController.LoadAll();
-            
-            if (!_pedidoController.MessageError.Equals(""))
+
+                if (!_pedidoController.MessageError.Equals(""))
                 MessageBox.Show(_pedidoController.MessageError);
             else if (_pedidos != null)
                 CarregaListaPedidos();
@@ -184,7 +185,7 @@ namespace ExpressDelivery
             {
                 MessageBox.Show(exception.Message);
             }
-            
+
             if (!_statusPedidoSelecionado.ToUpper().Equals("CONCLUIDO") && !_statusPedidoSelecionado.ToUpper().Equals("CANCELADO"))
             {
                 btnBaixarPedido.Visible = true;
@@ -213,7 +214,7 @@ namespace ExpressDelivery
             else if (atualizado > 0)
             {
                 CarregaDadosPedidos();
-                
+
                 btnCancelaPedido.Visible = false;
                 btnBaixarPedido.Visible = false;
                 MessageBox.Show(@"Pedido baixado com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.None);
@@ -228,7 +229,7 @@ namespace ExpressDelivery
             else if (atualizado > 0)
             {
                 CarregaDadosPedidos();
-                
+
                 btnCancelaPedido.Visible = false;
                 btnBaixarPedido.Visible = false;
                 MessageBox.Show(@"Pedido cancelado com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.None);

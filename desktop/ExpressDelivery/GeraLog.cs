@@ -7,7 +7,6 @@ namespace ExpressDelivery
     {
         public static bool PrintError(string value)
         {
-
             DateTime currentDateTime = DateTime.Now;
             var formatedDate = currentDateTime.ToString("yyyyMMdd");
             var formatedDateTime = currentDateTime.ToString("yyyyMMddHHmmss");
@@ -29,7 +28,6 @@ namespace ExpressDelivery
 
         public static bool PrintInfo(string value)
         {
-
             DateTime currentDateTime = DateTime.Now;
             var formatedDate = currentDateTime.ToString("yyyyMMdd");
             var formatedDateTime = currentDateTime.ToString("yyyyMMddHHmmss");
@@ -51,26 +49,32 @@ namespace ExpressDelivery
 
         private static bool Print(string path, string value)
         {
+            StreamWriter sw = null;
             try
             {
                 if (!File.Exists(path))
                 {
-                    StreamWriter sw = File.CreateText(path);
+                    sw = File.CreateText(path);
                     sw.WriteLine(value);
                     return true;
                 }
 
-                using (StreamWriter sw = File.AppendText(path))
+                using (sw = File.AppendText(path))
                 {
                     sw.WriteLine(value);
                 }
-                return true;
 
+                return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine("The process failed: {0}", e);
+                Console.WriteLine(@"The process failed: ", e);
                 return false;
+            }
+            finally
+            {
+                if (sw != null)
+                    sw.Close();
             }
         }
     }
