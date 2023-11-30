@@ -103,7 +103,7 @@ namespace ExpressDelivery.Repository
 
         public async Task<Client> LoadByPhone(string phone)
         {
-            Client client;
+            Client client = new Client();
 
             try
             {
@@ -113,7 +113,8 @@ namespace ExpressDelivery.Repository
                 var clientsJson = JsonConvert.DeserializeObject<Client>(result);
                 if (clientsJson == null)
                 {
-                    throw new Exception("falha na conversão do cliente");
+                    // throw new Exception("falha na conversão do cliente");
+                    return client;
                 }
 
                 client = clientsJson;
