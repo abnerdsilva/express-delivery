@@ -1,7 +1,8 @@
 package delivery.model.dao;
 
 public class PedidoDao {
-    private int codPedido;
+    private int id;
+    private String codPedido;
     private String codCliente;
     private ClienteDao cliente;
     private String statusPedido;
@@ -23,28 +24,40 @@ public class PedidoDao {
     private String dataAtualizacao;
     private String formaPagamento;
     private String codPedidoIntegracao;
-    private int codUsuario;
+    private String codUsuario;
 
     public PedidoDao() {
     }
 
-    public int getCodUsuario() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCodUsuario() {
         return codUsuario;
     }
 
-    public void setCodUsuario(int codUsuario) {
+    public void setCodUsuario(String codUsuario) {
         this.codUsuario = codUsuario;
+    }
+
+    public ClienteDao getCliente() {
+        return cliente;
     }
 
     public void setCliente(ClienteDao cliente) {
         this.cliente = cliente;
     }
 
-    public int getCodPedido() {
+    public String getCodPedido() {
         return codPedido;
     }
 
-    public void setCodPedido(int codPedido) {
+    public void setCodPedido(String codPedido) {
         this.codPedido = codPedido;
     }
 

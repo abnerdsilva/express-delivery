@@ -3,9 +3,10 @@ package delivery.model.dao;
 import delivery.model.PedidoItemDelivery;
 
 public class PedidoItemDao {
-    private int codPedidoItem;
-    private int codPedido;
+    private String codPedidoItem;
+    private String codPedido;
     private String codProduto;
+    private String codExterno;
     private int quantidade;
     private double vrUnitario;
     private double vrTotal;
@@ -15,19 +16,19 @@ public class PedidoItemDao {
     public PedidoItemDao() {
     }
 
-    public int getCodPedidoItem() {
+    public String getCodPedidoItem() {
         return codPedidoItem;
     }
 
-    public void setCodPedidoItem(int codPedidoItem) {
+    public void setCodPedidoItem(String codPedidoItem) {
         this.codPedidoItem = codPedidoItem;
     }
 
-    public int getCodPedido() {
+    public String getCodPedido() {
         return codPedido;
     }
 
-    public void setCodPedido(int codPedido) {
+    public void setCodPedido(String codPedido) {
         this.codPedido = codPedido;
     }
 
@@ -77,6 +78,14 @@ public class PedidoItemDao {
 
     public String getNome() {
         return nome;
+    }
+
+    public void setCodExterno(String codigo) {
+        this.codExterno = nome;
+    }
+
+    public String getCodExterno() {
+        return codExterno;
     }
 
     public PedidoItemDelivery itemDaoToItemDelivery() {

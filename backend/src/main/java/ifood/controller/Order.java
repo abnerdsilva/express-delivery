@@ -14,6 +14,7 @@ import log.LoggerInFile;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Order {
 
@@ -37,7 +38,7 @@ public class Order {
 
                 try {
                     PedidoController pedidoController = PedidoController.getInstance();
-                    int orderId = pedidoController.savePedido(pedido);
+                    int orderId = pedidoController.savePedidoIntegracao(pedido);
                     if (repository.updateOrderId(orderId, pedido.getCodPedidoIntegracao())) {
                         LoggerInFile.printInfo("Sucesso");
                     }
@@ -206,8 +207,10 @@ public class Order {
 
 //        LocalTime lt1 = LocalTime.parse(order.getCreatedAt()).minusHours(3);
 
+        var uid = UUID.randomUUID();
+
         PedidoDelivery pedidoDelivery = new PedidoDelivery();
-        pedidoDelivery.setCodPedido(0);
+        pedidoDelivery.setCodPedido("");
         pedidoDelivery.setDataCriacao(Geral.formateDateToLocal(order.getCreatedAt()));
 //        pedidoDelivery.setDataCriacao(lt1.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
         pedidoDelivery.setAgendado(!order.getOrderTiming().equals("IMMEDIATE"));

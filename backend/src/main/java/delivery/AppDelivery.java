@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @SpringBootApplication
 public class AppDelivery {
@@ -113,8 +114,10 @@ public class AppDelivery {
         clienteDelivery.setEmail("silvabner@gmail.com");
         clienteDelivery.setTelefone("(19)995323443");
 
+        var uid = UUID.randomUUID();
+
         PedidoDelivery pedidoDelivery = new PedidoDelivery();
-        pedidoDelivery.setCodPedido(123);
+        pedidoDelivery.setCodPedido(uid.toString());
         pedidoDelivery.setDataCriacao(now.format(dtf));
         pedidoDelivery.setAgendado(false);
         pedidoDelivery.setDataEntrega("2022/04/22 23:58:00");
@@ -131,7 +134,7 @@ public class AppDelivery {
         pedidoDelivery.setOrigem("IFOOD");
 
         try {
-            pedidoController.savePedido(pedidoDelivery);
+            pedidoController.savePedidoIntegracao(pedidoDelivery);
         } catch (SQLException e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());

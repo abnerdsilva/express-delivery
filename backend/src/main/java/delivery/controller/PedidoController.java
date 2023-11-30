@@ -1,6 +1,8 @@
 package delivery.controller;
 
 import delivery.Erro;
+import delivery.domain.user.OrderDTO;
+import delivery.domain.user.OrderItemDTO;
 import delivery.model.ClienteDelivery;
 import delivery.model.PagamentoDelivery;
 import delivery.model.PedidoDelivery;
@@ -12,13 +14,13 @@ import delivery.model.dao.ProdutoDao;
 import delivery.repository.ClienteRepository;
 import delivery.repository.PedidoRepository;
 import delivery.repository.ProdutoRepository;
+import jakarta.validation.Valid;
 import log.LoggerInFile;
 import log.MessageDefault;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -54,7 +56,7 @@ public class PedidoController {
      * @return - retorna id do pedido cadastrado
      * @throws SQLException - retorna exceção quando ocorre erro de SQL
      */
-    public int savePedido(PedidoDelivery pedidoDelivery) throws SQLException {
+    public int savePedidoIntegracao(PedidoDelivery pedidoDelivery) throws SQLException {
         try {
             ClienteDao clienteDao = _clienteRepository.loadByCode(pedidoDelivery.getCliente().getCodCliente());
             if (clienteDao == null || clienteDao.getCodCliente().equals("")) {
@@ -97,8 +99,8 @@ public class PedidoController {
 
             pedido.setObservacao(observacao);
 
-            int orderId = _pedidoRepository.saveOrder(pedido);
-            if (orderId <= 0) {
+            var orderUid = _pedidoRepository.saveOrder(pedido);
+            if (orderUid.equals("-1")) {
                 return -1;
             }
 
@@ -120,7 +122,7 @@ public class PedidoController {
                 }
 
                 PedidoItemDao pedidoItem = new PedidoItemDao();
-                pedidoItem.setCodPedido(orderId);
+                pedidoItem.setCodPedido(orderUid);
                 pedidoItem.setCodProduto(produto.getCodProduto());
                 pedidoItem.setQuantidade(item.getQuantidade());
                 pedidoItem.setObservacao(item.getObservacao());
@@ -133,7 +135,9 @@ public class PedidoController {
                 }
             }
 
-            return orderId;
+            var orderSaved = _pedidoRepository.getOrderByCode(orderUid);
+
+            return orderSaved.getId();
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
@@ -186,45 +190,120 @@ public class PedidoController {
      *
      * @return - lista de pedidos
      */
-    @RequestMapping("/orders")
-    public ResponseEntity getOrders() {
+    @RequestMapping("/v1/orders")
+    public ResponseEntity<?> getOrders(@RequestParam(value = "filter", required = false) String filter) {
         List<PedidoDelivery> orders = new ArrayList<>();
-        List<PedidoDao> pedidoDao = _pedidoRepository.getOrdersFromToday();
-        for (var ped : pedidoDao) {
-            PedidoDelivery pedidoDelivery = new PedidoDelivery();
-            try {
-                ClienteDao clienteDao = _clienteRepository.loadByCode(ped.getCodCliente());
+        List<OrderDTO> ordersDto = new ArrayList<>();
+        List<PedidoDao> pedidoDao = new ArrayList<>();
 
-                if (clienteDao == null) {
-                    throw new Exception("cliente não encontrado");
-                }
+        if (filter == null)
+            filter = "";
 
-                pedidoDelivery.setCodPedido(ped.getCodPedido());
-                pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
-                pedidoDelivery.setDataCriacao(ped.getDataPedido());
-                pedidoDelivery.setVrTotal(ped.getVrTotal());
-                pedidoDelivery.setVrDesconto(ped.getVrDesconto());
-                pedidoDelivery.setVrAdicional(ped.getVrTaxa());
-                pedidoDelivery.setObservacao(ped.getObservacao());
-                pedidoDelivery.setCodPedidoIntegracao(ped.getCodPedidoIntegracao());
-                pedidoDelivery.setOrigem(ped.getOrigem());
-                pedidoDelivery.setTipo(ped.getTipoPedido());
-                pedidoDelivery.setStatusPedido(ped.getStatusPedido());
+        if (filter == null || filter.isEmpty()) {
+            pedidoDao = _pedidoRepository.findAll();
+        } else if (filter.equals("mobile")) {
+            pedidoDao = _pedidoRepository.getOrdersFromToday();
+        } else if (filter.equals("date")) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            var today = LocalDateTime.now().format(dtf);
+            var tomorow = LocalDateTime.now().plusDays(1).format(dtf);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(e.getMessage()));
+            pedidoDao = _pedidoRepository.findAllByDate(today, tomorow);
+        } else if (filter.equals("lastOrder")) {
+            var orderId = _pedidoRepository.loadMaxOrder();
+            if (orderId == 0) orderId = 1;
+            var order = _pedidoRepository.getOrderById(orderId);
+            if (order != null) {
+                pedidoDao.add(order);
             }
-
-            orders.add(pedidoDelivery);
+        } else if (filter.equals("integracao")) {
+            var orderId = _pedidoRepository.loadMaxOrder();
+            if (orderId > 0) {
+                var order = _pedidoRepository.getOrderById(orderId);
+                pedidoDao.add(order);
+            }
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(orders);
+        if (!filter.equals("date")) {
+            for (var ped : pedidoDao) {
+                PedidoDelivery pedidoDelivery = new PedidoDelivery();
+                try {
+                    ClienteDao clienteDao = _clienteRepository.loadByCode(ped.getCodCliente());
+
+                    if (clienteDao == null) {
+                        throw new Exception("cliente não encontrado");
+                    }
+
+                    pedidoDelivery.setId(ped.getId());
+                    pedidoDelivery.setCodPedido(ped.getCodPedido());
+                    pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+                    pedidoDelivery.setDataCriacao(ped.getDataPedido());
+                    pedidoDelivery.setVrTotal(ped.getVrTotal());
+                    pedidoDelivery.setVrDesconto(ped.getVrDesconto());
+                    pedidoDelivery.setVrAdicional(ped.getVrTaxa());
+                    pedidoDelivery.setObservacao(ped.getObservacao());
+                    pedidoDelivery.setCodPedidoIntegracao(ped.getCodPedidoIntegracao());
+                    pedidoDelivery.setOrigem(ped.getOrigem());
+                    pedidoDelivery.setTipo(ped.getTipoPedido());
+                    pedidoDelivery.setStatusPedido(ped.getStatusPedido());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(e.getMessage()));
+                }
+
+                List<PedidoItemDelivery> itensDelivery = new ArrayList<>();
+                List<PedidoItemDao> itensDao = _pedidoRepository.loadItensByCode(ped.getCodPedido());
+
+                for (var item : itensDao) {
+                    itensDelivery.add(item.itemDaoToItemDelivery());
+                }
+
+                pedidoDelivery.setItens(itensDelivery);
+
+                orders.add(pedidoDelivery);
+            }
+        } else {
+            for (var ped : pedidoDao) {
+                var itensListDto = new ArrayList<OrderItemDTO>();
+
+                List<PedidoItemDao> itensDao = _pedidoRepository.loadItensByCode(ped.getCodPedido());
+                for (var it : itensDao) {
+                    var temp = new OrderItemDTO(it.getCodPedido(), it.getCodProduto(), it.getCodExterno(), it.getNome(),
+                            it.getQuantidade(), it.getVrUnitario(), it.getVrTotal(), 0.0, 0.0,
+                            it.getObservacao(), 0);
+
+                    itensListDto.add(temp);
+                }
+
+                var ord = new OrderDTO(ped.getId(), ped.getCodPedido(), ped.getCodCliente(),
+                        ped.getCliente().getNome(), ped.getStatusPedido(), ped.getDataPedido(),
+                        ped.getDataAtualizacao(), ped.getDataEntrega(), ped.getVrTotal(),
+                        ped.getVrTaxa(), ped.getVrTroco(), ped.getLogradouro(), ped.getNumero(),
+                        ped.getCodUsuario(), ped.getBairro(), ped.getCidade(), ped.getEstado(),
+                        ped.getCep(), ped.getTipoPedido(), ped.getOrigem(), ped.getObservacao(),
+                        ped.getFormaPagamento(), itensListDto);
+
+                ordersDto.add(ord);
+            }
+        }
+
+        if (filter.equals("lastOrder")) {
+            if (!orders.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK).body(orders.get(0));
+            } else {
+                return ResponseEntity.status(HttpStatus.OK).build();
+            }
+        } else if (filter.equals("date")) {
+            return ResponseEntity.status(HttpStatus.OK).body(ordersDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(orders);
+        }
     }
 
-    @RequestMapping("/order/{id}")
-    public PedidoDelivery getOrderFromId(@PathVariable int id) throws SQLException {
+    @RequestMapping("/v1/order/{id}")
+    public PedidoDelivery getOrderFromId(@PathVariable String id) throws SQLException {
         List<PedidoItemDelivery> itens = new ArrayList<>();
         List<PedidoItemDao> itensDao = _pedidoRepository.loadItensByCode(id);
 
@@ -232,7 +311,7 @@ public class PedidoController {
             itens.add(item.itemDaoToItemDelivery());
         }
 
-        PedidoDao pedidoDao = _pedidoRepository.getOrderById(id);
+        PedidoDao pedidoDao = _pedidoRepository.getOrderByCode(id);
 
         ClienteDao clienteDao = _clienteRepository.loadByCode(pedidoDao.getCodCliente());
 
@@ -267,7 +346,7 @@ public class PedidoController {
         return pedidoDelivery;
     }
 
-    @RequestMapping("/order/{id}/next")
+    @RequestMapping("/v1/order/{id}/next")
     public ResponseEntity<?> updateStatusOrder(@PathVariable String id) {
         try {
             PedidoDao pedidoDao = _pedidoRepository.getOrderById(Integer.parseInt(id));
@@ -300,7 +379,7 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    @RequestMapping("/order/{id}/cancel")
+    @RequestMapping("/v1/order/{id}/cancel")
     public ResponseEntity<?> cancelOrder(@PathVariable String id) {
         try {
             PedidoDao pedidoDao = _pedidoRepository.getOrderById(Integer.parseInt(id));
@@ -315,5 +394,96 @@ public class PedidoController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @PostMapping("/v1/order")
+    public ResponseEntity<?> saveOrder(@RequestBody @Valid OrderDTO data) {
+        try {
+            var cliente = _clienteRepository.loadByCode(data.codCliente());
+
+            var orderConverted = convertPedidoDelivery(data, cliente);
+
+            var orderUidSaved = _pedidoRepository.saveOrder(orderConverted);
+            if (orderUidSaved == null || orderUidSaved.equals("-1")) {
+                throw new RuntimeException("falha ao salvar pedido");
+            }
+
+            for (var item : data.itens()) {
+                var orderItem = convertPedidoItem(item);
+                orderItem.setCodPedido(orderUidSaved);
+
+                var orderItemSaved = _pedidoRepository.saveOrderItem(orderItem);
+                if (orderItemSaved == -1) {
+                    throw new RuntimeException("falha ao salvar item do pedido");
+                }
+            }
+
+            var order = _pedidoRepository.getOrderByCode(orderUidSaved);
+            var itens = _pedidoRepository.loadItensByCode(orderUidSaved);
+
+            var itensListDto = new ArrayList<OrderItemDTO>();
+
+            for (var it : itens) {
+                var temp = new OrderItemDTO(it.getCodPedido(), it.getCodProduto(), it.getCodExterno(), it.getNome(),
+                        it.getQuantidade(), it.getVrUnitario(), it.getVrTotal(), 0.0, 0.0,
+                        it.getObservacao(), 0);
+
+                itensListDto.add(temp);
+            }
+
+            var ord = new OrderDTO(order.getId(), order.getCodPedido(), order.getCodCliente(),
+                    cliente.getNome(), order.getStatusPedido(), order.getDataPedido(),
+                    order.getDataAtualizacao(), order.getDataEntrega(), order.getVrTotal(),
+                    order.getVrTaxa(), order.getVrTroco(), order.getLogradouro(), order.getNumero(),
+                    order.getCodUsuario(), order.getBairro(), order.getCidade(), order.getEstado(),
+                    order.getCep(), order.getTipoPedido(), order.getOrigem(), order.getObservacao(),
+                    order.getFormaPagamento(), itensListDto);
+
+            return ResponseEntity.status(HttpStatus.OK).body(ord);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro(e.getMessage()));
+        }
+    }
+
+    @NotNull
+    private static PedidoDao convertPedidoDelivery(OrderDTO data, ClienteDao cliente) {
+        var pedido = new PedidoDao();
+        pedido.setCodPedido(data.codPedido());
+        pedido.setStatusPedido(data.statusPedido());
+        pedido.setObservacao(data.observacao());
+        pedido.setVrDesconto(0.0);
+        pedido.setVrTaxa(data.vrTaxa());
+        pedido.setVrTotal(data.vrTotal());
+        pedido.setVrTroco(data.vrTroco());
+        pedido.setCodPedidoIntegracao("");
+        pedido.setOrigem(data.origem());
+        pedido.setFormaPagamento(data.formaPagamento());
+        pedido.setTipoPedido(data.tipoPedido());
+        pedido.setCliente(cliente);
+        pedido.setDataPedido(data.dataPedido());
+        pedido.setLogradouro(data.logradouro());
+        pedido.setNumero(data.numero());
+        pedido.setEstado(data.estado());
+        pedido.setCidade(data.cidade());
+        pedido.setCep(data.cep());
+        pedido.setBairro(data.bairro());
+        pedido.setCodUsuario(data.codUsuario());
+        return pedido;
+    }
+
+    @NotNull
+    private static PedidoItemDao convertPedidoItem(OrderItemDTO item) {
+        var codExterno = item.CodExterno() == null ? "" : item.CodExterno();
+
+        var orderItem = new PedidoItemDao();
+        orderItem.setCodProduto(item.CodProduto());
+        orderItem.setNome(item.Nome());
+        orderItem.setCodExterno(codExterno);
+        orderItem.setQuantidade(item.Quantidade());
+        orderItem.setObservacao(item.Observacao());
+        orderItem.setVrTotal(item.VrTotal());
+        orderItem.setVrUnitario(item.VrUnitario());
+        return orderItem;
     }
 }
