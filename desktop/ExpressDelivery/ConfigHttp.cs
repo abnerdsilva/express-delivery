@@ -5,7 +5,8 @@ namespace ExpressDelivery
 {
     internal class ConfigHttp
     {
-        public const string BaseUrl = "http://localhost:8080";
+        public const string BaseUrl = "http://ec2-18-222-179-122.us-east-2.compute.amazonaws.com:8080";
+        // public const string BaseUrl = "http://localhost:8080";
         
         public static string Token { get; set; }
         
