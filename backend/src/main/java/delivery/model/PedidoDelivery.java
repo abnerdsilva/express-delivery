@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 
 public class PedidoDelivery {
-    private int codPedido;
+    private int id;
+
+    private String codPedido;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String referencia;
@@ -45,11 +47,11 @@ public class PedidoDelivery {
     public PedidoDelivery() {
     }
 
-    public int getCodPedido() {
+    public String getCodPedido() {
         return codPedido;
     }
 
-    public void setCodPedido(int codPedido) {
+    public void setCodPedido(String codPedido) {
         this.codPedido = codPedido;
     }
 
@@ -187,5 +189,13 @@ public class PedidoDelivery {
 
     public void setVrTroco(double vrTroco) {
         this.vrTroco = vrTroco;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

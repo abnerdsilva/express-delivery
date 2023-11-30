@@ -22,6 +22,8 @@ namespace ExpressDelivery
             listProdutos.Clear();
             _products.Clear();
 
+            lbl_loading_produto.Visible = true;
+
             listProdutos.View = View.Details;
             listProdutos.FullRowSelect = true;
             listProdutos.GridLines = true;
@@ -34,25 +36,27 @@ namespace ExpressDelivery
             listProdutos.Columns.Add("Preço Venda", 120, HorizontalAlignment.Left);
 
             var statusPesquisa = 0;
-            if (cmbStatusPesquisa.Text == "Ativo")
+            if (cmbStatusPesquisa.Text == @"Ativo")
                 statusPesquisa = 1;
 
             if (txtDescricao.Text.Equals(""))
                 _products = _produtoController.LoadAll();
             else
             {
-                if (cmbTipoPesquisa.Text == "Descrição")
+                if (cmbTipoPesquisa.Text == @"Descrição")
                     _products = _produtoController.LoadByName(txtDescricao.Text);
                 else
                     _products = _produtoController.LoadById(txtDescricao.Text);
             }
 
             _products.FindAll(c => c.Status == statusPesquisa).ForEach(AddItemLista);
+
+            lbl_loading_produto.Visible = false;
         }
 
         private void AddItemLista(Product product)
         {
-            ListViewItem items = new ListViewItem(product.Id.ToString());
+            ListViewItem items = new ListViewItem(product.Uid);
             items.SubItems.Add(product.Descricao);
             items.SubItems.Add(product.PrecoCompra.ToString("0.00"));
             items.SubItems.Add(product.UnMedida);
@@ -118,7 +122,7 @@ namespace ExpressDelivery
             var product = new Product();
             foreach (var c in _products)
             {
-                if (c.Id != int.Parse(idProduct)) continue;
+                if (c.Uid != idProduct) continue;
                 product = c;
                 break;
             }
@@ -139,39 +143,41 @@ namespace ExpressDelivery
                 radioProdutoInativo.Checked = true;
         }
 
-        private void btnSalvarProduto_Click(object sender, EventArgs e)
+        private async void btnSalvarProduto_Click(object sender, EventArgs e)
         {
             var status = 0;
             if (radioProdutoAtivo.Checked)
                 status = 1;
 
-            var idProduct = _produtoController.LastProductId() + 1;
-            if (!txtIdProduto.Text.Equals("0"))
-                idProduct = Convert.ToInt16(txtIdProduto.Text);
-
             if (txtCodBarras.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo códico de barras é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo códico de barras é obrigatório.");
                 return;
             }
             
             if (txtNome.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo nome é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo nome é obrigatório.");
                 return;
             }
 
             if (cmbUnMedida.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo unidade de medida é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo unidade de medida é obrigatório.");
                 return;
             }
             
             if (txtPrecoVenda.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo preço de venda é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo preço de venda é obrigatório.");
                 return;
             }
+
+            lbl_loading_produto.Visible = true;
             
             var product = new Product
             {
@@ -185,21 +191,24 @@ namespace ExpressDelivery
                 PrecoVenda = ConvertToDouble(txtPrecoVenda.Text),
                 Status = status,
                 MargemLucro = ConvertToDouble(txtMargemLucro.Text),
-                Id = idProduct,
+                Uid = txtIdProduto.Text,
             };
             
-            _produtoController.Save(product, txtIdProduto.Text.Equals("0") ? "new" : "edit");
-            
+            var item = await _produtoController.Save(product, txtIdProduto.Text.Equals("0") ? "new" : "edit");
             if (!_produtoController.MessageError.Equals(""))
             {
                 MessageBox.Show($@"Erro ao salvar produto. {_produtoController.MessageError}");
+                lbl_loading_produto.Visible = false;
+                GeraLog.PrintError(_produtoController.MessageError);
                 return;
             }
-            
-            _products.Add(product);
-            
-            txtIdProduto.Text = idProduct.ToString();
-            
+
+            if (txtIdProduto.Text.Equals("0"))
+                _products.Add(product);
+
+            txtIdProduto.Text = item.Uid;
+            lbl_loading_produto.Visible = false;
+
             MessageBox.Show(@"Salvo com sucesso!","Sucesso", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 

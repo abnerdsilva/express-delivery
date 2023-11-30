@@ -1,7 +1,7 @@
 package delivery.model.dao;
 
 public class ProdutoDao {
-    private int codProduto;
+    private String codProduto;
     private String codBarras;
     private String nome;
     private String categoria;
@@ -17,11 +17,11 @@ public class ProdutoDao {
 
     public ProdutoDao(){}
 
-    public int getCodProduto() {
+    public String getCodProduto() {
         return codProduto;
     }
 
-    public void setCodProduto(int codProduto) {
+    public void setCodProduto(String codProduto) {
         this.codProduto = codProduto;
     }
 
@@ -86,6 +86,9 @@ public class ProdutoDao {
     }
 
     public void setLocalizacao(String localizacao) {
+        if (localizacao == null) {
+            localizacao = "";
+        }
         this.localizacao = localizacao;
     }
 
@@ -118,6 +121,9 @@ public class ProdutoDao {
     }
 
     public void setObservacao(String observacao) {
+        if (observacao == null) {
+            observacao = "";
+        }
         this.observacao = observacao;
     }
 }

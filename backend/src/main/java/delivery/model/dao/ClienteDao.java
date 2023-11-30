@@ -3,7 +3,7 @@ package delivery.model.dao;
 import delivery.model.ClienteDelivery;
 
 public class ClienteDao {
-    private long codCliente;
+    private String codCliente;
     private String nome;
     private String telefone;
     private String email;
@@ -20,11 +20,11 @@ public class ClienteDao {
     private String dataAtualizacao;
     private String observacao;
 
-    public long getCodCliente() {
+    public String getCodCliente() {
         return codCliente;
     }
 
-    public void setCodCliente(long codCliente) {
+    public void setCodCliente(String codCliente) {
         this.codCliente = codCliente;
     }
 
@@ -150,7 +150,7 @@ public class ClienteDao {
 
     public ClienteDelivery clientDaoToClienteDelivery() {
         ClienteDelivery clienteDelivery = new ClienteDelivery();
-        clienteDelivery.setCodCliente(Long.valueOf(this.getCodCliente()).intValue());
+        clienteDelivery.setCodCliente(this.getCodCliente());
         clienteDelivery.setDocumento(this.getCpf());
         clienteDelivery.setTelefone(this.getTelefone());
         clienteDelivery.setBairro(this.getBairro());

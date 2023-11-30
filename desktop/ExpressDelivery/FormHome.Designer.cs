@@ -45,13 +45,13 @@ namespace ExpressDelivery
             this.panelHomeBody = new System.Windows.Forms.Panel();
             this.panelSideMenu.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelSideMenu
             // 
             this.panelSideMenu.AutoScroll = true;
-            this.panelSideMenu.BackColor = System.Drawing.SystemColors.Desktop;
+            this.panelSideMenu.BackColor = System.Drawing.SystemColors.ControlDark;
             this.panelSideMenu.Controls.Add(this.lbl_idOperador);
             this.panelSideMenu.Controls.Add(this.label1);
             this.panelSideMenu.Controls.Add(this.btnFormUsuarios);
@@ -62,7 +62,7 @@ namespace ExpressDelivery
             this.panelSideMenu.Controls.Add(this.btnFormDashbord);
             this.panelSideMenu.Controls.Add(this.panel1);
             this.panelSideMenu.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelSideMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.panelSideMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelSideMenu.Location = new System.Drawing.Point(0, 0);
             this.panelSideMenu.Name = "panelSideMenu";
             this.panelSideMenu.Size = new System.Drawing.Size(200, 729);
@@ -213,7 +213,7 @@ namespace ExpressDelivery
             this.panelSideMenu.ResumeLayout(false);
             this.panelSideMenu.PerformLayout();
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
         }
 

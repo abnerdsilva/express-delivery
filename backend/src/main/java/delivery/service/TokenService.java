@@ -3,6 +3,7 @@ package delivery.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import delivery.model.dao.UsuarioDao;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,6 +20,7 @@ public class TokenService {
                 .withIssuer("auth-api")
                 .withSubject(usuario.getUsuario())
                 .withClaim("id", usuario.getId())
+                .withClaim("type", usuario.getTipoUsuario())
                 .withExpiresAt(getExpirationDate())
                 .sign(Algorithm.HMAC256(SECRET_KEY));
     }
@@ -37,5 +39,14 @@ public class TokenService {
                 .build()
                 .verify(token)
                 .getSubject();
+    }
+
+    public String getUserTokenId() {
+        var userDetails = (UsuarioDao) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        return userDetails.getId();
     }
 }

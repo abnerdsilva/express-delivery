@@ -143,11 +143,11 @@ public class ImprimeController {
                         List<PedidoItemDelivery> itens = new ArrayList<>();
                         List<PedidoItemDao> itensPedido = pedidoRepository.loadItensByCode(p.getCodPedido());
                         for (PedidoItemDao it : itensPedido) {
-                            ProdutoDao produtoDao = produtoRepository.loadById(String.valueOf(it.getCodProduto()));
+                            ProdutoDao produtoDao = produtoRepository.loadByCode(String.valueOf(it.getCodProduto()));
 
                             PedidoItemDelivery item = new PedidoItemDelivery();
                             item.setNome(produtoDao.getNome());
-                            item.setCodExterno(Integer.toString(it.getCodProduto()));
+                            item.setCodExterno(it.getCodProduto());
                             item.setObservacao(it.getObservacao());
                             item.setQuantidade(it.getQuantidade());
                             item.setVrDesconto(0);
@@ -158,10 +158,10 @@ public class ImprimeController {
                             itens.add(item);
                         }
 
-                        ClienteDao clienteDao = clienteRepository.loadById(p.getCodCliente());
+                        ClienteDao clienteDao = clienteRepository.loadByCode(p.getCodCliente());
                         ClienteDelivery clienteDelivery = new ClienteDelivery();
                         clienteDelivery.setNome(clienteDao.getNome());
-                        clienteDelivery.setCodCliente((int) clienteDao.getCodCliente());
+                        clienteDelivery.setCodCliente(clienteDao.getCodCliente());
                         clienteDelivery.setDocumento(clienteDao.getCpf());
                         clienteDelivery.setBairro(clienteDao.getBairro());
                         clienteDelivery.setLogradouro(clienteDao.getLogradouro());

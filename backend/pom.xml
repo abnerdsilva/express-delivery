@@ -75,8 +75,8 @@
             <uniqueVersion>false</uniqueVersion>
             <id>myrepository</id>
             <name>Local repository</name>
-<!--            <url>file://C:\Users\abner\.m2\repository</url>-->
-            <url>/home/azureuser/.m2/repository</url>
+            <url>file://E:\PROJETOS\.m2\repository</url>
+<!--            <url>/home/azureuser/.m2/repository</url>-->
             <layout>default</layout>
         </repository>
     </distributionManagement>

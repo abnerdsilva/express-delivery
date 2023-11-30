@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using ExpressDelivery.Models;
 using ExpressDelivery.Repository;
 
@@ -7,19 +9,29 @@ namespace ExpressDelivery.Controllers
     {
         public bool Status;
         public string Message = "";
-        
-        public Usuario Acessar(string login, string password)
+
+        public async Task<Usuario> Acessar(string login, string password)
         {
-            LoginRepository loginDao = new LoginRepository();
-            var usuario = loginDao.VerificaLogin(login, password);
-            if (loginDao.Message.Equals("") && loginDao.Status)
+            try
             {
+                LoginRepository loginDao = new LoginRepository();
+                var usuario = await loginDao.Login(login, password);
+                if (!loginDao.Message.Equals("") && !loginDao.Status)
+                {
+                    Message = "Usuário e/ou senha inválido";
+                    GeraLog.PrintError(Message);
+                    return null;
+                }
+
                 Status = true;
                 return usuario;
             }
-
-            Message = loginDao.Message;
-            return null;
+            catch (Exception e)
+            {
+                GeraLog.PrintError(e.Message);
+                Message = e.Message;
+                return null;
+            }
         }
     }
 }

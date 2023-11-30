@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using ExpressDelivery.Models;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
+using Newtonsoft.Json;
 
 namespace ExpressDelivery.Repository
 {
@@ -9,206 +13,125 @@ namespace ExpressDelivery.Repository
     {
         public string Message = "";
 
-        private readonly SqlCommand _cmd = new SqlCommand();
+        private readonly MySqlCommand _cmd = new MySqlCommand();
         private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
-        private SqlDataReader _dr;
+        private MySqlDataReader _dr;
 
-        public List<Client> LoadAll()
+        public async Task<List<Client>> LoadAll()
         {
             List<Client> clients = new List<Client>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_CLIENTE;";
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + "/v1/clients").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var clientsJson = JsonConvert.DeserializeObject<List<Client>>(result);
+                if (clientsJson == null)
                 {
-                    var client = new Client
-                    {
-                        Id = Convert.ToInt16(_dr["COD_CLIENTE"]),
-                        Nome = _dr["NOME"].ToString(),
-                        Telefone = _dr["TELEFONE"].ToString(),
-                        Endereco = _dr["LOGRADOURO"].ToString(),
-                        Numero = Convert.ToInt16(_dr["NUMERO"]),
-                        Bairro = _dr["BAIRRO"].ToString(),
-                        Cidade = _dr["CIDADE"].ToString(),
-                        Estado = _dr["ESTADO"].ToString(),
-                        CEP = _dr["CEP"].ToString(),
-                        Email = _dr["EMAIL"].ToString(),
-                        Status = Convert.ToInt16(_dr["STATUS_CLIENTE"]),
-                        CPF = _dr["CPF"].ToString(),
-                        RG = _dr["RG"].ToString(),
-                        Observacao = _dr["OBSERVACAO"].ToString()
-                    };
-
-                    clients.Add(client);
+                    throw new Exception("falha na conversão dos clientes");
                 }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+
+                clients.AddRange(clientsJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
-            }
-            finally
-            {
-                _con.Disconnect();
             }
 
             return clients;
         }
 
-        public List<Client> LoadByName(string name)
+        public async Task<List<Client>> LoadByName(string name)
         {
             List<Client> clients = new List<Client>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_CLIENTE WHERE NOME LIKE '%{name}%';";
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + $"/v1/clients?name={name}").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var clientsJson = JsonConvert.DeserializeObject<List<Client>>(result);
+                if (clientsJson == null)
                 {
-                    var client = new Client
-                    {
-                        Id = Convert.ToInt16(_dr["COD_CLIENTE"]),
-                        Nome = _dr["NOME"].ToString(),
-                        Telefone = _dr["TELEFONE"].ToString(),
-                        Endereco = _dr["LOGRADOURO"].ToString(),
-                        Status = Convert.ToInt16(_dr["STATUS_CLIENTE"]),
-                    };
-
-                    clients.Add(client);
+                    throw new Exception("falha na conversão dos clientes");
                 }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                return null;
+                
+                clients.AddRange(clientsJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                return null;
-            }
-            finally
-            {
-                _con.Disconnect();
+                GeraLog.PrintError(e.Message);
+                throw;
             }
 
             return clients;
         }
 
-        public List<Client> LoadById(string id)
+        public async Task<List<Client>> LoadById(string id)
         {
             List<Client> clients = new List<Client>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_CLIENTE WHERE COD_CLIENTE={id};";
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + $"/v1/client/{id}").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var clientJson = JsonConvert.DeserializeObject<Client>(result);
+                if (clientJson == null)
                 {
-                    var client = new Client
-                    {
-                        Id = Convert.ToInt16(_dr["COD_CLIENTE"]),
-                        Nome = _dr["NOME"].ToString(),
-                        Telefone = _dr["TELEFONE"].ToString(),
-                        Endereco = _dr["LOGRADOURO"].ToString(),
-                        Status = Convert.ToInt16(_dr["STATUS_CLIENTE"]),
-                    };
-
-                    clients.Add(client);
+                    throw new Exception("falha na conversão do cliente");
                 }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                return null;
+
+                clients.Add(clientJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
-                return null;
-            }
-            finally
-            {
-                _con.Disconnect();
+                GeraLog.PrintError(e.Message);
+                throw;
             }
 
             return clients;
         }
 
-        public Client LoadByPhone(string phone)
+        public async Task<Client> LoadByPhone(string phone)
         {
-            var client = new Client();
-
-            _cmd.CommandText = $"SELECT * FROM TB_CLIENTE WHERE TELEFONE='{phone}';";
+            Client client;
 
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + $"/v1/client?phone={phone}").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var clientsJson = JsonConvert.DeserializeObject<Client>(result);
+                if (clientsJson == null)
                 {
-                    client.Id = Convert.ToInt16(_dr["COD_CLIENTE"]);
-                    client.Nome = _dr["NOME"].ToString();
-                    client.Telefone = _dr["TELEFONE"].ToString();
-                    client.Endereco = _dr["LOGRADOURO"].ToString();
-                    client.Numero = Convert.ToInt16(_dr["NUMERO"]);
-                    client.Bairro = _dr["BAIRRO"].ToString();
-                    client.Cidade = _dr["CIDADE"].ToString();
-                    client.Estado = _dr["ESTADO"].ToString();
-                    client.CEP = _dr["CEP"].ToString();
-                    client.Email = _dr["EMAIL"].ToString();
-                    client.Status = Convert.ToInt16(_dr["STATUS_CLIENTE"]);
-                    client.CPF = _dr["CPF"].ToString();
-                    client.RG = _dr["RG"].ToString();
-                    client.Observacao = _dr["OBSERVACAO"].ToString();
+                    throw new Exception("falha na conversão do cliente");
                 }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+
+                client = clientsJson;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
-            }
-            finally
-            {
-                _con.Disconnect();
             }
 
             return client;
         }
 
-        public int LastClientId()
+        public int LastClientIdOld()
         {
-            _cmd.CommandText = $"SELECT MAX(COD_CLIENTE) AS LAST_ID FROM TB_CLIENTE;";
+            _cmd.CommandText = $"SELECT MAX(ID) AS LAST_ID FROM TB_CLIENTE;";
 
             var lastId = 0;
 
@@ -223,9 +146,10 @@ namespace ExpressDelivery.Repository
                         lastId = Convert.ToInt16(_dr["LAST_ID"]);
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
+                GeraLog.PrintError(e.Message);
                 Message = e.Message;
                 throw;
             }
@@ -233,6 +157,7 @@ namespace ExpressDelivery.Repository
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
             finally
@@ -243,48 +168,65 @@ namespace ExpressDelivery.Repository
             return lastId;
         }
 
-        public int Save(Client client, string type)
+        public async Task<Client> Create(Client client)
         {
-            if (type == "new")
-            {
-                _cmd.CommandText =
-                    $"INSERT INTO TB_CLIENTE (NOME, TELEFONE, CPF, LOGRADOURO, NUMERO, BAIRRO, CIDADE, ESTADO, CEP," +
-                    $" STATUS_CLIENTE, RG, EMAIL, OBSERVACAO) VALUES ('{client.Nome}', '{client.Telefone}', '{client.CPF}'," +
-                    $" '{client.Endereco}', {client.Numero}, '{client.Bairro}', '{client.Cidade}', '{client.Estado}'," +
-                    $" '{client.CEP}', {client.Status}, '{client.RG}', '{client.Email}', '{client.Observacao}');";
-            }
-            else
-            {
-                _cmd.CommandText =
-                    $"UPDATE TB_CLIENTE SET NOME='{client.Nome}', TELEFONE='{client.Telefone}', CPF='{client.CPF}'," +
-                    $" LOGRADOURO='{client.Endereco}', NUMERO='{client.Numero}', BAIRRO='{client.Bairro}'," +
-                    $" CIDADE='{client.Cidade}', ESTADO='{client.Estado}', CEP='{client.CEP}'," +
-                    $" STATUS_CLIENTE='{client.Status}', RG='{client.RG}', EMAIL='{client.Email}'," +
-                    $" DATA_ATUALIZACAO='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', OBSERVACAO='{client.Observacao}'" +
-                    $" WHERE COD_CLIENTE={client.Id};";
-            }
-
+            Client newClient;
             try
             {
-                _cmd.Connection = _con.Connect();
-                return _cmd.ExecuteNonQuery();
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+                var json = JsonConvert.SerializeObject(client);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = ConfigHttp.client.PostAsync($"{ConfigHttp.BaseUrl}/v1/client", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                var clientJson = JsonConvert.DeserializeObject<Client>(result);
+                if (clientJson == null)
+                {
+                    return null;
+                }
+
+                newClient = clientJson;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
-            finally
+
+            return newClient;
+        }
+
+        public async Task<Client> Update(Client client)
+        {
+            Client editedClient;
+
+            try
             {
-                _con.Disconnect();
+                var json = JsonConvert.SerializeObject(client);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/client/{client.Id}", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                var clientJson = JsonConvert.DeserializeObject<Client>(result);
+                if (clientJson == null)
+                {
+                    return null;
+                }
+
+                editedClient = clientJson;
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                GeraLog.PrintError(e.Message);
+                throw;
+            }
+
+            return editedClient;
         }
     }
 }

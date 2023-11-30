@@ -9,7 +9,6 @@ namespace ExpressDelivery
 {
     public partial class FormBairroTaxa : Form
     {
-
         private readonly BairroController _bairroController = new BairroController();
 
         private List<Bairro> _bairros = new List<Bairro>();
@@ -34,6 +33,8 @@ namespace ExpressDelivery
             {
                 Nome = txtBairro.Text,
                 VrTaxa = Convert.ToDouble(txtVrTaxa.Text),
+                Id = txtIdBairro.Text,
+                Status = 1
             };
 
             var resp = _bairroController.Save(bairro, "new");
@@ -77,11 +78,11 @@ namespace ExpressDelivery
 
         private void listBairros_DoubleClick(object sender, EventArgs e)
         {
-            var idBairroSeleiconado = Convert.ToInt16(listBairros.SelectedItems[0].SubItems[0].Text);
+            var idBairroSeleiconado = listBairros.SelectedItems[0].SubItems[0].Text;
             var bairro = _bairros.Single(pedido1 => pedido1.Id.Equals(idBairroSeleiconado));
 
             txtBairro.Text = bairro.Nome;
-            txtIdBairro.Text = bairro.Id.ToString();
+            txtIdBairro.Text = bairro.Id;
             txtVrTaxa.Text = bairro.VrTaxa.ToString("0.00");
         }
 
@@ -98,7 +99,7 @@ namespace ExpressDelivery
             listBairros.Columns.Add("Nome", 210, HorizontalAlignment.Left);
             listBairros.Columns.Add("Vr Taxa", 80, HorizontalAlignment.Center);
 
-            foreach(var bairro in _bairros)
+            foreach (var bairro in _bairros)
             {
                 ListViewItem items = new ListViewItem(bairro.Id.ToString());
                 items.SubItems.Add(bairro.Nome);

@@ -17,14 +17,16 @@ namespace ExpressDelivery
             {
                 txtLoginSenha.Focus();
                 MessageBox.Show(@"Usuário e/ou senha inválido(s)", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("Usuário e/ou senha inválido(s)");
                 return;
             }
 
             LoginController controle = new LoginController();
-            var usuario = controle.Acessar(txtLoginUsuario.Text, txtLoginSenha.Text);
-            if (usuario == null)
+            var usuario = controle.Acessar(txtLoginUsuario.Text, txtLoginSenha.Text).Result;
+            if (usuario == null || controle.Message != "")
             {
                 MessageBox.Show(controle.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError(controle.Message);
                 return;
             }
 

@@ -19,6 +19,8 @@ namespace ExpressDelivery
 
         private void btnPesquisar_Click(object sender, EventArgs e)
         {
+            lbl_client_loading.Visible = true;
+
             listClientes.Clear();
             _clients.Clear();
 
@@ -47,11 +49,13 @@ namespace ExpressDelivery
             }
 
             _clients.FindAll(c => c.Status == statusClientes).ForEach(AddItemLista);
+            
+            lbl_client_loading.Visible = false;
         }
 
         private void AddItemLista(Client client)
         {
-            ListViewItem items = new ListViewItem(client.Id.ToString());
+            ListViewItem items = new ListViewItem(client.Id);
             items.SubItems.Add(client.Nome);
             items.SubItems.Add(client.Telefone);
             items.SubItems.Add(client.Email);
@@ -115,7 +119,7 @@ namespace ExpressDelivery
             var client = new Client();
             foreach (var c in _clients)
             {
-                if (c.Id != int.Parse(idClient)) continue;
+                if (c.Id != idClient) continue;
                 client = c;
                 break;
             }
@@ -150,49 +154,53 @@ namespace ExpressDelivery
             if (radioAtivo.Checked)
                 status = 1;
 
-            var idClient = _clientController.LastClientId() + 1;
-            if (!txtIdClient.Text.Equals("0"))
-                idClient = Convert.ToInt16(txtIdClient.Text);
-
             if (txtNome.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo nome é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo nome é obrigatório.");
                 return;
             }
 
             if (txtCEP.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo cep é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo cep é obrigatório.");
                 return;
             }
 
             if (txtEndereco.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo endereço é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo endereço é obrigatório.");
                 return;
             }
 
             if (txtNumero.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo número é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo número é obrigatório.");
                 return;
             }
 
             if (txtBairro.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo bairro é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo bairro é obrigatório.");
                 return;
             }
 
             if (txtTelefone.Text.Equals(""))
             {
                 MessageBox.Show(@"O campo telefone é obrigatório.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GeraLog.PrintError("O campo telefone é obrigatório.");
                 return;
             }
 
             var cpf = txtCPF.Text;
             if (!cpf.Equals(""))
                 cpf = Convert.ToUInt64(txtCPF.Text.Replace(".", "").Replace("-", "")).ToString(@"000\.000\.000\-00");
+
+            lbl_client_loading.Visible = true;
 
             var client = new Client
             {
@@ -209,20 +217,22 @@ namespace ExpressDelivery
                 Email = txtEmail.Text,
                 Estado = cmbEstado.Text,
                 Observacao = txtInfoAdicional.Text,
-                Id = idClient,
+                Id = txtIdClient.Text,
             };
 
-            _clientController.Save(client, txtIdClient.Text.Equals("0") ? "new" : "edit");
+            var item = _clientController.Save(client, txtIdClient.Text.Equals("0") ? "new" : "edit");
 
             if (!_clientController.MessageError.Equals(""))
             {
                 MessageBox.Show($@"Erro ao salvar cliente. {_clientController.MessageError}");
+                GeraLog.PrintError(_clientController.MessageError);
                 return;
             }
 
             _clients.Add(client);
 
-            txtIdClient.Text = idClient.ToString();
+            txtIdClient.Text = item.Id;
+            lbl_client_loading.Visible = false;
 
             MessageBox.Show(@"Salvo com sucesso!");
         }

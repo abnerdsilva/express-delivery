@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Globalization;
 using ExpressDelivery.Models;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
 
 namespace ExpressDelivery.Repository
 {
@@ -12,11 +12,11 @@ namespace ExpressDelivery.Repository
     {
         public string Message = "";
 
-        private readonly SqlCommand _cmd = new SqlCommand();
+        private readonly MySqlCommand _cmd = new MySqlCommand();
         private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
         private readonly ConnectionDbRepository _con2 = new ConnectionDbRepository();
-        private SqlDataReader _dr;
-        private SqlDataReader _dr2;
+        private MySqlDataReader _dr;
+        private MySqlDataReader _dr2;
 
         public int LoadLastOrderId()
         {
@@ -35,16 +35,18 @@ namespace ExpressDelivery.Repository
                         lastId = Convert.ToInt16(_dr["LAST_ID"]);
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
             finally
@@ -96,7 +98,7 @@ namespace ExpressDelivery.Repository
                         {
                             Id = Convert.ToInt16(_dr2["COD_PEDIDO_ITEM"]),
                             CodPedido = Convert.ToInt16(_dr2["COD_PEDIDO"]),
-                            CodProduto = Convert.ToInt16(_dr2["COD_PRODUTO"]),
+                            CodProduto = Convert.ToString(_dr2["COD_PRODUTO"]),
                             Nome = _dr2["NOME"].ToString(),
                             Observacao = _dr2["OBSERVACAO"].ToString(),
                             VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
@@ -110,7 +112,7 @@ namespace ExpressDelivery.Repository
                     pedido = new Pedido
                     {
                         Id = Convert.ToInt16(_dr["COD_PEDIDO"]),
-                        CodCliente = Convert.ToInt16(_dr["COD_CLIENTE"]),
+                        CodCliente = _dr["COD_CLIENTE"].ToString(),
                         Nome = _dr["NOME"].ToString(),
                         Origem = _dr["ORIGEM"].ToString(),
                         TipoPedido = _dr["TIPO_PEDIDO"].ToString(),
@@ -137,16 +139,18 @@ namespace ExpressDelivery.Repository
                     _con2.Disconnect();
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             finally
@@ -201,7 +205,7 @@ namespace ExpressDelivery.Repository
                         {
                             Id = Convert.ToInt16(_dr2["COD_PEDIDO_ITEM"]),
                             CodPedido = Convert.ToInt16(_dr2["COD_PEDIDO"]),
-                            CodProduto = Convert.ToInt16(_dr2["COD_PRODUTO"]),
+                            CodProduto = Convert.ToString(_dr2["COD_PRODUTO"]),
                             Nome = _dr2["NOME"].ToString(),
                             Observacao = _dr2["OBSERVACAO"].ToString(),
                             VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
@@ -215,7 +219,7 @@ namespace ExpressDelivery.Repository
                     pedido = new Pedido
                     {
                         Id = Convert.ToInt16(_dr["COD_PEDIDO"]),
-                        CodCliente = Convert.ToInt16(_dr["COD_CLIENTE"]),
+                        CodCliente = _dr["COD_CLIENTE"].ToString(),
                         Nome = _dr["NOME"].ToString(),
                         Origem = _dr["ORIGEM"].ToString(),
                         TipoPedido = _dr["TIPO_PEDIDO"].ToString(),
@@ -242,16 +246,18 @@ namespace ExpressDelivery.Repository
                     break;
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             finally
@@ -305,7 +311,7 @@ namespace ExpressDelivery.Repository
                         {
                             Id = Convert.ToInt16(_dr2["COD_PEDIDO_ITEM"]),
                             CodPedido = Convert.ToInt16(_dr2["COD_PEDIDO"]),
-                            CodProduto = Convert.ToInt16(_dr2["COD_PRODUTO"]),
+                            CodProduto = Convert.ToString(_dr2["COD_PRODUTO"]),
                             Nome = _dr2["NOME"].ToString(),
                             Observacao = _dr2["OBSERVACAO"].ToString(),
                             VrTotal = Convert.ToDouble(_dr2["VR_TOTAL"]),
@@ -319,7 +325,7 @@ namespace ExpressDelivery.Repository
                     pedido = new Pedido
                     {
                         Id = Convert.ToInt16(_dr["COD_PEDIDO"]),
-                        CodCliente = Convert.ToInt16(_dr["COD_CLIENTE"]),
+                        CodCliente = _dr["COD_CLIENTE"].ToString(),
                         Nome = _dr["NOME"].ToString(),
                         Origem = _dr["ORIGEM"].ToString(),
                         TipoPedido = _dr["TIPO_PEDIDO"].ToString(),
@@ -345,16 +351,18 @@ namespace ExpressDelivery.Repository
                     _con2.Disconnect();
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             finally
@@ -385,16 +393,18 @@ namespace ExpressDelivery.Repository
                     ret = "Ped: " + idPedido + " -> " + dataPedido;
                 }
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return null;
             }
             finally
@@ -410,15 +420,15 @@ namespace ExpressDelivery.Repository
             var nextOrderId = 0;
             var connectionString = ConfigurationManager.ConnectionStrings["DatabaseConnectionString"].ConnectionString;
 
-            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            using (MySqlConnection oConnection = new MySqlConnection(connectionString))
             {
                 oConnection.Open();
-                using (SqlTransaction oTransaction = oConnection.BeginTransaction())
+                using (MySqlTransaction oTransaction = oConnection.BeginTransaction())
                 {
                     var nfi = new NumberFormatInfo();
                     nfi.NumberDecimalSeparator = ".";
 
-                    using (SqlCommand oCommand = oConnection.CreateCommand())
+                    using (MySqlCommand oCommand = oConnection.CreateCommand())
                     {
                         oCommand.Transaction = oTransaction;
                         oCommand.CommandType = CommandType.Text;
@@ -461,15 +471,17 @@ namespace ExpressDelivery.Repository
                             else
                                 nextOrderId = order.Id;
                         }
-                        catch (SqlException e)
+                        catch (MySqlException e)
                         {
                             Message = e.Message;
+                            GeraLog.PrintError(e.Message);
                             return -1;
                         }
                         catch (Exception e)
                         {
                             oTransaction.Rollback();
                             Message = e.Message;
+                            GeraLog.PrintError(e.Message);
                             return -1;
                         }
                         finally
@@ -478,7 +490,7 @@ namespace ExpressDelivery.Repository
                         }
                     }
 
-                    using (SqlCommand oCommand = oConnection.CreateCommand())
+                    using (MySqlCommand oCommand = oConnection.CreateCommand())
                     {
                         oCommand.Transaction = oTransaction;
                         oCommand.CommandType = CommandType.Text;
@@ -499,15 +511,17 @@ namespace ExpressDelivery.Repository
                                 }
                             }
                         }
-                        catch (SqlException e)
+                        catch (MySqlException e)
                         {
                             Message = e.Message;
+                            GeraLog.PrintError(e.Message);
                             return -1;
                         }
                         catch (Exception e)
                         {
                             oTransaction.Rollback();
                             Message = e.Message;
+                            GeraLog.PrintError(e.Message);
                             return -1;
                         }
                         finally
@@ -532,16 +546,18 @@ namespace ExpressDelivery.Repository
                 _cmd.Connection = _con.Connect();
                 value = _cmd.ExecuteNonQuery();
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return -1;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 return -1;
             }
             finally

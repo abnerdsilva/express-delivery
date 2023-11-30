@@ -43,6 +43,7 @@ namespace ExpressDelivery
             this.btnPesquisar = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.panelDetalheCardapio = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
             this.cmbUnMedida = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
             this.txtLocalizacao = new System.Windows.Forms.TextBox();
@@ -51,7 +52,6 @@ namespace ExpressDelivery
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.txtCodBarras = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.txtPrecoCompra = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.txtPrecoVenda = new System.Windows.Forms.TextBox();
@@ -69,6 +69,7 @@ namespace ExpressDelivery
             this.radioProdutoInativo = new System.Windows.Forms.RadioButton();
             this.radioProdutoAtivo = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lbl_loading_produto = new System.Windows.Forms.Label();
             this.painelConsultaCardapio.SuspendLayout();
             this.panelDetalheCardapio.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -77,7 +78,7 @@ namespace ExpressDelivery
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label1.Location = new System.Drawing.Point(12, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 33);
@@ -102,11 +103,9 @@ namespace ExpressDelivery
             // 
             // cmbTipoPesquisa
             // 
-            this.cmbTipoPesquisa.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbTipoPesquisa.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.cmbTipoPesquisa.FormattingEnabled = true;
-            this.cmbTipoPesquisa.Items.AddRange(new object[] {
-            "Descrição",
-            "ID Produto"});
+            this.cmbTipoPesquisa.Items.AddRange(new object[] {"Descrição", "ID Produto"});
             this.cmbTipoPesquisa.Location = new System.Drawing.Point(541, 25);
             this.cmbTipoPesquisa.Name = "cmbTipoPesquisa";
             this.cmbTipoPesquisa.Size = new System.Drawing.Size(166, 24);
@@ -115,7 +114,7 @@ namespace ExpressDelivery
             // 
             // txtDescricao
             // 
-            this.txtDescricao.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDescricao.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtDescricao.Location = new System.Drawing.Point(6, 25);
             this.txtDescricao.Name = "txtDescricao";
             this.txtDescricao.Size = new System.Drawing.Size(403, 22);
@@ -123,11 +122,9 @@ namespace ExpressDelivery
             // 
             // cmbStatusPesquisa
             // 
-            this.cmbStatusPesquisa.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbStatusPesquisa.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.cmbStatusPesquisa.FormattingEnabled = true;
-            this.cmbStatusPesquisa.Items.AddRange(new object[] {
-            "Ativo",
-            "Inativo"});
+            this.cmbStatusPesquisa.Items.AddRange(new object[] {"Ativo", "Inativo"});
             this.cmbStatusPesquisa.Location = new System.Drawing.Point(420, 25);
             this.cmbStatusPesquisa.Name = "cmbStatusPesquisa";
             this.cmbStatusPesquisa.Size = new System.Drawing.Size(113, 24);
@@ -147,7 +144,7 @@ namespace ExpressDelivery
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label4.Location = new System.Drawing.Point(538, 9);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 16);
@@ -157,7 +154,7 @@ namespace ExpressDelivery
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label3.Location = new System.Drawing.Point(417, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(45, 16);
@@ -191,7 +188,7 @@ namespace ExpressDelivery
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label2.Location = new System.Drawing.Point(3, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 16);
@@ -231,13 +228,21 @@ namespace ExpressDelivery
             this.panelDetalheCardapio.TabIndex = 4;
             this.panelDetalheCardapio.Visible = false;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label8.Location = new System.Drawing.Point(6, 54);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(100, 16);
+            this.label8.TabIndex = 46;
+            this.label8.Text = "Código Barras*";
+            // 
             // cmbUnMedida
             // 
-            this.cmbUnMedida.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbUnMedida.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.cmbUnMedida.FormattingEnabled = true;
-            this.cmbUnMedida.Items.AddRange(new object[] {
-            "UN",
-            "KG"});
+            this.cmbUnMedida.Items.AddRange(new object[] {"UN", "KG"});
             this.cmbUnMedida.Location = new System.Drawing.Point(637, 126);
             this.cmbUnMedida.Name = "cmbUnMedida";
             this.cmbUnMedida.Size = new System.Drawing.Size(136, 24);
@@ -247,7 +252,7 @@ namespace ExpressDelivery
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label14.Location = new System.Drawing.Point(634, 107);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(82, 16);
@@ -256,7 +261,7 @@ namespace ExpressDelivery
             // 
             // txtLocalizacao
             // 
-            this.txtLocalizacao.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLocalizacao.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtLocalizacao.Location = new System.Drawing.Point(314, 180);
             this.txtLocalizacao.Name = "txtLocalizacao";
             this.txtLocalizacao.Size = new System.Drawing.Size(459, 22);
@@ -264,7 +269,7 @@ namespace ExpressDelivery
             // 
             // txtMargemLucro
             // 
-            this.txtMargemLucro.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMargemLucro.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtMargemLucro.Location = new System.Drawing.Point(203, 241);
             this.txtMargemLucro.Name = "txtMargemLucro";
             this.txtMargemLucro.Size = new System.Drawing.Size(177, 22);
@@ -272,7 +277,7 @@ namespace ExpressDelivery
             // 
             // txtObservacao
             // 
-            this.txtObservacao.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtObservacao.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtObservacao.Location = new System.Drawing.Point(12, 305);
             this.txtObservacao.Multiline = true;
             this.txtObservacao.Name = "txtObservacao";
@@ -282,7 +287,7 @@ namespace ExpressDelivery
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label13.Location = new System.Drawing.Point(9, 286);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(83, 16);
@@ -292,7 +297,7 @@ namespace ExpressDelivery
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label11.Location = new System.Drawing.Point(311, 161);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(81, 16);
@@ -301,25 +306,15 @@ namespace ExpressDelivery
             // 
             // txtCodBarras
             // 
-            this.txtCodBarras.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCodBarras.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtCodBarras.Location = new System.Drawing.Point(9, 73);
             this.txtCodBarras.Name = "txtCodBarras";
             this.txtCodBarras.Size = new System.Drawing.Size(206, 22);
             this.txtCodBarras.TabIndex = 47;
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(6, 54);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(100, 16);
-            this.label8.TabIndex = 46;
-            this.label8.Text = "Código Barras*";
-            // 
             // txtPrecoCompra
             // 
-            this.txtPrecoCompra.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPrecoCompra.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtPrecoCompra.Location = new System.Drawing.Point(11, 241);
             this.txtPrecoCompra.Name = "txtPrecoCompra";
             this.txtPrecoCompra.Size = new System.Drawing.Size(168, 22);
@@ -328,7 +323,7 @@ namespace ExpressDelivery
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label12.Location = new System.Drawing.Point(8, 222);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(100, 16);
@@ -337,7 +332,7 @@ namespace ExpressDelivery
             // 
             // txtPrecoVenda
             // 
-            this.txtPrecoVenda.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPrecoVenda.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtPrecoVenda.Location = new System.Drawing.Point(401, 241);
             this.txtPrecoVenda.Name = "txtPrecoVenda";
             this.txtPrecoVenda.Size = new System.Drawing.Size(174, 22);
@@ -346,7 +341,7 @@ namespace ExpressDelivery
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label9.Location = new System.Drawing.Point(398, 222);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(87, 16);
@@ -356,7 +351,7 @@ namespace ExpressDelivery
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label10.Location = new System.Drawing.Point(200, 222);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(94, 16);
@@ -365,7 +360,7 @@ namespace ExpressDelivery
             // 
             // txtCategoria
             // 
-            this.txtCategoria.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCategoria.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtCategoria.Location = new System.Drawing.Point(11, 180);
             this.txtCategoria.Name = "txtCategoria";
             this.txtCategoria.Size = new System.Drawing.Size(283, 22);
@@ -374,7 +369,7 @@ namespace ExpressDelivery
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label7.Location = new System.Drawing.Point(8, 161);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(72, 16);
@@ -383,7 +378,7 @@ namespace ExpressDelivery
             // 
             // txtNome
             // 
-            this.txtNome.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNome.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtNome.Location = new System.Drawing.Point(11, 126);
             this.txtNome.Name = "txtNome";
             this.txtNome.Size = new System.Drawing.Size(607, 22);
@@ -392,7 +387,7 @@ namespace ExpressDelivery
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label6.Location = new System.Drawing.Point(8, 107);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(50, 16);
@@ -401,7 +396,7 @@ namespace ExpressDelivery
             // 
             // btnVoltarProduto
             // 
-            this.btnVoltarProduto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVoltarProduto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.btnVoltarProduto.Location = new System.Drawing.Point(687, 10);
             this.btnVoltarProduto.Name = "btnVoltarProduto";
             this.btnVoltarProduto.Size = new System.Drawing.Size(87, 23);
@@ -412,7 +407,7 @@ namespace ExpressDelivery
             // 
             // btnNovoProduto
             // 
-            this.btnNovoProduto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNovoProduto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.btnNovoProduto.Location = new System.Drawing.Point(501, 10);
             this.btnNovoProduto.Name = "btnNovoProduto";
             this.btnNovoProduto.Size = new System.Drawing.Size(87, 23);
@@ -423,7 +418,7 @@ namespace ExpressDelivery
             // 
             // btnSalvarProduto
             // 
-            this.btnSalvarProduto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSalvarProduto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.btnSalvarProduto.Location = new System.Drawing.Point(594, 10);
             this.btnSalvarProduto.Name = "btnSalvarProduto";
             this.btnSalvarProduto.Size = new System.Drawing.Size(87, 23);
@@ -435,7 +430,7 @@ namespace ExpressDelivery
             // txtIdProduto
             // 
             this.txtIdProduto.Enabled = false;
-            this.txtIdProduto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtIdProduto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.txtIdProduto.Location = new System.Drawing.Point(79, 12);
             this.txtIdProduto.Name = "txtIdProduto";
             this.txtIdProduto.Size = new System.Drawing.Size(88, 22);
@@ -444,7 +439,7 @@ namespace ExpressDelivery
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label5.Location = new System.Drawing.Point(5, 15);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(71, 16);
@@ -454,7 +449,7 @@ namespace ExpressDelivery
             // radioProdutoInativo
             // 
             this.radioProdutoInativo.AutoSize = true;
-            this.radioProdutoInativo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioProdutoInativo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.radioProdutoInativo.Location = new System.Drawing.Point(243, 14);
             this.radioProdutoInativo.Name = "radioProdutoInativo";
             this.radioProdutoInativo.Size = new System.Drawing.Size(65, 20);
@@ -466,7 +461,7 @@ namespace ExpressDelivery
             // radioProdutoAtivo
             // 
             this.radioProdutoAtivo.AutoSize = true;
-            this.radioProdutoAtivo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioProdutoAtivo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.radioProdutoAtivo.Location = new System.Drawing.Point(185, 14);
             this.radioProdutoAtivo.Name = "radioProdutoAtivo";
             this.radioProdutoAtivo.Size = new System.Drawing.Size(56, 20);
@@ -477,12 +472,27 @@ namespace ExpressDelivery
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lbl_loading_produto);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(792, 63);
             this.panel1.TabIndex = 5;
+            // 
+            // lbl_loading_produto
+            // 
+            this.lbl_loading_produto.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_loading_produto.AutoSize = true;
+            this.lbl_loading_produto.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.lbl_loading_produto.ForeColor = System.Drawing.Color.Red;
+            this.lbl_loading_produto.Location = new System.Drawing.Point(646, 22);
+            this.lbl_loading_produto.Name = "lbl_loading_produto";
+            this.lbl_loading_produto.Size = new System.Drawing.Size(143, 25);
+            this.lbl_loading_produto.TabIndex = 3;
+            this.lbl_loading_produto.Text = "Carregando...";
+            this.lbl_loading_produto.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbl_loading_produto.Visible = false;
             // 
             // FormCardapio
             // 
@@ -501,8 +511,11 @@ namespace ExpressDelivery
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-
         }
+
+        private System.Windows.Forms.Label lbl_loading_produto;
+
+        private System.Windows.Forms.Label label15;
 
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox cmbUnMedida;

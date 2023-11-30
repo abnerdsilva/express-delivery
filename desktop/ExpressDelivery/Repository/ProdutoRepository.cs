@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using ExpressDelivery.Models;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
+using Newtonsoft.Json;
 
 namespace ExpressDelivery.Repository
 {
@@ -9,237 +13,182 @@ namespace ExpressDelivery.Repository
     {
         public string Message = "";
 
-        private readonly SqlCommand _cmd = new SqlCommand();
+        private readonly MySqlCommand _cmd = new MySqlCommand();
         private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
-        private SqlDataReader _dr;
+        private MySqlDataReader _dr;
         
-        public List<Product> LoadAll()
+        public async Task<List<Product>> LoadAll()
         {
             var products = new List<Product>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_PRODUTO WHERE STATUS_PRODUTO=1;";
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + "/v1/products").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var productsJson = JsonConvert.DeserializeObject<List<Product>>(result);
+                if (productsJson == null)
                 {
-                    var product = new Product
-                    {
-                        Id = Convert.ToInt16(_dr["COD_PRODUTO"]),
-                        Status = Convert.ToInt16(_dr["STATUS_PRODUTO"]),
-                        CodBarras = _dr["COD_BARRAS"].ToString(),
-                        Descricao = _dr["NOME"].ToString(),
-                        Categoria = _dr["CATEGORIA"].ToString(),
-                        PrecoCompra = Convert.ToDouble(_dr["VR_COMPRA"]),
-                        PrecoVenda = Convert.ToDouble(_dr["VR_UNITARIO"]),
-                        MargemLucro = Convert.ToDouble(_dr["MARGEM_LUCRO"]),
-                        UnMedida = _dr["UN_MEDIDA"].ToString(),
-                        Localizacao = _dr["LOCALIZACAO"].ToString(),
-                        Observacao = _dr["OBSERVACAO"].ToString(),
-                    };
-
-                    products.Add(product);
+                    GeraLog.PrintError("falha na conversão dos produtos");
+                    throw new Exception("falha na conversão dos produtos");
                 }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+
+                products.AddRange(productsJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
-            }
-            finally
-            {
-                _con.Disconnect();
             }
 
             return products;
         }
 
-        public List<Product> LoadByName(string name)
+        public async Task<List<Product>> LoadByName(string name)
         {
             List<Product> products = new List<Product>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_PRODUTO WHERE NOME LIKE '%{name}%';";
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync($"{ConfigHttp.BaseUrl}/v1/products?name={name}").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var productsJson = JsonConvert.DeserializeObject<List<Product>>(result);
+                if (productsJson == null)
                 {
-                    var product = new Product
-                    {
-                        Id = Convert.ToInt16(_dr["COD_PRODUTO"]),
-                        Descricao = _dr["NOME"].ToString(),
-                        PrecoCompra = Convert.ToDouble(_dr["VR_COMPRA"]),
-                        UnMedida = _dr["UN_MEDIDA"].ToString(),
-                        PrecoVenda = Convert.ToDouble(_dr["VR_UNITARIO"]),
-                        Status = Convert.ToInt16(_dr["STATUS_PRODUTO"]),
-                    };
-
-                    products.Add(product);
+                    throw new Exception("falha na conversão dos produtos");
                 }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+
+                products.AddRange(productsJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
-            }
-            finally
-            {
-                _con.Disconnect();
             }
 
             return products;
         }
 
-        public List<Product> LoadById(string id)
+        public async Task<List<Product>> LoadById(string id)
         {
             var products = new List<Product>();
 
-            _cmd.CommandText = $"SELECT * FROM TB_PRODUTO WHERE COD_PRODUTO LIKE '%{id}%';";
-
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync($"{ConfigHttp.BaseUrl}/v1/product/{id}").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var productsJson = JsonConvert.DeserializeObject<Product>(result);
+                if (productsJson == null)
                 {
-                    var product = new Product
-                    {
-                        Id = Convert.ToInt16(_dr["COD_PRODUTO"]),
-                        Status = Convert.ToInt16(_dr["STATUS_PRODUTO"]),
-                        Descricao = _dr["NOME"].ToString(),
-                        PrecoCompra = Convert.ToDouble(_dr["VR_COMPRA"]),
-                        UnMedida = _dr["UN_MEDIDA"].ToString(),
-                        PrecoVenda = Convert.ToDouble(_dr["VR_UNITARIO"]),
-                    };
-
-                    products.Add(product);
+                    return products;
                 }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+
+                products.Add(productsJson);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
-            }
-            finally
-            {
-                _con.Disconnect();
             }
 
             return products;
         }
         
-        public int LastProductId()
+        public async Task<Product> LastProductId()
         {
-            _cmd.CommandText = $"SELECT MAX(COD_PRODUTO) AS LAST_ID FROM TB_PRODUTO;";
-
-            var lastId = 0;
+            var product = new Product();
 
             try
             {
-                _cmd.Connection = _con.Connect();
-                _dr = _cmd.ExecuteReader();
+                var response = ConfigHttp.client.GetAsync($"{ConfigHttp.BaseUrl}/v1/product?mode=lastProduct").Result;
+                var result = await response.Content.ReadAsStringAsync();
 
-                while (_dr.Read())
+                var productJson = JsonConvert.DeserializeObject<Product>(result);
+                if (productJson == null)
                 {
-                    if (_dr["LAST_ID"] != DBNull.Value)
-                        lastId = Convert.ToInt16(_dr["LAST_ID"]);
+                    return product;
                 }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+
+                product = productJson;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
-            finally
-            {
-                _con.Disconnect();
-            }
 
-            return lastId;
+            return product;
         }
         
-        public int Save(Product product, string type)
+        public async Task<Product> Create(Product product)
         {
-            var precoCompra = product.PrecoCompra.ToString().Replace(",", ".");
-            var vrUnitario = product.PrecoVenda.ToString().Replace(",", ".");
-            var margemLucro = product.MargemLucro.ToString().Replace(",", ".");
-
-            if (type == "new")
-            {
-                _cmd.CommandText =
-                    $"INSERT INTO TB_PRODUTO (NOME, CATEGORIA, VR_COMPRA, VR_UNITARIO, LOCALIZACAO, STATUS_PRODUTO," +
-                    $" MARGEM_LUCRO, UN_MEDIDA, OBSERVACAO, COD_BARRAS) VALUES ('{product.Descricao}'," +
-                    $" '{product.Categoria}', {precoCompra}, {vrUnitario}, '{product.Localizacao}'," +
-                    $" {product.Status}, {margemLucro}, '{product.UnMedida}', '{product.Observacao}'," +
-                    $" '{product.CodBarras}');";
-            }
-            else
-            {
-                _cmd.CommandText =
-                    $"UPDATE TB_PRODUTO SET NOME='{product.Descricao}', CATEGORIA='{product.Categoria}'," +
-                    $" VR_COMPRA={precoCompra}, VR_UNITARIO={vrUnitario}, LOCALIZACAO='{product.Localizacao}'," +
-                    $" STATUS_PRODUTO={product.Status}, MARGEM_LUCRO={margemLucro}, UN_MEDIDA='{product.UnMedida}'," +
-                    $" OBSERVACAO='{product.Observacao}', COD_BARRAS='{product.CodBarras}'," +
-                    $" DATA_ATUALIZACAO='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' WHERE COD_PRODUTO={product.Id};";
-            }
-
+            Product newProduct;
             try
             {
-                _cmd.Connection = _con.Connect();
-                return _cmd.ExecuteNonQuery();
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                throw;
+                var json = JsonConvert.SerializeObject(product);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+            
+                var response = ConfigHttp.client.PostAsync($"{ConfigHttp.BaseUrl}/v1/product", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                var productJson = JsonConvert.DeserializeObject<Product>(result);
+                if (productJson == null)
+                {
+                    return null;
+                }
+
+                newProduct = productJson;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
+                GeraLog.PrintError(e.Message);
                 throw;
             }
-            finally
-            {
-                _con.Disconnect();
-            }
+            
+            return newProduct;
         }
 
+        public async Task<Product> Update(Product product)
+        {
+            Product editedProduct;
+
+            try
+            {
+                var json = JsonConvert.SerializeObject(product);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+            
+                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/product/{product.Uid}", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                var productJson = JsonConvert.DeserializeObject<Product>(result);
+                if (productJson == null)
+                {
+                    return null;
+                }
+
+                editedProduct = productJson;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                GeraLog.PrintError(e.Message);
+                throw;
+            }
+
+            return editedProduct;
+        }
     }
 }

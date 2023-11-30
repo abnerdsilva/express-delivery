@@ -6,7 +6,7 @@ namespace ExpressDelivery.Models
     public class Pedido
     {
         public int Id { get; set; }
-        public int CodCliente { get; set; }
+        public string CodCliente { get; set; }
         public string Nome { get; set; }
         public string StatusPedido { get; set; }
         public DateTime DataPedido { get; set; }
@@ -17,7 +17,7 @@ namespace ExpressDelivery.Models
         public double VrTroco { get; set; }
         public string Logradouro { get; set; }
         public int Numero { get; set; }
-        public int IdOperador { get; set; }
+        public string IdOperador { get; set; }
         public string Bairro { get; set; }
         public string Cidade { get; set; }
         public string Estado { get; set; }
@@ -33,7 +33,7 @@ namespace ExpressDelivery.Models
     {
         public int Id { get; set; }
         public int CodPedido { get; set; }
-        public int CodProduto { get; set; }
+        public string CodProduto { get; set; }
         public string Nome { get; set; }
         public double Quantidade { get; set; }
         public double VrUnitario { get; set; }
