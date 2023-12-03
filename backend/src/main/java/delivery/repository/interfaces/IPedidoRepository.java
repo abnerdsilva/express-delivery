@@ -9,7 +9,7 @@ import java.util.List;
 public interface IPedidoRepository {
     List<PedidoItemDao> loadItensByCode(String code);
 
-    int loadMaxOrder() throws SQLException;
+    PedidoDao loadMaxOrder() throws SQLException;
 
     String saveOrder(PedidoDao pedido);
 
@@ -25,11 +25,19 @@ public interface IPedidoRepository {
 
     List<PedidoDao> findAllByDate(String start, String end);
 
+    List<PedidoDao> findAllByDateAndStatus(String start, String end, String status);
+
     List<PedidoDao> findAllByIntegracaoIfood();
+
+    List<PedidoDao> getOrdersByIdAndStatus(String status, int id);
+
+    List<PedidoDao> getOrdersByStatus(String status);
 
     PedidoDao getOrderById(int id);
 
     PedidoDao getOrderByCode(String code);
 
     int updateStatusOrder(int id, String status);
+
+    int updateOrder(PedidoDao order);
 }

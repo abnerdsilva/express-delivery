@@ -95,7 +95,7 @@ public class AppDelivery {
             pedidoItemDelivery.setQuantidade(1);
             pedidoItemDelivery.setVrDesconto(0);
             pedidoItemDelivery.setVrAdicional(0);
-            pedidoItemDelivery.setVrUnit(15.587);
+            pedidoItemDelivery.setVrUnitario(15.587);
             pedidoItemDelivery.setVrTotal(15.587);
 
             itens.add(pedidoItemDelivery);
@@ -118,7 +118,7 @@ public class AppDelivery {
 
         PedidoDelivery pedidoDelivery = new PedidoDelivery();
         pedidoDelivery.setCodPedido(uid.toString());
-        pedidoDelivery.setDataCriacao(now.format(dtf));
+        pedidoDelivery.setDataPedido(now.format(dtf));
         pedidoDelivery.setAgendado(false);
         pedidoDelivery.setDataEntrega("2022/04/22 23:58:00");
         pedidoDelivery.setObservacao("sem observação");

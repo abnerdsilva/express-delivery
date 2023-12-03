@@ -26,7 +26,7 @@ namespace ExpressDelivery.Controllers
                 throw;
             }
         }
-        
+
         public List<Pedido> LoadAll()
         {
             MessageError = "";
@@ -34,7 +34,7 @@ namespace ExpressDelivery.Controllers
             MessageError = _pedidoRepository.Message;
             return resp;
         }
-        
+
         public List<Pedido> LoadByCode(int code, string status)
         {
             MessageError = "";
@@ -42,7 +42,7 @@ namespace ExpressDelivery.Controllers
             MessageError = _pedidoRepository.Message;
             return resp;
         }
-        
+
         public List<Pedido> LoadByDate(string inicio, string fim, string status)
         {
             var resp = _pedidoRepository.LoadByDate(inicio, fim, status).Result;
@@ -59,14 +59,25 @@ namespace ExpressDelivery.Controllers
 
         public int SaveOrder(Pedido order, string type)
         {
-            var resp = _pedidoRepository.SaveOrder(order, type).Result;
+            int resp;
+            if (type.Equals("new"))
+                resp = _pedidoRepository.SaveOrder(order, type).Result;
+            else
+                resp = _pedidoRepository.UpdateOrder(order).Result;
             MessageError = _pedidoRepository.Message;
             return resp;
         }
-        
-        public int UpdateOrder(string status, int id)
+
+        public int UpdateStatusOrder(int id)
         {
-            var resp = _pedidoRepository.UpdateOrder(status, id);
+            var resp = _pedidoRepository.UpdateStatusOrder(id).Result;
+            MessageError = _pedidoRepository.Message;
+            return resp;
+        }
+
+        public int CancelOrder(int id)
+        {
+            var resp = _pedidoRepository.CancelOrder(id).Result;
             MessageError = _pedidoRepository.Message;
             return resp;
         }

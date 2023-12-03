@@ -12,6 +12,7 @@ public class PedidoItemDao {
     private double vrTotal;
     private String observacao;
     private String nome;
+    private int statusEditar;
 
     public PedidoItemDao() {
     }
@@ -88,10 +89,18 @@ public class PedidoItemDao {
         return codExterno;
     }
 
+    public void setStatusEditar(int status) {
+        this.statusEditar = status;
+    }
+
+    public int getStatusEditar() {
+        return statusEditar;
+    }
+
     public PedidoItemDelivery itemDaoToItemDelivery() {
         PedidoItemDelivery itemDelivery = new PedidoItemDelivery();
         itemDelivery.setId(this.getCodProduto());
-        itemDelivery.setVrUnit(this.getVrUnitario());
+        itemDelivery.setVrUnitario(this.getVrUnitario());
         itemDelivery.setQuantidade(this.getQuantidade());
         itemDelivery.setObservacao(this.getObservacao());
         itemDelivery.setVrTotal(this.getVrTotal());

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using ExpressDelivery.Controllers;
 using ExpressDelivery.Models;
@@ -26,13 +26,13 @@ namespace ExpressDelivery
         private Product _productSelected = new Product();
         private List<Product> _products = new List<Product>();
         private List<PedidoItem> _pedidoItens = new List<PedidoItem>();
+        private List<PedidoItem> _pedidoItensNew = new List<PedidoItem>();
         private List<Bairro> _bairros = new List<Bairro>();
         private double _vrTotalPedido;
+        private Pedido _orderSelected;
 
         private void FormPedido_Load(object sender, EventArgs e)
         {
-            _bairros = _bairroController.LoadAll();
-
             ClearClient();
             ClearOrder();
 
@@ -86,6 +86,7 @@ namespace ExpressDelivery
             _products.Clear();
             _productSelected = null;
             _pedidoItens.Clear();
+            _pedidoItensNew.Clear();
             _clientSelected = null;
             _vrTotalPedido = 0.0;
             lblNrPedido.Text = "0";
@@ -243,6 +244,8 @@ namespace ExpressDelivery
         private void btnSalvarCliente_Click(object sender, EventArgs e)
         {
             if (!VerificaCamposObrigatorios()) return;
+            
+            lblFormPedidoAguarde.Visible = true;
 
             var clientId = "";
             var city = "";
@@ -289,6 +292,7 @@ namespace ExpressDelivery
             }
 
             _products = _produtoController.LoadAll();
+            cmbDescricaoProduto.Items.Clear();
             _products.ForEach(product => cmbDescricaoProduto.Items.Add(product.Descricao));
 
             var clienteCadastrado = _clientController.LoadByPhone(client.Telefone);
@@ -299,7 +303,7 @@ namespace ExpressDelivery
             }
 
             _clientSelected = clienteCadastrado;
-            txtIdCliente.Text = clienteCadastrado.Id.ToString();
+            txtIdCliente.Text = clienteCadastrado.Id;
 
             InicializaPedido();
 
@@ -309,6 +313,8 @@ namespace ExpressDelivery
             txtVrTaxaEntrega.Text = txtTaxaEntrega.Text;
 
             txtCodBarras.Focus();
+            
+            lblFormPedidoAguarde.Visible = false;
         }
 
         private void InicializaPedido()
@@ -484,9 +490,9 @@ namespace ExpressDelivery
 
             try
             {
-                var lastOrder = _pedidoController.LoadLastOrderId();
-                if (!lblNrPedido.Text.Equals("0"))
-                    lastOrder.Id = Convert.ToInt16(lblNrPedido.Text);
+                // var lastOrder = _pedidoController.LoadLastOrderId();
+                // if (!lblNrPedido.Text.Equals("0"))
+                //     lastOrder.Id = Convert.ToInt16(lblNrPedido.Text);
 
                 var qtde = Convert.ToInt16(txtQtde.Text);
                 var vrTotalItem = _productSelected.PrecoVenda * qtde;
@@ -506,10 +512,11 @@ namespace ExpressDelivery
                     Quantidade = qtde,
                     Observacao = txtObservacaoProduto.Text,
                     VrTotal = vrTotalItem,
-                    CodPedido = lastOrder.CodPedido,
+                    CodPedido = _orderSelected?.CodPedido,
                 };
 
                 _pedidoItens.Add(item);
+                _pedidoItensNew.Add(item);
 
                 listProdutos.Items.Add(items);
 
@@ -565,6 +572,8 @@ namespace ExpressDelivery
                 return;
             }
 
+            lblFormPedidoAguarde.Visible = true;
+            
             var vrTotal = 0.00;
             _pedidoItens.ForEach(item => vrTotal += item.VrTotal);
 
@@ -573,9 +582,12 @@ namespace ExpressDelivery
             var vrTaxa = Convert.ToDouble(txtVrTaxaEntrega.Text);
             var formaPagamento = cmbFormaPagamento.Text;
 
+            var codPedido = _orderSelected?.CodPedido;
+
             var order = new Pedido
             {
                 Id = orderId,
+                CodPedido = codPedido,
                 IdOperador = User.Id,
                 Bairro = _clientSelected.Bairro,
                 Cidade = _clientSelected.Cidade,
@@ -592,7 +604,7 @@ namespace ExpressDelivery
                 VrTotal = vrTotal,
                 VrTroco = vrTroco,
                 VrTaxa = vrTaxa,
-                Itens = _pedidoItens,
+                Itens = orderId == 0 ? _pedidoItens : _pedidoItensNew,
                 CEP = _clientSelected.CEP,
                 FormaPagamento = formaPagamento,
             };
@@ -609,6 +621,8 @@ namespace ExpressDelivery
                     MessageBoxIcon.None);
                 LimpaTelaPedidoConcluido();
             }
+            
+            lblFormPedidoAguarde.Visible = false;
         }
 
         private void LimpaTelaPedidoConcluido()
@@ -632,16 +646,30 @@ namespace ExpressDelivery
             ClearClient();
             ClearOrder();
 
+            timer_notificaPedidoAberto.Enabled = false;
+            timer_notificaPedidoAberto.Stop();
+
             using (var formPedidos = new FormPedidos())
             {
                 formPedidos.ShowDialog();
+
+                timer_notificaPedidoAberto.Enabled = true;
+                timer_notificaPedidoAberto.Start();
+
                 if (formPedidos.PedidoSelecionado != null)
+                {
                     CarregaPedidoSelecionado(formPedidos.PedidoSelecionado);
+                    _orderSelected = formPedidos.PedidoSelecionado;
+                }
+                else
+                    _orderSelected = null;
             }
         }
 
         private void CarregaPedidoSelecionado(Pedido pedido)
         {
+            lblFormPedidoAguarde.Visible = true;
+            
             InicializaPedido();
 
             // Carrega dados pedido
@@ -668,6 +696,9 @@ namespace ExpressDelivery
             _vrTotalPedido = pedido.VrTaxa + pedido.VrTotal;
 
             _products = _produtoController.LoadAll();
+            cmbDescricaoProduto.Items.Clear();
+            _products.ForEach(product => cmbDescricaoProduto.Items.Add(product.Descricao));
+
             foreach (var item in pedido.Itens)
             {
                 CarregaItensPedidoSelecionado(item);
@@ -676,23 +707,23 @@ namespace ExpressDelivery
             // Carrega dados cliente
             panelClient.Enabled = false;
 
-            var cliente = _clientController.LoadById(pedido.CodCliente.ToString()).First();
+            // var cliente = _clientController.LoadById(pedido.Cliente.Id).First();
             _clientSelected = new Client
             {
-                Id = pedido.CodCliente,
-                Nome = pedido.Nome,
-                Telefone = cliente.Telefone,
-                Endereco = pedido.Logradouro,
-                Bairro = pedido.Bairro,
-                Cidade = cliente.Cidade,
-                Email = cliente.Email,
-                Estado = cliente.Estado,
-                Numero = pedido.Numero,
+                Id = pedido.Cliente.Id,
+                Nome = pedido.Cliente.Nome,
+                Telefone = pedido.Cliente.Telefone,
+                Endereco = pedido.Cliente.Endereco,
+                Bairro = pedido.Cliente.Bairro,
+                Cidade = pedido.Cliente.Cidade,
+                Email = pedido.Cliente.Email,
+                Estado = pedido.Cliente.Estado,
+                Numero = pedido.Cliente.Numero,
                 Observacao = pedido.Observacao,
-                Status = cliente.Status,
-                RG = cliente.RG,
-                CEP = pedido.CEP,
-                CPF = cliente.CPF,
+                Status = pedido.Cliente.Status,
+                RG = pedido.Cliente.RG,
+                CEP = pedido.Cliente.CEP,
+                CPF = pedido.Cliente.CPF,
             };
 
             txtNome.Text = _clientSelected.Nome;
@@ -703,7 +734,9 @@ namespace ExpressDelivery
             txtCEP.Text = pedido.CEP;
             txtEndereco.Text = pedido.Logradouro;
             txtObservacaoCliente.Text = pedido.Observacao;
-            txtIdCliente.Text = cliente.Id.ToString();
+            txtIdCliente.Text = pedido.Cliente.Id;
+            
+            lblFormPedidoAguarde.Visible = false;
         }
 
         private void CarregaItensPedidoSelecionado(PedidoItem pedidoItem)
@@ -743,8 +776,13 @@ namespace ExpressDelivery
             {
                 formBairro.ShowDialog();
 
+                lblFormPedidoAguarde.Visible = true;
+                _bairros = _bairroController.LoadAll();
+
                 ClearClient();
                 ClearOrder();
+                
+                lblFormPedidoAguarde.Visible = false;
             }
         }
 
@@ -779,7 +817,7 @@ namespace ExpressDelivery
             }
         }
 
-        private void timer_notificaPedidoAberto_Tick(object sender, EventArgs e)
+        private void threadLoadOpenedPending()
         {
             var pedidoAberto = _pedidoController.LoadPedidosAberto();
             if (pedidoAberto != null)
@@ -800,6 +838,19 @@ namespace ExpressDelivery
                 lbl_notificaPedidoAberto.BackColor = Color.Transparent;
                 lbl_notificaPedidoAberto.Text = "";
             }
+        }
+
+        private void timer_notificaPedidoAberto_Tick(object sender, EventArgs e)
+        {
+            var thre = new Thread(threadLoadOpenedPending);
+            thre.Start();
+        }
+
+        private void FormPedido_Shown(object sender, EventArgs e)
+        {
+            lblFormPedidoAguarde.Visible = true;
+            _bairros = _bairroController.LoadAll();
+            lblFormPedidoAguarde.Visible = false;
         }
     }
 }

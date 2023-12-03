@@ -22,7 +22,6 @@ namespace ExpressDelivery
             }
 
             var message = "[" + formatedDateTime + "][ERROR] " + value;
-
             return Print(path, message);
         }
 
