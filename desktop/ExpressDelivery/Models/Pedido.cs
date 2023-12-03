@@ -72,20 +72,40 @@ namespace ExpressDelivery.Models
         [JsonProperty("formaPagamento")]
         public string FormaPagamento { get; set; }
         
+        [JsonProperty("cliente")]
+        public Client Cliente { get; set; }
+        
         [JsonProperty("itens")]
         public List<PedidoItem> Itens { get; set; }
     }
 
     public class PedidoItem
     {
+        [JsonProperty("id")]
         public string Id { get; set; }
+        
+        [JsonProperty("codPedido")]
         public string CodPedido { get; set; }
+        
+        [JsonProperty("codProduto")]
         public string CodProduto { get; set; }
+        
+        [JsonProperty("nome")]
         public string Nome { get; set; }
+        
+        [JsonProperty("quantidade")]
         public double Quantidade { get; set; }
+        
+        [JsonProperty("vrUnitario")]
         public double VrUnitario { get; set; }
+        
+        [JsonProperty("vrTotal")]
         public double VrTotal { get; set; }
+        
+        [JsonProperty("observacao")]
         public string Observacao { get; set; }
+        
+        [JsonProperty("statusEditar")]
         public int StatusEditar { get; set; }
     }
 }

@@ -35,15 +35,17 @@ namespace ExpressDelivery
             cmbStatusPedidoData.Items.Clear();
             cmbStatusPedidoCodigo.Items.Clear();
             cmbStatusPedidoData.Items.Add("ABERTO");
-            cmbStatusPedidoData.Items.Add("BAIXADO");
+            cmbStatusPedidoData.Items.Add("CONFIRMADO");
+            cmbStatusPedidoData.Items.Add("DESPACHADO");
+            cmbStatusPedidoData.Items.Add("CONCLUIDO");
             cmbStatusPedidoData.Items.Add("CANCELADO");
             cmbStatusPedidoData.Items.Add("TODOS");
             cmbStatusPedidoCodigo.Items.Add("ABERTO");
-            cmbStatusPedidoCodigo.Items.Add("BAIXADO");
+            cmbStatusPedidoCodigo.Items.Add("CONFIRMADO");
+            cmbStatusPedidoCodigo.Items.Add("DESPACHADO");
+            cmbStatusPedidoCodigo.Items.Add("CONCLUIDO");
             cmbStatusPedidoCodigo.Items.Add("CANCELADO");
             cmbStatusPedidoCodigo.Items.Add("TODOS");
-
-            CarregaDadosPedidos();
         }
 
         private void CarregaListaPedidos()
@@ -63,24 +65,25 @@ namespace ExpressDelivery
             foreach (var pedido in _pedidos)
             {
                 var items = new ListViewItem(pedido.Id.ToString());
-                items.SubItems.Add(pedido.Nome);
+                items.SubItems.Add(pedido.Cliente.Nome);
                 items.SubItems.Add(pedido.DataPedido.ToString("dd/MM/yyy"));
                 items.SubItems.Add(pedido.Origem);
                 items.SubItems.Add(pedido.StatusPedido);
                 items.SubItems.Add((pedido.VrTotal + pedido.VrTaxa).ToString("0.00"));
 
-                if (pedido.StatusPedido == "CANCELADO")
+                if (pedido.StatusPedido.ToUpper() == "CANCELADO")
                     items.ForeColor = Color.Red;
-                else if (pedido.StatusPedido == "BAIXADO")
+                else if (pedido.StatusPedido.ToUpper() == "CONCLUIDO")
                     items.ForeColor = Color.Green;
-                else if (pedido.Origem.Equals("IFOOD") && pedido.StatusPedido.Equals("ABERTO") &&
+                else if (pedido.Origem.Equals("IFOOD") && pedido.StatusPedido.ToUpper().Equals("ABERTO") &&
                          pedido.DataAtualizacao.ToString().Contains("00:00:00"))
                     items.BackColor = Color.OrangeRed;
 
                 listPedidos.Items.Add(items);
             }
 
-            if (!_statusPedidoSelecionado.ToUpper().Equals("CONCLUIDO") && !_statusPedidoSelecionado.ToUpper().Equals("CANCELADO"))
+            if (!_statusPedidoSelecionado.ToUpper().Equals("FECHADO") && !_statusPedidoSelecionado.ToUpper().Equals("CONCLUIDO") &&
+                !_statusPedidoSelecionado.ToUpper().Equals("CANCELADO"))
             {
                 btnBaixarPedido.Visible = true;
                 btnCancelaPedido.Visible = true;
@@ -130,6 +133,9 @@ namespace ExpressDelivery
         {
             _pedidos?.Clear();
             listPedidos.Clear();
+            listDetalhePedido.Clear();
+
+            lblAguarde.Visible = true;
 
             if (_localBusca.Equals("DATA"))
                 _pedidos = _pedidoController.LoadByDate(dtInicio.Value.ToString("yyyy-MM-dd"),
@@ -139,10 +145,12 @@ namespace ExpressDelivery
             else
                 _pedidos = _pedidoController.LoadAll();
 
-                if (!_pedidoController.MessageError.Equals(""))
+            if (!_pedidoController.MessageError.Equals(""))
                 MessageBox.Show(_pedidoController.MessageError);
             else if (_pedidos != null)
                 CarregaListaPedidos();
+
+            lblAguarde.Visible = false;
         }
 
         private void listPedidos_SelectedIndexChanged(object sender, EventArgs e)
@@ -170,7 +178,7 @@ namespace ExpressDelivery
                     var pedido = _pedidos.Single(pedido1 => pedido1.Id.Equals(_idPedidoSelecionado));
                     foreach (var item in pedido.Itens)
                     {
-                        var items = new ListViewItem(item.CodProduto.ToString());
+                        var items = new ListViewItem(item.Id);
                         items.SubItems.Add(item.Nome);
                         items.SubItems.Add(item.Quantidade.ToString("0"));
                         items.SubItems.Add(item.VrUnitario.ToString("0.00"));
@@ -179,6 +187,15 @@ namespace ExpressDelivery
 
                         listDetalhePedido.Items.Add(items);
                     }
+
+                    var nomeBotao = "Concluir";
+                    var index = listPedidos.SelectedItems[0].SubItems[4].Text;
+                    if (index.ToUpper() == "ABERTO")
+                        nomeBotao = "Confirmar";
+                    else if (index.ToUpper() == "CONFIRMADO")
+                        nomeBotao = "Despachar";
+
+                    btnBaixarPedido.Text = $"{nomeBotao} pedido";
                 }
             }
             catch (Exception exception)
@@ -195,6 +212,8 @@ namespace ExpressDelivery
             {
                 btnBaixarPedido.Visible = false;
                 btnCancelaPedido.Visible = false;
+
+                listDetalhePedido.Clear();
             }
         }
 
@@ -202,38 +221,77 @@ namespace ExpressDelivery
         {
             var index = listPedidos.SelectedItems[0].SubItems[0].Text;
             PedidoSelecionado = _pedidos.Single(pedido1 => pedido1.Id.Equals(Convert.ToInt16(index)));
-            if (PedidoSelecionado.StatusPedido.Equals("BAIXADO") || PedidoSelecionado.StatusPedido.Equals("CANCELADO")) return;
+            if (PedidoSelecionado.StatusPedido.ToUpper().Equals("DESPACHADO") || PedidoSelecionado.StatusPedido.ToUpper().Equals("CONCLUIDO") ||
+                PedidoSelecionado.StatusPedido.ToUpper().Equals("CANCELADO")) return;
             Dispose();
         }
 
         private void btnBaixarPedido_Click(object sender, EventArgs e)
         {
-            var atualizado = _pedidoController.UpdateOrder("BAIXADO", _idPedidoSelecionado);
+            lblAguarde.Visible = true;
+
+            var atualizado = _pedidoController.UpdateStatusOrder(_idPedidoSelecionado);
             if (!_pedidoController.MessageError.Equals(""))
                 MessageBox.Show(_pedidoController.MessageError, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else if (atualizado > 0)
             {
-                CarregaDadosPedidos();
+                // CarregaDadosPedidos();
+
+                var status = "Concluido";
+                var nomeBotao = "Concluir";
+                var index = listPedidos.SelectedItems[0].SubItems[4].Text;
+                if (index.ToUpper() == "ABERTO")
+                {
+                    status = "Confirmado";
+                    nomeBotao = "Confirmar";
+                }
+                else if (index.ToUpper() == "CONFIRMADO")
+                {
+                    status = "Despachado";
+                    nomeBotao = "Despachar";
+                }
+
+                listPedidos.SelectedItems[0].SubItems[4].Text = status;
 
                 btnCancelaPedido.Visible = false;
                 btnBaixarPedido.Visible = false;
-                MessageBox.Show(@"Pedido baixado com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.None);
+                btnBaixarPedido.Text = $"{nomeBotao} pedido";
+
+                listDetalhePedido.Clear();
+
+                MessageBox.Show(@"Status do pedido atualizado com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.None);
             }
+
+            lblAguarde.Visible = false;
         }
 
         private void btnCancelaPedido_Click(object sender, EventArgs e)
         {
-            var atualizado = _pedidoController.UpdateOrder("CANCELADO", _idPedidoSelecionado);
+            lblAguarde.Visible = true;
+
+            var atualizado = _pedidoController.CancelOrder(_idPedidoSelecionado);
             if (!_pedidoController.MessageError.Equals(""))
                 MessageBox.Show(_pedidoController.MessageError, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else if (atualizado > 0)
             {
-                CarregaDadosPedidos();
+                // CarregaDadosPedidos();
+
+                listPedidos.SelectedItems[0].SubItems[4].Text = "CANCELADO";
 
                 btnCancelaPedido.Visible = false;
                 btnBaixarPedido.Visible = false;
+
+                listDetalhePedido.Clear();
+
                 MessageBox.Show(@"Pedido cancelado com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.None);
             }
+
+            lblAguarde.Visible = false;
+        }
+
+        private void FormPedidos_Shown(object sender, EventArgs e)
+        {
+            CarregaDadosPedidos();
         }
     }
 }

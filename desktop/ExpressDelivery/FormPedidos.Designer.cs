@@ -32,6 +32,7 @@ namespace ExpressDelivery
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblAguarde = new System.Windows.Forms.Label();
             this.btnBuscarTodosDoDia = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -64,6 +65,7 @@ namespace ExpressDelivery
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lblAguarde);
             this.panel1.Controls.Add(this.btnBuscarTodosDoDia);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -71,6 +73,18 @@ namespace ExpressDelivery
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(792, 63);
             this.panel1.TabIndex = 1;
+            // 
+            // lblAguarde
+            // 
+            this.lblAguarde.AutoSize = true;
+            this.lblAguarde.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAguarde.ForeColor = System.Drawing.Color.Red;
+            this.lblAguarde.Location = new System.Drawing.Point(341, 25);
+            this.lblAguarde.Name = "lblAguarde";
+            this.lblAguarde.Size = new System.Drawing.Size(122, 29);
+            this.lblAguarde.TabIndex = 2;
+            this.lblAguarde.Text = "Aguarde...";
+            this.lblAguarde.Visible = false;
             // 
             // btnBuscarTodosDoDia
             // 
@@ -112,11 +126,7 @@ namespace ExpressDelivery
             // cmbStatusPedidoCodigo
             // 
             this.cmbStatusPedidoCodigo.FormattingEnabled = true;
-            this.cmbStatusPedidoCodigo.Items.AddRange(new object[] {
-            "TODOS",
-            "ABERTO",
-            "BAIXADO",
-            "CANCELADO"});
+            this.cmbStatusPedidoCodigo.Items.AddRange(new object[] { "TODOS", "ABERTO", "BAIXADO", "CANCELADO" });
             this.cmbStatusPedidoCodigo.Location = new System.Drawing.Point(142, 34);
             this.cmbStatusPedidoCodigo.Name = "cmbStatusPedidoCodigo";
             this.cmbStatusPedidoCodigo.Size = new System.Drawing.Size(101, 21);
@@ -178,11 +188,7 @@ namespace ExpressDelivery
             // cmbStatusPedidoData
             // 
             this.cmbStatusPedidoData.FormattingEnabled = true;
-            this.cmbStatusPedidoData.Items.AddRange(new object[] {
-            "TODOS",
-            "ABERTO",
-            "BAIXADO",
-            "CANCELADO"});
+            this.cmbStatusPedidoData.Items.AddRange(new object[] { "TODOS", "ABERTO", "BAIXADO", "CANCELADO" });
             this.cmbStatusPedidoData.Location = new System.Drawing.Point(310, 35);
             this.cmbStatusPedidoData.Name = "cmbStatusPedidoData";
             this.cmbStatusPedidoData.Size = new System.Drawing.Size(89, 21);
@@ -350,6 +356,7 @@ namespace ExpressDelivery
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FormPedidos";
             this.Load += new System.EventHandler(this.FormPedidos_Load);
+            this.Shown += new System.EventHandler(this.FormPedidos_Shown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -360,6 +367,8 @@ namespace ExpressDelivery
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.Label lblAguarde;
 
         private System.Windows.Forms.Button btnCancelaPedido;
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,11 +14,9 @@ namespace ExpressDelivery.Repository
     {
         public string Message = "";
 
-        private readonly MySqlCommand _cmd = new MySqlCommand();
-        private readonly ConnectionDbRepository _con = new ConnectionDbRepository();
-
         public async Task<Pedido> LoadLastOrderId()
         {
+            Message = "";
             var pedido = new Pedido();
 
             try
@@ -49,6 +48,7 @@ namespace ExpressDelivery.Repository
 
         public async Task<List<Pedido>> LoadAll()
         {
+            Message = "";
             var pedidos = new List<Pedido>();
 
             try
@@ -78,11 +78,12 @@ namespace ExpressDelivery.Repository
 
         public async Task<List<Pedido>> LoadByCode(int code, string status)
         {
+            Message = "";
             var pedidos = new List<Pedido>();
 
             try
             {
-                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + $"/v1/orders").Result;
+                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + $"/v1/orders?status={status}&id={code}").Result;
                 var result = await response.Content.ReadAsStringAsync();
 
                 var itemJson = JsonConvert.DeserializeObject<List<Pedido>>(result);
@@ -120,11 +121,13 @@ namespace ExpressDelivery.Repository
 
         public async Task<List<Pedido>> LoadByDate(string inicio, string fim, string status)
         {
+            Message = "";
             var pedidos = new List<Pedido>();
 
             try
             {
-                var response = ConfigHttp.client.GetAsync(ConfigHttp.BaseUrl + $"/v1/orders?status={status}").Result;
+                var response = ConfigHttp.client.GetAsync($"{ConfigHttp.BaseUrl}/v1/orders?status={status}&dataInicio={inicio}&dataFim={fim}")
+                    .Result;
                 var result = await response.Content.ReadAsStringAsync();
 
                 var itemJson = JsonConvert.DeserializeObject<List<Pedido>>(result);
@@ -147,6 +150,7 @@ namespace ExpressDelivery.Repository
 
         public async Task<string> LoadPedidosAbertosIntegracao()
         {
+            Message = "";
             var ret = "";
 
             try
@@ -186,6 +190,7 @@ namespace ExpressDelivery.Repository
 
         public async Task<int> SaveOrder(Pedido order, string type)
         {
+            Message = "";
             Pedido newOrder;
             try
             {
@@ -333,32 +338,84 @@ namespace ExpressDelivery.Repository
             // return nextOrderId;
         }
 
-        public int UpdateOrder(string status, int id)
+        public async Task<int> UpdateStatusOrder(int id)
         {
+            Message = "";
             var value = 0;
             try
             {
-                _cmd.CommandText = $"UPDATE TB_PEDIDO SET STATUS_PEDIDO='{status}' WHERE COD_PEDIDO={id};";
-                _cmd.Connection = _con.Connect();
-                value = _cmd.ExecuteNonQuery();
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-                Message = e.Message;
-                GeraLog.PrintError(e.Message);
-                return -1;
+                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/order/{id}/next", null).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    value = -1;
+                else
+                    value = id;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Message = e.Message;
                 GeraLog.PrintError(e.Message);
-                return -1;
+                value = -1;
+                throw;
             }
-            finally
+
+            return value;
+        }
+
+        public async Task<int> UpdateOrder(Pedido order)
+        {
+            Message = "";
+            var value = 0;
+            try
             {
-                _con.Disconnect();
+                var json = JsonConvert.SerializeObject(order);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/order/{order.Id}", data).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    value = -1;
+                else
+                    value = order.Id;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                GeraLog.PrintError(e.Message);
+                value = -1;
+                throw;
+            }
+
+            return value;
+        }
+
+        public async Task<int> CancelOrder(int id)
+        {
+            Message = "";
+            var value = 0;
+            try
+            {
+                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/order/{id}/cancel", null).Result;
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    value = -1;
+                }
+
+                value = 1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Message = e.Message;
+                GeraLog.PrintError(e.Message);
+                value = -1;
+                throw;
             }
 
             return value;

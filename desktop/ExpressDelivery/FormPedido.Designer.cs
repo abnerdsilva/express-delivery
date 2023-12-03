@@ -66,6 +66,7 @@ namespace ExpressDelivery
             this.lblDataHora = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panelClient = new System.Windows.Forms.Panel();
+            this.panel_notificaPedidoAberto = new System.Windows.Forms.Panel();
             this.btnCancelarCliente = new System.Windows.Forms.Button();
             this.label20 = new System.Windows.Forms.Label();
             this.txtTaxaEntrega = new System.Windows.Forms.TextBox();
@@ -90,8 +91,8 @@ namespace ExpressDelivery
             this.label2 = new System.Windows.Forms.Label();
             this.timerDataHora = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblFormPedidoAguarde = new System.Windows.Forms.Label();
             this.btnCadastroBairros = new System.Windows.Forms.Button();
-            this.panel_notificaPedidoAberto = new System.Windows.Forms.Panel();
             this.lbl_notificaPedidoAberto = new System.Windows.Forms.Label();
             this.timer_notificaPedidoAberto = new System.Windows.Forms.Timer(this.components);
             this.panelOrder.SuspendLayout();
@@ -198,7 +199,7 @@ namespace ExpressDelivery
             this.cmbFormaPagamento.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbFormaPagamento.FormattingEnabled = true;
             this.cmbFormaPagamento.ItemHeight = 16;
-            this.cmbFormaPagamento.Items.AddRange(new object[] {"Dinheiro", "Cartão"});
+            this.cmbFormaPagamento.Items.AddRange(new object[] { "Dinheiro", "Cartão" });
             this.cmbFormaPagamento.Location = new System.Drawing.Point(375, 468);
             this.cmbFormaPagamento.Name = "cmbFormaPagamento";
             this.cmbFormaPagamento.Size = new System.Drawing.Size(160, 24);
@@ -414,7 +415,7 @@ namespace ExpressDelivery
             this.txtQtde.Location = new System.Drawing.Point(10, 26);
             this.txtQtde.MinimumSize = new System.Drawing.Size(4, 29);
             this.txtQtde.Name = "txtQtde";
-            this.txtQtde.Size = new System.Drawing.Size(157, 29);
+            this.txtQtde.Size = new System.Drawing.Size(157, 22);
             this.txtQtde.TabIndex = 16;
             this.txtQtde.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtQtde.WordWrap = false;
@@ -500,6 +501,14 @@ namespace ExpressDelivery
             this.panelClient.Name = "panelClient";
             this.panelClient.Size = new System.Drawing.Size(245, 510);
             this.panelClient.TabIndex = 3;
+            // 
+            // panel_notificaPedidoAberto
+            // 
+            this.panel_notificaPedidoAberto.BackColor = System.Drawing.Color.Red;
+            this.panel_notificaPedidoAberto.Location = new System.Drawing.Point(16, 515);
+            this.panel_notificaPedidoAberto.Name = "panel_notificaPedidoAberto";
+            this.panel_notificaPedidoAberto.Size = new System.Drawing.Size(200, 50);
+            this.panel_notificaPedidoAberto.TabIndex = 0;
             // 
             // btnCancelarCliente
             // 
@@ -744,6 +753,7 @@ namespace ExpressDelivery
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lblFormPedidoAguarde);
             this.panel1.Controls.Add(this.lblDataHora);
             this.panel1.Controls.Add(this.lblNrPedido);
             this.panel1.Controls.Add(this.label1);
@@ -752,6 +762,18 @@ namespace ExpressDelivery
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(792, 63);
             this.panel1.TabIndex = 4;
+            // 
+            // lblFormPedidoAguarde
+            // 
+            this.lblFormPedidoAguarde.AutoSize = true;
+            this.lblFormPedidoAguarde.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFormPedidoAguarde.ForeColor = System.Drawing.Color.Red;
+            this.lblFormPedidoAguarde.Location = new System.Drawing.Point(321, 25);
+            this.lblFormPedidoAguarde.Name = "lblFormPedidoAguarde";
+            this.lblFormPedidoAguarde.Size = new System.Drawing.Size(140, 31);
+            this.lblFormPedidoAguarde.TabIndex = 33;
+            this.lblFormPedidoAguarde.Text = "Aguarde...";
+            this.lblFormPedidoAguarde.Visible = false;
             // 
             // btnCadastroBairros
             // 
@@ -762,14 +784,6 @@ namespace ExpressDelivery
             this.btnCadastroBairros.Text = "Bairros";
             this.btnCadastroBairros.UseVisualStyleBackColor = true;
             this.btnCadastroBairros.Click += new System.EventHandler(this.btnCadastroBairros_Click);
-            // 
-            // panel_notificaPedidoAberto
-            // 
-            this.panel_notificaPedidoAberto.BackColor = System.Drawing.Color.Red;
-            this.panel_notificaPedidoAberto.Location = new System.Drawing.Point(16, 515);
-            this.panel_notificaPedidoAberto.Name = "panel_notificaPedidoAberto";
-            this.panel_notificaPedidoAberto.Size = new System.Drawing.Size(200, 50);
-            this.panel_notificaPedidoAberto.TabIndex = 0;
             // 
             // lbl_notificaPedidoAberto
             // 
@@ -786,7 +800,7 @@ namespace ExpressDelivery
             // timer_notificaPedidoAberto
             // 
             this.timer_notificaPedidoAberto.Enabled = true;
-            this.timer_notificaPedidoAberto.Interval = 5000;
+            this.timer_notificaPedidoAberto.Interval = 30000;
             this.timer_notificaPedidoAberto.Tick += new System.EventHandler(this.timer_notificaPedidoAberto_Tick);
             // 
             // FormPedido
@@ -803,6 +817,7 @@ namespace ExpressDelivery
             this.Name = "FormPedido";
             this.Text = "FormPedido";
             this.Load += new System.EventHandler(this.FormPedido_Load);
+            this.Shown += new System.EventHandler(this.FormPedido_Shown);
             this.panelOrder.ResumeLayout(false);
             this.panelOrder.PerformLayout();
             this.panelClient.ResumeLayout(false);
@@ -810,8 +825,9 @@ namespace ExpressDelivery
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-
         }
+
+        private System.Windows.Forms.Label lblFormPedidoAguarde;
 
         private System.Windows.Forms.TextBox txtObservacaoPedido;
 
