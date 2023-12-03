@@ -1,6 +1,6 @@
 package delivery.domain.user;
 
-public record OrderItemDTO(String CodPedido, String CodProduto, String CodExterno, String Nome, int Quantidade,
-                           double VrUnitario, double VrTotal, double VrDesconto, double VrAdicional, String Observacao,
-                           int StatusEditar) {
+public record OrderItemDTO(String id, String codPedido, String codProduto, String codExterno, String nome, int quantidade,
+                           double vrUnitario, double vrTotal, double vrDesconto, double vrAdicional, String observacao,
+                           int statusEditar) {
 }

@@ -14,7 +14,7 @@ public class PedidoDelivery {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String referenciaCurta;
-    private String dataCriacao;
+    private String dataPedido;
     private String statusPedido;
     private boolean agendado;
 
@@ -71,12 +71,12 @@ public class PedidoDelivery {
         this.referenciaCurta = referenciaCurta;
     }
 
-    public String getDataCriacao() {
-        return dataCriacao;
+    public String getDataPedido() {
+        return dataPedido;
     }
 
-    public void setDataCriacao(String dataCriacao) {
-        this.dataCriacao = dataCriacao;
+    public void setDataPedido(String dataCriacao) {
+        this.dataPedido = dataCriacao;
     }
 
     public boolean isAgendado() {

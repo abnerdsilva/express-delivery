@@ -79,7 +79,7 @@ public class ImprimeController {
         for (var p : pedido.getItens()) {
             textToPrint += imprimir.preencheLinha(p.getNome(), " ", 30, "E")
                     + imprimir.preencheLinha(Integer.toString(p.getQuantidade()), " ", 7, "ED")
-                    + imprimir.preencheLinha(Double.toString(p.getVrUnit()), " ", 10, "D")
+                    + imprimir.preencheLinha(Double.toString(p.getVrUnitario()), " ", 10, "D")
                     + imprimir.preencheLinha(Double.toString(p.getVrTotal()), " ", 10, "D");
 
             textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
@@ -152,7 +152,7 @@ public class ImprimeController {
                             item.setQuantidade(it.getQuantidade());
                             item.setVrDesconto(0);
                             item.setVrAdicional(0);
-                            item.setVrUnit(it.getVrUnitario());
+                            item.setVrUnitario(it.getVrUnitario());
                             item.setVrTotal(it.getVrTotal());
 
                             itens.add(item);
@@ -174,7 +174,7 @@ public class ImprimeController {
 
                         PedidoDelivery pedidoDelivery = new PedidoDelivery();
                         pedidoDelivery.setCodPedido(p.getCodPedido());
-                        pedidoDelivery.setDataCriacao(p.getDataPedido());
+                        pedidoDelivery.setDataPedido(p.getDataPedido());
                         pedidoDelivery.setAgendado(false);
                         pedidoDelivery.setDataEntrega(p.getDataEntrega());
                         pedidoDelivery.setObservacao(p.getObservacao());

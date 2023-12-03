@@ -65,8 +65,12 @@ public class PedidoRepository implements IPedidoRepository {
      * @return - retorna codigo do ultimo pedido ou -1 quando ocorre erro
      */
     @Override
-    public int loadMaxOrder() {
-        String sql = "SELECT MAX(ID) AS orderID FROM TB_PEDIDO";
+    public PedidoDao loadMaxOrder() {
+        String sql = "SELECT * FROM TB_PEDIDO TP" +
+                " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TP.COD_CLIENTE" +
+                " ORDER BY TP.ID DESC LIMIT 1";
+
+        PedidoDao pedido = null;
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
@@ -75,7 +79,46 @@ public class PedidoRepository implements IPedidoRepository {
             bd.st = bd.connection.prepareStatement(sql);
             bd.rs = bd.st.executeQuery();
             if (bd.rs.next()) {
-                return bd.rs.getInt(1);
+                pedido = new PedidoDao();
+                pedido.setId(bd.rs.getInt("id"));
+                pedido.setCodPedido(bd.rs.getString("cod_pedido"));
+                pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
+                pedido.setDataEntrega(bd.rs.getString("data_entrega"));
+                pedido.setDataPedido(bd.rs.getString("data_pedido"));
+                pedido.setLogradouro(bd.rs.getString("logradouro"));
+                pedido.setNumero(bd.rs.getInt("numero"));
+                pedido.setBairro(bd.rs.getString("bairro"));
+                pedido.setCidade(bd.rs.getString("cidade"));
+                pedido.setEstado(bd.rs.getString("estado"));
+                pedido.setCep(bd.rs.getString("cep"));
+                pedido.setTipoPedido(bd.rs.getString("tipo_pedido"));
+                pedido.setOrigem(bd.rs.getString("origem"));
+                pedido.setObservacao(bd.rs.getString("observacao"));
+                pedido.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                pedido.setFormaPagamento(bd.rs.getString("forma_pagamento"));
+                pedido.setCodCliente(bd.rs.getString("cod_cliente"));
+                pedido.setVrTotal(bd.rs.getDouble("vr_total"));
+                pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
+                pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+                pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+
+                var cliente = new ClienteDao();
+                cliente.setCodCliente(bd.rs.getString("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+
+                pedido.setCliente(cliente);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,7 +127,7 @@ public class PedidoRepository implements IPedidoRepository {
             bd.close();
         }
 
-        return -1;
+        return pedido;
     }
 
     /**
@@ -215,7 +258,9 @@ public class PedidoRepository implements IPedidoRepository {
      */
     @Override
     public List<PedidoDao> getPedidosParaImprimir() {
-        String sql = "SELECT * FROM TB_PEDIDO WHERE IMPRIME_PEDIDO = 1";
+        String sql = "SELECT * FROM TB_PEDIDO TP" +
+                " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TP.COD_CLIENTE" +
+                " WHERE IMPRIME_PEDIDO = 1";
 
         List<PedidoDao> pedidos = new ArrayList<>();
 
@@ -227,6 +272,7 @@ public class PedidoRepository implements IPedidoRepository {
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 PedidoDao pedido = new PedidoDao();
+                pedido.setId(bd.rs.getInt("id"));
                 pedido.setCodPedido(bd.rs.getString("cod_pedido"));
                 pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
                 pedido.setDataEntrega(bd.rs.getString("data_entrega"));
@@ -247,6 +293,24 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
 
+                var cliente = new ClienteDao();
+                cliente.setCodCliente(bd.rs.getString("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+
+                pedido.setCliente(cliente);
+
                 pedidos.add(pedido);
             }
         } catch (Exception e) {
@@ -261,7 +325,9 @@ public class PedidoRepository implements IPedidoRepository {
 
     @Override
     public List<PedidoDao> getOrdersFromToday() {
-        String sql = "SELECT * FROM TB_PEDIDO WHERE DATA_PEDIDO > CURRENT_DATE()";
+        String sql = "SELECT * FROM TB_PEDIDO TP" +
+                " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TP.COD_CLIENTE" +
+                " WHERE DATA_PEDIDO > SUBDATE(now(), INTERVAL 3 hour)";
 
         List<PedidoDao> pedidos = new ArrayList<>();
 
@@ -273,6 +339,7 @@ public class PedidoRepository implements IPedidoRepository {
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 PedidoDao pedido = new PedidoDao();
+                pedido.setId(bd.rs.getInt("id"));
                 pedido.setCodPedido(bd.rs.getString("cod_pedido"));
                 pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
                 pedido.setDataEntrega(bd.rs.getString("data_entrega"));
@@ -294,6 +361,99 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
                 pedido.setStatusPedido(bd.rs.getString("status_pedido"));
 
+                var cliente = new ClienteDao();
+                cliente.setCodCliente(bd.rs.getString("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+
+                pedido.setCliente(cliente);
+
+                pedidos.add(pedido);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return pedidos;
+    }
+
+    @Override
+    public List<PedidoDao> findAllByDateAndStatus(String start, String end, String status) {
+        String sql = "SELECT * FROM TB_PEDIDO" +
+                " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE";
+
+        String where = " WHERE STATUS_PEDIDO = '" + status + "' AND DATA_PEDIDO BETWEEN '" + start + "' AND '" + end + " 23:59:59'";
+        if (status.equals("TODOS") || status.isEmpty()) {
+            where = " WHERE DATA_PEDIDO BETWEEN '" + start + "' AND '" + end + " 23:59:59'";
+        }
+
+        List<PedidoDao> pedidos = new ArrayList<>();
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        sql = sql + where;
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+            while (bd.rs.next()) {
+                PedidoDao pedido = new PedidoDao();
+                pedido.setCodPedido(bd.rs.getString("cod_pedido"));
+                pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
+                pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+                pedido.setDataEntrega(bd.rs.getString("data_entrega"));
+                pedido.setDataPedido(bd.rs.getString("data_pedido"));
+                pedido.setLogradouro(bd.rs.getString("logradouro"));
+                pedido.setNumero(bd.rs.getInt("numero"));
+                pedido.setBairro(bd.rs.getString("bairro"));
+                pedido.setCidade(bd.rs.getString("cidade"));
+                pedido.setEstado(bd.rs.getString("estado"));
+                pedido.setCep(bd.rs.getString("cep"));
+                pedido.setTipoPedido(bd.rs.getString("tipo_pedido"));
+                pedido.setOrigem(bd.rs.getString("origem"));
+                pedido.setObservacao(bd.rs.getString("observacao"));
+                pedido.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                pedido.setFormaPagamento(bd.rs.getString("forma_pagamento"));
+                pedido.setCodCliente(bd.rs.getString("cod_cliente"));
+                pedido.setVrTotal(bd.rs.getDouble("vr_total"));
+                pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
+                pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+                pedido.setId(bd.rs.getInt("id"));
+                pedido.setCodUsuario(bd.rs.getString("cod_usuario"));
+
+                var cliente = new ClienteDao();
+                cliente.setCodCliente(bd.rs.getString("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+
+                pedido.setCliente(cliente);
+
                 pedidos.add(pedido);
             }
         } catch (Exception e) {
@@ -310,7 +470,7 @@ public class PedidoRepository implements IPedidoRepository {
     public List<PedidoDao> findAllByDate(String start, String end) {
         String sql = "SELECT TB_PEDIDO.*, NOME FROM TB_PEDIDO" +
                 " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE" +
-                " WHERE DATA_PEDIDO BETWEEN ? AND ?";
+                " WHERE DATA_PEDIDO BETWEEN '" + start + "' AND '" + end + " 23:59:59'";
 
         List<PedidoDao> pedidos = new ArrayList<>();
 
@@ -319,8 +479,6 @@ public class PedidoRepository implements IPedidoRepository {
 
         try {
             bd.st = bd.connection.prepareStatement(sql);
-            bd.st.setString(1, start);
-            bd.st.setString(2, end);
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 PedidoDao pedido = new PedidoDao();
@@ -367,7 +525,9 @@ public class PedidoRepository implements IPedidoRepository {
 
     @Override
     public List<PedidoDao> findAllByIntegracaoIfood() {
-        String sql = "SELECT COD_PEDIDO, DATA_PEDIDO FROM TB_PEDIDO WHERE STATUS_PEDIDO='ABERTO' AND ORIGEM='IFOOD'" +
+        String sql = "SELECT * FROM TB_PEDIDO TP" +
+                " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TP.COD_CLIENTE" +
+                " WHERE STATUS_PEDIDO='ABERTO' AND ORIGEM='IFOOD'" +
                 " AND cod_pedido_integracao IS NOT NULL AND DATA_ATUALIZACAO IS NULL ORDER BY DATA_PEDIDO DESC";
 
         List<PedidoDao> pedidos = new ArrayList<>();
@@ -380,6 +540,7 @@ public class PedidoRepository implements IPedidoRepository {
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 PedidoDao pedido = new PedidoDao();
+                pedido.setId(bd.rs.getInt("id"));
                 pedido.setCodPedido(bd.rs.getString("cod_pedido"));
                 pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
                 pedido.setDataEntrega(bd.rs.getString("data_entrega"));
@@ -399,6 +560,169 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTotal(bd.rs.getDouble("vr_total"));
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+
+                var cliente = new ClienteDao();
+                cliente.setCodCliente(bd.rs.getString("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+
+                pedido.setCliente(cliente);
+
+                pedidos.add(pedido);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return pedidos;
+    }
+
+    @Override
+    public List<PedidoDao> getOrdersByIdAndStatus(String status, int id) {
+        String sql = "SELECT * FROM TB_PEDIDO TP" +
+                " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TP.COD_CLIENTE";
+
+        String where = " WHERE STATUS_PEDIDO = '" + status + "' AND TP.ID = ?";
+        if (status.equals("TODOS")) {
+            where = " WHERE TP.ID = ?";
+        }
+
+        sql = sql + where;
+
+        List<PedidoDao> pedidos = new ArrayList<>();
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.st.setInt(1, id);
+            bd.rs = bd.st.executeQuery();
+            while (bd.rs.next()) {
+                PedidoDao pedido = new PedidoDao();
+                pedido.setId(bd.rs.getInt("id"));
+                pedido.setCodPedido(bd.rs.getString("cod_pedido"));
+                pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
+                pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+                pedido.setDataEntrega(bd.rs.getString("data_entrega"));
+                pedido.setDataPedido(bd.rs.getString("data_pedido"));
+                pedido.setLogradouro(bd.rs.getString("logradouro"));
+                pedido.setNumero(bd.rs.getInt("numero"));
+                pedido.setBairro(bd.rs.getString("bairro"));
+                pedido.setCidade(bd.rs.getString("cidade"));
+                pedido.setEstado(bd.rs.getString("estado"));
+                pedido.setCep(bd.rs.getString("cep"));
+                pedido.setTipoPedido(bd.rs.getString("tipo_pedido"));
+                pedido.setOrigem(bd.rs.getString("origem"));
+                pedido.setObservacao(bd.rs.getString("observacao"));
+                pedido.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                pedido.setFormaPagamento(bd.rs.getString("forma_pagamento"));
+                pedido.setCodCliente(bd.rs.getString("cod_cliente"));
+                pedido.setVrTotal(bd.rs.getDouble("vr_total"));
+                pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
+                pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+                pedido.setCodUsuario(bd.rs.getString("cod_usuario"));
+
+                var cliente = new ClienteDao();
+                cliente.setCodCliente(bd.rs.getString("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+
+                pedido.setCliente(cliente);
+
+                pedidos.add(pedido);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return pedidos;
+    }
+
+    @Override
+    public List<PedidoDao> getOrdersByStatus(String status) {
+        String sql = "SELECT * FROM TB_PEDIDO" +
+                " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TB_PEDIDO.COD_CLIENTE" +
+                " WHERE STATUS_PEDIDO = '" + status + "'";
+
+        List<PedidoDao> pedidos = new ArrayList<>();
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.rs = bd.st.executeQuery();
+            while (bd.rs.next()) {
+                PedidoDao pedido = new PedidoDao();
+                pedido.setId(bd.rs.getInt("id"));
+                pedido.setCodPedido(bd.rs.getString("cod_pedido"));
+                pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
+                pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+                pedido.setDataEntrega(bd.rs.getString("data_entrega"));
+                pedido.setDataPedido(bd.rs.getString("data_pedido"));
+                pedido.setLogradouro(bd.rs.getString("logradouro"));
+                pedido.setNumero(bd.rs.getInt("numero"));
+                pedido.setBairro(bd.rs.getString("bairro"));
+                pedido.setCidade(bd.rs.getString("cidade"));
+                pedido.setEstado(bd.rs.getString("estado"));
+                pedido.setCep(bd.rs.getString("cep"));
+                pedido.setTipoPedido(bd.rs.getString("tipo_pedido"));
+                pedido.setOrigem(bd.rs.getString("origem"));
+                pedido.setObservacao(bd.rs.getString("observacao"));
+                pedido.setDataAtualizacao(bd.rs.getString("data_atualizacao"));
+                pedido.setFormaPagamento(bd.rs.getString("forma_pagamento"));
+                pedido.setCodCliente(bd.rs.getString("cod_cliente"));
+                pedido.setVrTotal(bd.rs.getDouble("vr_total"));
+                pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
+                pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+                pedido.setCodUsuario(bd.rs.getString("cod_usuario"));
+
+                var cliente = new ClienteDao();
+                cliente.setCodCliente(bd.rs.getString("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+
+                pedido.setCliente(cliente);
 
                 pedidos.add(pedido);
             }
@@ -414,7 +738,9 @@ public class PedidoRepository implements IPedidoRepository {
 
     @Override
     public PedidoDao getOrderById(int code) {
-        String sql = "SELECT * FROM TB_PEDIDO WHERE ID = " + code;
+        String sql = "SELECT * FROM TB_PEDIDO TP" +
+                " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TP.COD_CLIENTE" +
+                " WHERE TP.ID = " + code;
 
         PedidoDao order = null;
 
@@ -448,6 +774,24 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
                 pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+
+                var cliente = new ClienteDao();
+                cliente.setCodCliente(bd.rs.getString("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+
+                pedido.setCliente(cliente);
 
                 order = pedido;
             }
@@ -463,7 +807,9 @@ public class PedidoRepository implements IPedidoRepository {
 
     @Override
     public PedidoDao getOrderByCode(String code) {
-        String sql = "SELECT * FROM TB_PEDIDO WHERE COD_PEDIDO = '" + code + "'";
+        String sql = "SELECT * FROM TB_PEDIDO TP" +
+                " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TP.COD_CLIENTE" +
+                " WHERE COD_PEDIDO = '" + code + "'";
 
         PedidoDao order = null;
 
@@ -476,6 +822,7 @@ public class PedidoRepository implements IPedidoRepository {
 
             if (bd.rs.next()) {
                 PedidoDao pedido = new PedidoDao();
+                pedido.setId(bd.rs.getInt("id"));
                 pedido.setCodPedido(bd.rs.getString("cod_pedido"));
                 pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
                 pedido.setDataEntrega(bd.rs.getString("data_entrega"));
@@ -496,8 +843,25 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
                 pedido.setStatusPedido(bd.rs.getString("status_pedido"));
-                pedido.setId(bd.rs.getInt("id"));
                 pedido.setCodUsuario(bd.rs.getString("cod_usuario"));
+
+                var cliente = new ClienteDao();
+                cliente.setCodCliente(bd.rs.getString("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+
+                pedido.setCliente(cliente);
 
                 order = pedido;
             }
@@ -515,21 +879,51 @@ public class PedidoRepository implements IPedidoRepository {
     public int updateStatusOrder(int id, String status) {
         int ret = -1;
 
-        String insertSql = "UPDATE TB_PEDIDO SET STATUS_PEDIDO=? WHERE COD_PEDIDO = ?";
+        String insertSql = "UPDATE TB_PEDIDO SET STATUS_PEDIDO=?, DATA_ATUALIZACAO=current_timestamp() WHERE ID = ?";
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
 
         try {
-            PreparedStatement ps = bd.connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, status);
-            ps.setInt(2, id);
-            ps.execute();
-            bd.rs = ps.getGeneratedKeys();
+            bd.st = bd.connection.prepareStatement(insertSql);
+//            PreparedStatement ps = bd.connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            bd.st.setString(1, status);
+            bd.st.setInt(2, id);
+//            ps.execute();
+            return bd.st.executeUpdate();
+//            bd.rs = ps.getGeneratedKeys();
 
-            if (bd.rs.next()) {
-                return 1;
-            }
+//            if (bd.rs.next()) {
+//                return 1;
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return ret;
+    }
+
+    @Override
+    public int updateOrder(PedidoDao order) {
+        int ret = -1;
+
+        String insertSql = "UPDATE TB_PEDIDO SET VR_TAXA=?, VR_TOTAL=?, VR_TROCO=?, OBSERVACAO=?," +
+                " DATA_ATUALIZACAO=current_timestamp() WHERE ID = ?";
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(insertSql);
+            bd.st.setDouble(1, order.getVrTaxa());
+            bd.st.setDouble(2, order.getVrTotal());
+            bd.st.setDouble(3, order.getVrTroco());
+            bd.st.setString(4, order.getObservacao());
+            bd.st.setInt(5, order.getId());
+            return bd.st.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
@@ -542,7 +936,8 @@ public class PedidoRepository implements IPedidoRepository {
 
     @Override
     public List<PedidoDao> findAll() {
-        String sql = "SELECT * FROM TB_PEDIDO";
+        String sql = "SELECT * FROM TB_PEDIDO TP" +
+                " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TP.COD_CLIENTE";
 
         List<PedidoDao> pedidos = new ArrayList<>();
 
@@ -554,6 +949,7 @@ public class PedidoRepository implements IPedidoRepository {
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 PedidoDao pedido = new PedidoDao();
+                pedido.setId(bd.rs.getInt("id"));
                 pedido.setCodPedido(bd.rs.getString("cod_pedido"));
                 pedido.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
                 pedido.setDataEntrega(bd.rs.getString("data_entrega"));
@@ -573,6 +969,24 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTotal(bd.rs.getDouble("vr_total"));
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+
+                var cliente = new ClienteDao();
+                cliente.setCodCliente(bd.rs.getString("cod_cliente"));
+                cliente.setNome(bd.rs.getString("nome"));
+                cliente.setObservacao(bd.rs.getString("observacao"));
+                cliente.setTelefone(bd.rs.getString("telefone"));
+                cliente.setBairro(bd.rs.getString("bairro"));
+                cliente.setCep(bd.rs.getInt("cep"));
+                cliente.setCidade(bd.rs.getString("cidade"));
+                cliente.setStatusCliente(bd.rs.getInt("status_cliente"));
+                cliente.setEmail(bd.rs.getString("email"));
+                cliente.setEstado(bd.rs.getString("estado"));
+                cliente.setLogradouro(bd.rs.getString("logradouro"));
+                cliente.setNumero(bd.rs.getInt("numero"));
+                cliente.setCpf(bd.rs.getString("cpf"));
+                cliente.setRg(bd.rs.getString("rg"));
+
+                pedido.setCliente(cliente);
 
                 pedidos.add(pedido);
             }

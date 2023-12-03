@@ -4,7 +4,7 @@ public class PedidoItemDelivery {
     private String id;
     private String nome;
     private int quantidade;
-    private double vrUnit;
+    private double vrUnitario;
     private double vrTotal;
     private double vrDesconto;
     private double vrAdicional;
@@ -38,12 +38,12 @@ public class PedidoItemDelivery {
         this.quantidade = quantidade;
     }
 
-    public double getVrUnit() {
-        return vrUnit;
+    public double getVrUnitario() {
+        return vrUnitario;
     }
 
-    public void setVrUnit(double vrUnit) {
-        this.vrUnit = vrUnit;
+    public void setVrUnitario(double vrUnitario) {
+        this.vrUnitario = vrUnitario;
     }
 
     public double getVrTotal() {

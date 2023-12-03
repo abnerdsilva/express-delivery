@@ -160,7 +160,7 @@ public class Order {
             pedidoItemDelivery.setQuantidade(item.getQuantity());
             pedidoItemDelivery.setVrDesconto(0);
             pedidoItemDelivery.setVrAdicional(item.getOptionsPrice());
-            pedidoItemDelivery.setVrUnit(item.getUnitPrice());
+            pedidoItemDelivery.setVrUnitario(item.getUnitPrice());
             pedidoItemDelivery.setVrTotal(item.getTotalPrice());
 
             itens.add(pedidoItemDelivery);
@@ -211,7 +211,7 @@ public class Order {
 
         PedidoDelivery pedidoDelivery = new PedidoDelivery();
         pedidoDelivery.setCodPedido("");
-        pedidoDelivery.setDataCriacao(Geral.formateDateToLocal(order.getCreatedAt()));
+        pedidoDelivery.setDataPedido(Geral.formateDateToLocal(order.getCreatedAt()));
 //        pedidoDelivery.setDataCriacao(lt1.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
         pedidoDelivery.setAgendado(!order.getOrderTiming().equals("IMMEDIATE"));
         pedidoDelivery.setDataEntrega(dataEntrega);
