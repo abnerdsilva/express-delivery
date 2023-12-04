@@ -6,4 +6,6 @@ import java.sql.SQLException;
 
 public interface IConfigRepository {
     ConfigDao load(String item) throws SQLException;
+
+    int save(String user) throws SQLException;
 }

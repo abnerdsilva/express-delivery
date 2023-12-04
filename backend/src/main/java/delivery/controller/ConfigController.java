@@ -1,10 +1,15 @@
 package delivery.controller;
 
+import delivery.Erro;
 import delivery.model.dao.ConfigDao;
 import delivery.repository.ConfigRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
+@RestController
 public class ConfigController {
     public final String permitionGranted = "SIM";
     public String statusIntegrationIfood = "";
@@ -65,5 +70,35 @@ public class ConfigController {
             }
         }
         return false;
+    }
+
+    @RequestMapping(value = "/v1/privacy", method = RequestMethod.GET)
+    public ResponseEntity<?> getTermsPrivacy() throws SQLException {
+        var data = configRepository.load("TERMOS_PRIVACIDADE");
+        if (data == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro("Configuração não encontrada"));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(data);
+    }
+
+    @RequestMapping(value = "/v1/privacy/{user}", method = RequestMethod.POST)
+    public ResponseEntity<?> setTermsPrivacy(@PathVariable String user) throws SQLException {
+        var data = configRepository.load("TERMOS_PRIVACIDADE");
+        if (data != null) {
+            return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(data);
+        }
+
+        var isSaved = configRepository.save(user);
+        if (isSaved <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro("Falha ao salvar política"));
+        }
+
+        data = configRepository.load("TERMOS_PRIVACIDADE");
+        if (data == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro("Configuração não encontrada"));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 }

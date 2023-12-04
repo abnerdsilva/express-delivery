@@ -48,4 +48,26 @@ public class ConfigRepository implements IConfigRepository {
 
         return config;
     }
+
+    @Override
+    public int save(String user) throws SQLException {
+        String sql = "INSERT INTO TB_CONFIGURACAO (COD_CONFIGURACAO, ITEM, FLAG1, FLAG2)" +
+                " VALUES (uuid(),'TERMOS_PRIVACIDADE',?,NOW())";
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(sql);
+            bd.st.setString(1, user);
+            return bd.st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
+
+        return -1;
+    }
 }
