@@ -269,7 +269,7 @@ public class PedidoController {
     }
 
     @RequestMapping(value = "/v1/order/{id}", method = RequestMethod.GET)
-    public PedidoDelivery getOrderFromId(@PathVariable String id) throws SQLException {
+    public ResponseEntity<?> getOrderFromId(@PathVariable String id) throws SQLException {
         List<PedidoItemDelivery> itens = new ArrayList<>();
         List<PedidoItemDao> itensDao = _pedidoRepository.loadItensByCode(id);
 
@@ -282,7 +282,8 @@ public class PedidoController {
         ClienteDao clienteDao = _clienteRepository.loadByCode(pedidoDao.getCodCliente());
 
         PedidoDelivery pedidoDelivery = new PedidoDelivery();
-        pedidoDelivery.setCodPedido(id);
+        pedidoDelivery.setId(pedidoDao.getId());
+        pedidoDelivery.setCodPedido(pedidoDao.getCodPedido());
         pedidoDelivery.setItens(itens);
         pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
         pedidoDelivery.setDataPedido(pedidoDao.getDataPedido());
@@ -309,13 +310,13 @@ public class PedidoController {
 
         pedidoDelivery.setPagamento(pagamentoDelivery);
 
-        return pedidoDelivery;
+        return ResponseEntity.status(HttpStatus.OK).body(pedidoDelivery);
     }
 
     @RequestMapping("/v1/order/{id}/next")
-    public ResponseEntity<?> updateStatusOrder(@PathVariable int id) {
+    public ResponseEntity<?> updateStatusOrder(@PathVariable String id) {
         try {
-            PedidoDao pedidoDao = _pedidoRepository.getOrderById(id);
+            PedidoDao pedidoDao = _pedidoRepository.getOrderByCode(id);
             if (pedidoDao.getId() <= 0) {
                 throw new Exception("pedido não encontrado, tente novamente");
             }
@@ -336,7 +337,7 @@ public class PedidoController {
                     break;
             }
 
-            int statusOrder = _pedidoRepository.updateStatusOrder(id, orderStatus);
+            int statusOrder = _pedidoRepository.updateStatusOrder(pedidoDao.getId(), orderStatus);
             if (statusOrder == -1) {
                 throw new Exception("pedido não atualizado, tente novamente");
             }
@@ -371,6 +372,9 @@ public class PedidoController {
                 }
             }
 
+            if (!data.itens().isEmpty()) {
+                _pedidoRepository.setOrderToPrint(orderConverted.getCodPedido());
+            }
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -381,9 +385,9 @@ public class PedidoController {
     }
 
     @RequestMapping("/v1/order/{id}/cancel")
-    public ResponseEntity<?> cancelOrder(@PathVariable int id) {
+    public ResponseEntity<?> cancelOrder(@PathVariable String id) {
         try {
-            PedidoDao pedidoDao = _pedidoRepository.getOrderById(id);
+            PedidoDao pedidoDao = _pedidoRepository.getOrderByCode(id);
             if (pedidoDao.getId() <= 0) {
                 throw new Exception("pedido não encontrado, tente novamente");
             }
@@ -436,11 +440,63 @@ public class PedidoController {
             var clientDTO = convertClienteDaoToClientDTO(order.getCliente());
             var ord = convertPedidoDaoToOrderDto(order, itensListDto, clientDTO);
 
+            _pedidoRepository.setOrderToPrint(ord.codPedido());
+
             return ResponseEntity.status(HttpStatus.OK).body(ord);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro(e.getMessage()));
         }
+    }
+
+    @PostMapping("/v1/order/{code}/reprint")
+    public ResponseEntity<?> printOrder(@PathVariable String code) throws SQLException {
+        List<PedidoItemDelivery> itens = new ArrayList<>();
+        List<PedidoItemDao> itensDao = _pedidoRepository.loadItensByCode(code);
+
+        for (var item : itensDao) {
+            itens.add(item.itemDaoToItemDelivery());
+        }
+
+        PedidoDao pedidoDao = _pedidoRepository.getOrderByCode(code);
+
+        ClienteDao clienteDao = _clienteRepository.loadByCode(pedidoDao.getCodCliente());
+
+        PedidoDelivery pedidoDelivery = new PedidoDelivery();
+        pedidoDelivery.setId(pedidoDao.getId());
+        pedidoDelivery.setCodPedido(pedidoDao.getCodPedido());
+        pedidoDelivery.setItens(itens);
+        pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+        pedidoDelivery.setDataPedido(pedidoDao.getDataPedido());
+        pedidoDelivery.setVrTotal(pedidoDao.getVrTotal());
+        pedidoDelivery.setVrTroco(pedidoDao.getVrTroco());
+        pedidoDelivery.setVrDesconto(pedidoDao.getVrDesconto());
+        pedidoDelivery.setVrAdicional(pedidoDao.getVrTaxa());
+        pedidoDelivery.setObservacao(pedidoDao.getObservacao());
+        pedidoDelivery.setCodPedidoIntegracao(pedidoDao.getCodPedidoIntegracao());
+        pedidoDelivery.setOrigem(pedidoDao.getOrigem());
+        pedidoDelivery.setTipo(pedidoDao.getTipoPedido());
+        pedidoDelivery.setReferencia("");
+        pedidoDelivery.setReferenciaCurta("");
+        pedidoDelivery.setStatusPedido(pedidoDao.getStatusPedido());
+
+        PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
+        pagamentoDelivery.setTroco(pedidoDao.getVrTroco());
+        pagamentoDelivery.setPrePago(false);
+        pagamentoDelivery.setValor(pedidoDao.getVrTotal());
+        pagamentoDelivery.setTipo(pedidoDao.getFormaPagamento());
+        pagamentoDelivery.setNome(pedidoDao.getFormaPagamento());
+
+        pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+
+        pedidoDelivery.setPagamento(pagamentoDelivery);
+
+        var orderPrinted = ImprimeController.imprimePedido(pedidoDelivery);
+        if (!orderPrinted) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro("Falha ao imprimir pedido"));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @NotNull

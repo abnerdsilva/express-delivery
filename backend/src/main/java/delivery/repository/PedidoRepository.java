@@ -101,6 +101,7 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
                 pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+                pedido.setCodUsuario(bd.rs.getString("cod_usuario"));
 
                 var cliente = new ClienteDao();
                 cliente.setCodCliente(bd.rs.getString("cod_cliente"));
@@ -166,7 +167,7 @@ public class PedidoRepository implements IPedidoRepository {
             bd.st.setString(15, pedido.getObservacao());
             bd.st.setString(16, pedido.getFormaPagamento());
             bd.st.setString(17, pedido.getCodPedidoIntegracao());
-            bd.st.setString(18, "VERIFICAR");
+            bd.st.setString(18, pedido.getCodUsuario());
             bd.st.setString(19, uid.toString());
 
             int resultInsert = bd.st.executeUpdate();
@@ -233,14 +234,32 @@ public class PedidoRepository implements IPedidoRepository {
         bd.getConnection();
 
         try {
-            PreparedStatement prepsInsertProduct = bd.connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-            prepsInsertProduct.setString(1, idPedido);
-            prepsInsertProduct.execute();
-            bd.rs = prepsInsertProduct.getGeneratedKeys();
+            bd.st = bd.connection.prepareStatement(insertSql);
+            bd.st.setString(1, idPedido);
+            return bd.st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerInFile.printError(e.getMessage());
+        } finally {
+            bd.close();
+        }
 
-            if (bd.rs.next()) {
-                return 1;
-            }
+        return ret;
+    }
+
+    @Override
+    public int setOrderToPrint(String code) {
+        int ret = -1;
+
+        String insertSql = "UPDATE TB_PEDIDO SET IMPRIME_PEDIDO=1 WHERE COD_PEDIDO = ?";
+
+        DatabaseConnection bd = new DatabaseConnection();
+        bd.getConnection();
+
+        try {
+            bd.st = bd.connection.prepareStatement(insertSql);
+            bd.st.setString(1, code);
+            return bd.st.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
@@ -292,6 +311,8 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTotal(bd.rs.getDouble("vr_total"));
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+                pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+                pedido.setCodUsuario(bd.rs.getString("cod_usuario"));
 
                 var cliente = new ClienteDao();
                 cliente.setCodCliente(bd.rs.getString("cod_cliente"));
@@ -327,7 +348,7 @@ public class PedidoRepository implements IPedidoRepository {
     public List<PedidoDao> getOrdersFromToday() {
         String sql = "SELECT * FROM TB_PEDIDO TP" +
                 " INNER JOIN TB_CLIENTE TC on TC.COD_CLIENTE = TP.COD_CLIENTE" +
-                " WHERE DATA_PEDIDO > SUBDATE(now(), INTERVAL 3 hour)";
+                " WHERE DATA_PEDIDO > SUBSTRING(SUBDATE(now(), INTERVAL 3 hour), 1, 10)";
 
         List<PedidoDao> pedidos = new ArrayList<>();
 
@@ -360,6 +381,7 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
                 pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+                pedido.setCodUsuario(bd.rs.getString("cod_usuario"));
 
                 var cliente = new ClienteDao();
                 cliente.setCodCliente(bd.rs.getString("cod_cliente"));
@@ -560,6 +582,8 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTotal(bd.rs.getDouble("vr_total"));
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+                pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+                pedido.setCodUsuario(bd.rs.getString("cod_usuario"));
 
                 var cliente = new ClienteDao();
                 cliente.setCodCliente(bd.rs.getString("cod_cliente"));
@@ -774,6 +798,7 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
                 pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+                pedido.setCodUsuario(bd.rs.getString("cod_usuario"));
 
                 var cliente = new ClienteDao();
                 cliente.setCodCliente(bd.rs.getString("cod_cliente"));
@@ -969,6 +994,8 @@ public class PedidoRepository implements IPedidoRepository {
                 pedido.setVrTotal(bd.rs.getDouble("vr_total"));
                 pedido.setVrTaxa(bd.rs.getDouble("vr_taxa"));
                 pedido.setVrTroco(bd.rs.getDouble("vr_troco"));
+                pedido.setStatusPedido(bd.rs.getString("status_pedido"));
+                pedido.setCodUsuario(bd.rs.getString("cod_usuario"));
 
                 var cliente = new ClienteDao();
                 cliente.setCodCliente(bd.rs.getString("cod_cliente"));

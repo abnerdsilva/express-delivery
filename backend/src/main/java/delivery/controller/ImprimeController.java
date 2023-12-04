@@ -32,14 +32,14 @@ public class ImprimeController {
      * @param pedido - dados do pedido
      * @return - status do processo de imprimir pedido
      */
-    public boolean imprimePedido(PedidoDelivery pedido) {
+    public static boolean imprimePedido(PedidoDelivery pedido) {
         boolean statusImpressao = false;
         Impressora imprimir = new Impressora();
 
         String textToPrint = "\n-----------------------------------------------------------\n";
         textToPrint += imprimir.preencheLinha("Pedido Delivery", " ", 60, "ED");
         textToPrint += imprimir.preencheLinha("\n", " ", 60, "D");
-        textToPrint += imprimir.preencheLinha("Pedido: " + pedido.getCodPedido(), " ", 60, "ED");
+        textToPrint += imprimir.preencheLinha("Pedido: " + pedido.getId(), " ", 60, "ED");
         textToPrint += "\n-----------------------------------------------------------";
 
         textToPrint += "\n";
@@ -127,7 +127,7 @@ public class ImprimeController {
     /**
      * inicia processo de loop para imprimir pedidos
      */
-    public void startPrinter() {
+    public static void startPrinter() {
         new Thread(() -> {
             for (; ; ) {
                 System.out.println("loop printer");
@@ -173,6 +173,7 @@ public class ImprimeController {
                         clienteDelivery.setTelefone(clienteDao.getTelefone());
 
                         PedidoDelivery pedidoDelivery = new PedidoDelivery();
+                        pedidoDelivery.setId(p.getId());
                         pedidoDelivery.setCodPedido(p.getCodPedido());
                         pedidoDelivery.setDataPedido(p.getDataPedido());
                         pedidoDelivery.setAgendado(false);
