@@ -153,7 +153,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/auth/login2")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO data) {
         try {
 //            var authenticationToken = new UsernamePasswordAuthenticationToken(data.username(), data.password());
 //            var auth = this.authenticationManager.authenticate(authenticationToken);
@@ -174,14 +174,14 @@ public class UsuarioController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO data) {
         if (this.usuarioRepository.findByLogin(data.username()) != null) {
             return ResponseEntity.badRequest().build();
         }
 
         var encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         var uid = UUID.randomUUID();
-        var newUser = new UsuarioDao(uid.toString(), data.username(), encryptedPassword, data.role(), 1);
+        var newUser = new UsuarioDao(uid.toString(), data.username(), encryptedPassword, data.type(), 1);
 
         var userCreated = usuarioRepository.save(newUser);
         if (userCreated != 1) {
