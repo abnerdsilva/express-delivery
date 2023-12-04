@@ -230,7 +230,8 @@ namespace ExpressDelivery
         {
             lblAguarde.Visible = true;
 
-            var atualizado = _pedidoController.UpdateStatusOrder(_idPedidoSelecionado);
+            var tempPedidoSelecionado = _pedidos.Find(p => p.Id == _idPedidoSelecionado);
+            var atualizado = _pedidoController.UpdateStatusOrder(tempPedidoSelecionado.CodPedido);
             if (!_pedidoController.MessageError.Equals(""))
                 MessageBox.Show(_pedidoController.MessageError, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else if (atualizado > 0)
@@ -269,7 +270,8 @@ namespace ExpressDelivery
         {
             lblAguarde.Visible = true;
 
-            var atualizado = _pedidoController.CancelOrder(_idPedidoSelecionado);
+            var tempPedidoSelecionado = _pedidos.Find(p => p.Id == _idPedidoSelecionado);
+            var atualizado = _pedidoController.CancelOrder(tempPedidoSelecionado.CodPedido);
             if (!_pedidoController.MessageError.Equals(""))
                 MessageBox.Show(_pedidoController.MessageError, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else if (atualizado > 0)

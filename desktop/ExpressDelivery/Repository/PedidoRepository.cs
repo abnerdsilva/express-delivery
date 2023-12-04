@@ -338,19 +338,19 @@ namespace ExpressDelivery.Repository
             // return nextOrderId;
         }
 
-        public async Task<int> UpdateStatusOrder(int id)
+        public async Task<int> UpdateStatusOrder(string code)
         {
             Message = "";
             var value = 0;
             try
             {
-                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/order/{id}/next", null).Result;
+                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/order/{code}/next", null).Result;
                 var result = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
                     value = -1;
                 else
-                    value = id;
+                    value = 1;
             }
             catch (Exception e)
             {
@@ -393,13 +393,13 @@ namespace ExpressDelivery.Repository
             return value;
         }
 
-        public async Task<int> CancelOrder(int id)
+        public async Task<int> CancelOrder(string code)
         {
             Message = "";
             var value = 0;
             try
             {
-                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/order/{id}/cancel", null).Result;
+                var response = ConfigHttp.client.PutAsync($"{ConfigHttp.BaseUrl}/v1/order/{code}/cancel", null).Result;
                 var result = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
