@@ -12,11 +12,12 @@ class OrderDetailsController extends GetxController {
 
   RxList<ProductOrder> itensOrder = <ProductOrder>[].obs;
   Rx<OrderDetailsModel> order = OrderDetailsModel(
-    codPedido: 0,
+    id: 0,
+    codPedido: '',
     observacao: '',
     dataPedido: '',
     statusPedido: '',
-    codCliente: 0,
+    codCliente: '',
     tipoPedido: '',
     origem: '',
     formaPagamento: '',
@@ -38,17 +39,16 @@ class OrderDetailsController extends GetxController {
     findOrderById(orderTemp.codPedido);
   }
 
-  Future<void> findOrderById(int codPedido) async {
+  Future<void> findOrderById(String codPedido) async {
     try {
-      final orderCompleteTemp =
-          await _orderRepository.getOrderCompleteById(codPedido);
+      final orderCompleteTemp = await _orderRepository.getOrderCompleteById(codPedido);
       order.value = orderCompleteTemp;
     } catch (e) {
       log(e.toString());
     }
   }
 
-  Future<void> updateOrderStatus(int codPedido) async {
+  Future<void> updateOrderStatus(String codPedido) async {
     try {
       final status = await _orderRepository.updateOrderStatus(codPedido);
       if (status) {
@@ -68,7 +68,7 @@ class OrderDetailsController extends GetxController {
     }
   }
 
-  Future<void> cancelOrder(int codPedido) async {
+  Future<void> cancelOrder(String codPedido) async {
     try {
       final status = await _orderRepository.cancelOrder(codPedido);
       if (status) {
@@ -84,6 +84,19 @@ class OrderDetailsController extends GetxController {
         S().ops,
         S().notPossibleCancelOrderVerifyWithAdministrator,
       );
+      log(e.toString());
+    }
+  }
+
+  Future<void> reprintOrder(String code) async {
+    try {
+      final status = await _orderRepository.reprintOrder(code);
+      if (status) {
+        Get.snackbar(S().success, S().successOrderUpdated);
+      } else {
+        Get.snackbar(S().error, 'Falha ao reimprimir pedido');
+      }
+    } catch (e) {
       log(e.toString());
     }
   }

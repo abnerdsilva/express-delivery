@@ -17,6 +17,8 @@ public interface IPedidoRepository {
 
     int updateOrderPrinted(String idPedido);
 
+    int setOrderToPrint(String code);
+
     List<PedidoDao> getPedidosParaImprimir();
 
     List<PedidoDao> findAll();

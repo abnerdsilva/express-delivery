@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class ProductOrder {
-  final int id;
+  final String id;
   final String name;
   final String? description;
   final double unitValue;
@@ -36,10 +36,10 @@ class ProductOrder {
 
   factory ProductOrder.fromMap(Map<String, dynamic> map) {
     return ProductOrder(
-      id: map['id']?.toInt() ?? 0,
+      id: map['id'] ?? '',
       name: map['nome'] ?? '',
       description: map['observacao'] ?? '',
-      unitValue: map['vrUnit'] ?? 0.0,
+      unitValue: map['vrUnitario'] ?? 0.0,
       quantity: map['quantidade'] ?? 0,
       totalValue: map['vrTotal'] ?? 0.0,
       benefit: map['vrDesconto'] ?? 0.0,

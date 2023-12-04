@@ -4,8 +4,9 @@ import 'package:express_delivery/shared/model/client.dart';
 import 'package:express_delivery/shared/model/product_order.dart';
 
 class OrderDetailsModel {
-  final int codPedido;
-  final int codCliente;
+  final int id;
+  final String codPedido;
+  final String codCliente;
   final String observacao;
   final String dataPedido;
   final String? dataEntrega;
@@ -25,6 +26,7 @@ class OrderDetailsModel {
   final List<ProductOrder>? itens;
 
   OrderDetailsModel({
+    required this.id,
     required this.codPedido,
     required this.observacao,
     required this.dataPedido,
@@ -48,10 +50,11 @@ class OrderDetailsModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'codPedido': codPedido,
       'codCliente': codCliente,
       'observacao': observacao,
-      'dataCriacao': dataPedido,
+      'dataPedido': dataPedido,
       'dataEntrega': dataEntrega,
       'statusPedido': statusPedido,
       'tipo': tipoPedido,
@@ -72,10 +75,11 @@ class OrderDetailsModel {
 
   factory OrderDetailsModel.fromMap(Map<String, dynamic> map) {
     return OrderDetailsModel(
-      codPedido: map['codPedido'],
-      codCliente: map['codCliente'] ?? 0,
+      id: map['id'] ?? 0,
+      codPedido: map['codPedido'] ?? '',
+      codCliente: map['codCliente'] ?? '',
       observacao: map['observacao'] ?? '',
-      dataPedido: map['dataCriacao'] ?? '',
+      dataPedido: map['dataPedido'] ?? '',
       dataEntrega: map['dataEntrega'] ?? '',
       statusPedido: map['statusPedido'] ?? '',
       tipoPedido: map['tipo'] ?? '',

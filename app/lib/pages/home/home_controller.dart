@@ -6,8 +6,7 @@ import 'package:express_delivery/shared/repositories/shared_preferences_reposito
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class HomeController extends GetxController with GetSingleTickerProviderStateMixin {
   late TabController tabController;
 
   late OrderRepository _orderRepository;
@@ -48,13 +47,14 @@ class HomeController extends GetxController
     orders.clear();
     ordersClosed.clear();
     ordersOpened.clear();
-    orders.addAll(ordersTemp);
-    for (var el in orders) {
-      if (el.statusPedido.toUpperCase() == statusCancelled ||
-          el.statusPedido.toUpperCase() == statusConcluded) {
-        ordersClosed.add(el);
-      } else {
-        ordersOpened.add(el);
+    if (ordersTemp.isNotEmpty) {
+      orders.addAll(ordersTemp);
+      for (var el in orders) {
+        if (el.statusPedido.toUpperCase() == statusCancelled || el.statusPedido.toUpperCase() == statusConcluded) {
+          ordersClosed.add(el);
+        } else {
+          ordersOpened.add(el);
+        }
       }
     }
   }

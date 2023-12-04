@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class UserModel {
-  final int id;
+  final String id;
   final String username;
   final String type;
   final String status;
@@ -24,7 +24,7 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'] as int,
+      id: map['id'] as String,
       username: map['username'] as String,
       type: map['type'] as String,
       status: map['status'] as String,

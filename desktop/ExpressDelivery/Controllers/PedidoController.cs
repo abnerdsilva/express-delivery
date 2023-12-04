@@ -68,16 +68,16 @@ namespace ExpressDelivery.Controllers
             return resp;
         }
 
-        public int UpdateStatusOrder(int id)
+        public int UpdateStatusOrder(string code)
         {
-            var resp = _pedidoRepository.UpdateStatusOrder(id).Result;
+            var resp = _pedidoRepository.UpdateStatusOrder(code).Result;
             MessageError = _pedidoRepository.Message;
             return resp;
         }
 
-        public int CancelOrder(int id)
+        public int CancelOrder(string code)
         {
-            var resp = _pedidoRepository.CancelOrder(id).Result;
+            var resp = _pedidoRepository.CancelOrder(code).Result;
             MessageError = _pedidoRepository.Message;
             return resp;
         }

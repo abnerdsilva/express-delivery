@@ -5,6 +5,7 @@ class SharedPrefsRepository {
   static const _userID = '/USER_ID/';
   static const _userNAME = '/USER_NAME/';
   static const _localeID = '/LOCALE_ID/';
+  static const _token = '/TOKEN/';
 
   static SharedPreferences? prefs;
   static SharedPrefsRepository? _instanceRepository;
@@ -29,6 +30,12 @@ class SharedPrefsRepository {
   }
 
   String? get clienteID => prefs!.getString(_userID);
+
+  Future<void> registerToken(String token) async {
+    await prefs!.setString(_token, token);
+  }
+
+  String? get token => prefs!.getString(_token);
 
   Future<void> registerClientName(String name) async {
     await prefs!.setString(_userNAME, name);

@@ -29,13 +29,29 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Obx(
                   () => Text(
-                    '${S().order} ${S().orderID} ${controller.order.value.codPedido}',
+                    '${S().order} ${S().orderID} ${controller.order.value.id}',
                     style: const TextStyle(
                       fontSize: 22,
                       color: ThemeConfig.kTextThirdColor,
                     ),
                   ),
                 ),
+              ),
+              Obx(
+                () => controller.order.value.statusPedido.toUpperCase() == 'CONFIRMADO'
+                    ? Align(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                          onPressed: () => controller.reprintOrder(
+                            controller.order.value.codPedido,
+                          ),
+                          icon: const Icon(
+                            Icons.print,
+                            color: ThemeConfig.kTextThirdColor,
+                          ),
+                        ),
+                      )
+                    : Container(),
               ),
             ],
           ),
@@ -186,14 +202,9 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      controller.order.value.statusPedido.toUpperCase() ==
-                                  'ABERTO' ||
-                              controller.order.value.statusPedido
-                                      .toUpperCase() ==
-                                  'CONFIRMADO' ||
-                              controller.order.value.statusPedido
-                                      .toUpperCase() ==
-                                  'DESPACHADO'
+                      controller.order.value.statusPedido.toUpperCase() == 'ABERTO' ||
+                              controller.order.value.statusPedido.toUpperCase() == 'CONFIRMADO' ||
+                              controller.order.value.statusPedido.toUpperCase() == 'DESPACHADO'
                           ? Align(
                               alignment: Alignment.centerRight,
                               child: ElevatedButton(
@@ -201,9 +212,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                                   controller.order.value.codPedido,
                                 ),
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateColor.resolveWith(
-                                          (states) => Colors.redAccent),
+                                  backgroundColor: MaterialStateColor.resolveWith((states) => Colors.redAccent),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -217,11 +226,8 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                               ),
                             )
                           : Container(),
-                      controller.order.value.statusPedido.toUpperCase() !=
-                                  'CANCELADO' &&
-                              controller.order.value.statusPedido
-                                      .toUpperCase() !=
-                                  'CONCLUIDO'
+                      controller.order.value.statusPedido.toUpperCase() != 'CANCELADO' &&
+                              controller.order.value.statusPedido.toUpperCase() != 'CONCLUIDO'
                           ? Align(
                               alignment: Alignment.centerRight,
                               child: ElevatedButton(
@@ -229,9 +235,7 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                                   controller.order.value.codPedido,
                                 ),
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateColor.resolveWith(
-                                          (states) => Colors.blueAccent),
+                                  backgroundColor: MaterialStateColor.resolveWith((states) => Colors.blueAccent),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -239,18 +243,11 @@ class OrderDetailsPage extends GetView<OrderDetailsController> {
                                     horizontal: 24.0,
                                   ),
                                   child: Text(
-                                    controller.order.value.statusPedido
-                                                .toUpperCase() ==
-                                            'ABERTO'
+                                    controller.order.value.statusPedido.toUpperCase() == 'ABERTO'
                                         ? S().confirm
-                                        : controller.order.value.statusPedido
-                                                    .toUpperCase() ==
-                                                'CONFIRMADO'
+                                        : controller.order.value.statusPedido.toUpperCase() == 'CONFIRMADO'
                                             ? S().dispatch
-                                            : controller.order.value
-                                                        .statusPedido
-                                                        .toUpperCase() ==
-                                                    'DESPACHADO'
+                                            : controller.order.value.statusPedido.toUpperCase() == 'DESPACHADO'
                                                 ? S().conclude
                                                 : '',
                                   ),
