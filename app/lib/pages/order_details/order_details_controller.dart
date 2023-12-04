@@ -87,4 +87,17 @@ class OrderDetailsController extends GetxController {
       log(e.toString());
     }
   }
+
+  Future<void> reprintOrder(String code) async {
+    try {
+      final status = await _orderRepository.reprintOrder(code);
+      if (status) {
+        Get.snackbar(S().success, S().successOrderUpdated);
+      } else {
+        Get.snackbar(S().error, 'Falha ao reimprimir pedido');
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 }

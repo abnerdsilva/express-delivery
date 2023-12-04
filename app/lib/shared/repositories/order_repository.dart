@@ -121,4 +121,38 @@ class OrderRepository {
     }
     return status;
   }
+
+  Future<bool> reprintOrder(String code) async {
+    bool status = false;
+    try {
+      final response = await restClient.post('/v1/order/$code/reprint', null);
+      if (response.hasError) {
+        String message = response.bodyString!;
+
+        if (response.statusCode == 403) {
+          message = 'Acesso negado, favor logar novamente na aplicação';
+
+          // final prefs = await SharedPrefsRepository.instance;
+          // prefs.logout();
+          throw Exception(message);
+        }
+        if (response.statusCode == 404) {
+          message = 'Erro ao autenticar usuário.';
+        }
+        if (response.statusCode == 304) {
+          message = 'Pedido já está atualizado';
+          // message = response.body['message'];
+        }
+        throw RestClientException(message, code: response.statusCode);
+      }
+
+      status = true;
+    } on RestClientException catch (e) {
+      throw RestClientException(e.message, code: e.code);
+    } catch (e) {
+      log(e.toString());
+      throw Exception(e.toString());
+    }
+    return status;
+  }
 }
