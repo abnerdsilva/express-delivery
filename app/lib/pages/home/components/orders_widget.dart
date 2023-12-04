@@ -12,6 +12,7 @@ class OrdersWidget extends StatelessWidget {
 
   static const statusCancelled = 'CANCELADO';
   static const statusConcluded = 'CONCLUIDO';
+  static const statusDispatched = 'DESPACHADO';
   static const statusOpened = 'ABERTO';
   static const statusConfirmed = 'CONFIRMADO';
 
@@ -76,7 +77,7 @@ class OrdersWidget extends StatelessWidget {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          '${S().order} ${S().orderID} ${item.codPedido}',
+                          '${S().order} ${S().orderID} ${item.id}',
                           style: const TextStyle(
                             fontSize: 20,
                             color: ThemeConfig.kTextFourtyColor,

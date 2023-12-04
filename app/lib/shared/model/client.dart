@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class Client {
-  final int id;
+  final String id;
   final String name;
   final String address;
   final String addressNumber;
@@ -36,7 +36,7 @@ class Client {
 
   factory Client.fromMap(Map<String, dynamic> map) {
     return Client(
-      id: map['codCliente']?.toInt() ?? 0,
+      id: map['codCliente'] ?? '',
       name: map['nome'] ?? '',
       address: map['logradouro'] ?? '',
       addressNumber: map['numero'].toString(),
