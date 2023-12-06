@@ -95,24 +95,20 @@ namespace ExpressDelivery.Repository
             return users;
         }
 
-        public async Task<Usuario> Create(Usuario user)
+        public async Task<bool> Create(Usuario user)
         {
-            Usuario newUser;
+            bool newUser = false;
             try
             {
                 var json = JsonConvert.SerializeObject(user);
                 var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = ConfigHttp.client.PostAsync($"{ConfigHttp.BaseUrl}/v1/user", data).Result;
-                var result = await response.Content.ReadAsStringAsync();
-
-                var userJson = JsonConvert.DeserializeObject<Usuario>(result);
-                if (userJson == null)
+                var response = ConfigHttp.client.PostAsync($"{ConfigHttp.BaseUrl}/auth/register", data).Result;
+                await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    return null;
+                    newUser = true;
                 }
-
-                newUser = userJson;
             }
             catch (Exception e)
             {
@@ -124,7 +120,7 @@ namespace ExpressDelivery.Repository
 
             return newUser;
         }
-        
+
         public async Task<Usuario> Update(Usuario user)
         {
             Message = "";

@@ -7,16 +7,18 @@ namespace ExpressDelivery.Controllers
 {
     public class LoginController
     {
+        private readonly LoginRepository _loginRepository = new LoginRepository();
+        
         public bool Status;
         public string Message = "";
 
         public async Task<Usuario> Acessar(string login, string password)
         {
+            Message = "";
             try
             {
-                LoginRepository loginDao = new LoginRepository();
-                var usuario = await loginDao.Login(login, password);
-                if (!loginDao.Message.Equals("") && !loginDao.Status)
+                var usuario = await _loginRepository.Login(login, password);
+                if (!_loginRepository.Message.Equals("") && !_loginRepository.Status)
                 {
                     Message = "Usuário e/ou senha inválido";
                     GeraLog.PrintError(Message);

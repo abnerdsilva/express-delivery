@@ -118,8 +118,8 @@ namespace ExpressDelivery
                     MessageBoxIcon.Error);
                 return;
             }
-            
-            if (txtNewPassword.Text.Equals(""))
+
+            if (txtNewPassword.Text.Equals("") && !txtIdUsuario.Text.Equals("0") && !txtIdUsuario.Text.Equals(""))
             {
                 MessageBox.Show(@"Senha é obrigatório", "Erro", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -130,26 +130,27 @@ namespace ExpressDelivery
             if (radioAtivo.Checked)
                 status = "ATIVO";
 
+            var isNewUser = txtIdUsuario.Text.Equals("") || txtIdUsuario.Text.Equals("0");
+
             var user = new Usuario
             {
                 Id = txtIdUsuario.Text,
                 Login = txtUsuario.Text,
-                Senha = txtNewPassword.Text,
+                Senha = isNewUser ? txtSenha.Text : txtNewPassword.Text,
                 SenhaAtual = txtSenha.Text,
                 TipoUsuario = cmbTipoUsuario.Text,
                 Status = status,
             };
 
-            var item = _usuarioController.Save(user, txtIdUsuario.Text.Equals("") ? "new" : "edit");
-            if (item == null || !_usuarioController.MessageError.Equals(""))
+            var isCreated = _usuarioController.Save(user, isNewUser ? "new" : "edit");
+            if (!isCreated || !_usuarioController.MessageError.Equals(""))
             {
                 MessageBox.Show($@"Erro ao salvar usuário. {_usuarioController.MessageError}");
                 return;
             }
 
-            _users.Add(user);
-
-            txtIdUsuario.Text = item.Id;
+            _users = _usuarioController.LoadAll();
+            ClearDetailsUsuario();
 
             MessageBox.Show(@"Salvo com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
@@ -158,7 +159,7 @@ namespace ExpressDelivery
         {
             panelConsultaUsuario.Visible = true;
             panelCadastroUsuario.Visible = false;
-            
+
             lblNewPassword.Visible = false;
             lblNewPasswordConfirm.Visible = false;
             txtNewPassword.Visible = false;
@@ -190,8 +191,8 @@ namespace ExpressDelivery
             txtUsuario.Text = user.Login;
             txtSenha.Text = password;
             cmbTipoUsuario.Text = user.TipoUsuario;
-            
-            if (!txtIdUsuario.Text.Equals(""))
+
+            if (!txtIdUsuario.Text.Equals("") && !txtIdUsuario.Text.Equals("0"))
             {
                 lblNewPassword.Visible = true;
                 lblNewPasswordConfirm.Visible = true;

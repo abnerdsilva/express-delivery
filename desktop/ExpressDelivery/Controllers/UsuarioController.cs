@@ -31,29 +31,34 @@ namespace ExpressDelivery.Controllers
             return resp;
         }
 
-        public Usuario Save(Usuario user, string type)
+        public bool Save(Usuario user, string type)
         {
+            var isCreated = false;
+            MessageError = "";
             if (user.Login == null || user.Senha == null || user.TipoUsuario == null || user.Status == null)
             {
                 MessageError = @"Verique os campos obrigatórios";
-                return null;
+                return isCreated;
             }
 
             if (user.Login.Equals("") || user.Senha.Equals("") || user.TipoUsuario == "" ||
                 user.Status == "")
             {
                 MessageError = @"Verique os campos obrigatórios";
-                return null;
+                return isCreated;
             }
 
-            Usuario usuarioTemp;
             if (type.Equals("new"))
-                usuarioTemp = _usuarioRepository.Create(user).Result;
+                isCreated = _usuarioRepository.Create(user).Result;
             else
-                usuarioTemp = _usuarioRepository.Update(user).Result;
+            {
+                var usuario = _usuarioRepository.Update(user).Result;
+                if (usuario != null && !usuario.Id.Equals(""))
+                    isCreated = true;
+            }
 
             MessageError = _usuarioRepository.Message;
-            return usuarioTemp;
+            return isCreated;
         }
     }
 }
