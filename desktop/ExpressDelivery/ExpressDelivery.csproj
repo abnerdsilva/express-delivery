@@ -278,6 +278,7 @@
     <Compile Include="Controllers\BairroController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
+    <Compile Include="Controllers\PrivacyController.cs" />
     <Compile Include="Controllers\ProdutoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="FormBairroTaxa.cs">
@@ -293,6 +294,12 @@
       <DependentUpon>FormPedidos.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigHttp.cs" />
+    <Compile Include="FormPolitica.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPolitica.Designer.cs">
+      <DependentUpon>FormPolitica.cs</DependentUpon>
+    </Compile>
     <Compile Include="GeraLog.cs" />
     <Compile Include="Models\Bairro.cs" />
     <Compile Include="Models\Client.cs" />
@@ -303,6 +310,7 @@
     <Compile Include="Repository\BairroRepository.cs" />
     <Compile Include="Repository\ClientRepository.cs" />
     <Compile Include="Repository\ConexaoDBRepository.cs" />
+    <Compile Include="Repository\ConfigRepository.cs" />
     <Compile Include="Repository\LoginRepository.cs" />
     <Compile Include="FormProduto.cs">
       <SubType>Form</SubType>
@@ -357,6 +365,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormPedidos.resx">
       <DependentUpon>FormPedidos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPolitica.resx">
+      <DependentUpon>FormPolitica.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormProduto.resx">
       <DependentUpon>FormProduto.cs</DependentUpon>

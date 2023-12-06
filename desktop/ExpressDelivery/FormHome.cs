@@ -99,5 +99,10 @@ namespace ExpressDelivery
             else
                 AbrirFormularios<FormDashboard>();
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://abnerdsilva.github.io/express-delivery/");
+        }
     }
 }

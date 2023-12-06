@@ -32,6 +32,7 @@ namespace ExpressDelivery
         private void InitializeComponent()
         {
             this.panelSideMenu = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
             this.lbl_idOperador = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnFormUsuarios = new System.Windows.Forms.Button();
@@ -52,6 +53,7 @@ namespace ExpressDelivery
             // 
             this.panelSideMenu.AutoScroll = true;
             this.panelSideMenu.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.panelSideMenu.Controls.Add(this.label2);
             this.panelSideMenu.Controls.Add(this.lbl_idOperador);
             this.panelSideMenu.Controls.Add(this.label1);
             this.panelSideMenu.Controls.Add(this.btnFormUsuarios);
@@ -68,6 +70,15 @@ namespace ExpressDelivery
             this.panelSideMenu.Size = new System.Drawing.Size(200, 729);
             this.panelSideMenu.TabIndex = 0;
             // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(12, 659);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(154, 18);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Política e Privacidade";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
             // lbl_idOperador
             // 
             this.lbl_idOperador.AutoSize = true;
@@ -79,11 +90,12 @@ namespace ExpressDelivery
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 650);
+            this.label1.Location = new System.Drawing.Point(12, 621);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(64, 18);
             this.label1.TabIndex = 7;
             this.label1.Text = "Usuário:";
+            this.label1.Visible = false;
             // 
             // btnFormUsuarios
             // 
