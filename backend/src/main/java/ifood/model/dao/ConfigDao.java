@@ -1,7 +1,7 @@
 package ifood.model.dao;
 
 public class ConfigDao {
-    int codConfiguracao;
+    String codConfiguracao;
     String item;
     String flag1;
     String flag2;
@@ -12,7 +12,7 @@ public class ConfigDao {
     public ConfigDao() {
     }
 
-    public ConfigDao(int codConfiguracao, String item, String flag1, String flag2, String flag3, String flag4, String flag5) {
+    public ConfigDao(String codConfiguracao, String item, String flag1, String flag2, String flag3, String flag4, String flag5) {
         this.codConfiguracao = codConfiguracao;
         this.item = item;
         this.flag1 = flag1;
@@ -22,11 +22,11 @@ public class ConfigDao {
         this.flag5 = flag5;
     }
 
-    public void setCodConfiguracao(int codConfiguracao) {
+    public void setCodConfiguracao(String codConfiguracao) {
         this.codConfiguracao = codConfiguracao;
     }
 
-    public int getCodConfiguracao() {
+    public String getCodConfiguracao() {
         return codConfiguracao;
     }
 

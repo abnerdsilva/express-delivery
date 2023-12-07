@@ -130,12 +130,9 @@ public class UserCodeRepository implements IUserCodeRepository {
         bd.getConnection();
 
         try {
-            bd.st = bd.connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-
-            bd.st.execute();
-            bd.rs = bd.st.getGeneratedKeys();
-
-            while (bd.rs.next()) {
+            bd.st = bd.connection.prepareStatement(insertSql);
+            var ret = bd.st.executeUpdate();
+            if (ret > 0) {
                 return true;
             }
         } catch (Exception e) {
@@ -167,7 +164,7 @@ public class UserCodeRepository implements IUserCodeRepository {
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 config = new ConfigDao();
-                config.setCodConfiguracao(bd.rs.getInt(1));
+                config.setCodConfiguracao(bd.rs.getString(1));
                 config.setItem(bd.rs.getString(2));
                 config.setFlag1(bd.rs.getString(3));
                 config.setFlag2(bd.rs.getString(4));
@@ -205,7 +202,7 @@ public class UserCodeRepository implements IUserCodeRepository {
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 config = new ConfigDao();
-                config.setCodConfiguracao(bd.rs.getInt(1));
+                config.setCodConfiguracao(bd.rs.getString(1));
                 config.setItem(bd.rs.getString(2));
                 config.setFlag1(bd.rs.getString(3));
                 config.setFlag2(bd.rs.getString(4));

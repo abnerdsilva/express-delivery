@@ -150,7 +150,7 @@ public class PedidoRepository implements IPedidoRepository {
         try {
             bd.connection.beginRequest();
             bd.st = bd.connection.prepareStatement(sql);
-            bd.st.setString(1, pedido.getCliente().getCodCliente());
+            bd.st.setString(1, pedido.getCodCliente());
             bd.st.setString(2, pedido.getDataPedido());
             bd.st.setString(3, pedido.getDataEntrega());
             bd.st.setDouble(4, pedido.getVrTotal());
@@ -167,7 +167,7 @@ public class PedidoRepository implements IPedidoRepository {
             bd.st.setString(15, pedido.getObservacao());
             bd.st.setString(16, pedido.getFormaPagamento());
             bd.st.setString(17, pedido.getCodPedidoIntegracao());
-            bd.st.setString(18, pedido.getCodUsuario());
+            bd.st.setString(18, "5d34a894-4b9c-4c96-9fee-7d081ad47367");
             bd.st.setString(19, uid.toString());
 
             int resultInsert = bd.st.executeUpdate();

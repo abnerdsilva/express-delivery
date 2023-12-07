@@ -3,7 +3,7 @@ package ifood.model;
 import java.sql.Timestamp;
 
 public class OrderIntegration {
-    private int idPedido;
+    private String idPedido;
     private String id;
     private String codPedidoIntegracao;
     private Timestamp dataCriacao;
@@ -11,11 +11,11 @@ public class OrderIntegration {
     private String codStatusIntegracao;
     private int nrPedido;
 
-    public int getIdPedido() {
+    public String getIdPedido() {
         return idPedido;
     }
 
-    public void setIdPedido(int idPedido) {
+    public void setIdPedido(String idPedido) {
         this.idPedido = idPedido;
     }
 

@@ -58,18 +58,21 @@ public class PedidoController {
      * @return - retorna id do pedido cadastrado
      * @throws SQLException - retorna exceção quando ocorre erro de SQL
      */
-    public int savePedidoIntegracao(PedidoDelivery pedidoDelivery) throws SQLException {
+    public String savePedidoIntegracao(PedidoDelivery pedidoDelivery) throws SQLException {
         try {
             ClienteDao clienteDao = _clienteRepository.loadByCode(pedidoDelivery.getCliente().getCodCliente());
+            var idCliente = "";
             if (clienteDao == null || clienteDao.getCodCliente().equals("")) {
-                var idCliente = addCliente(pedidoDelivery.getCliente());
+                idCliente = addCliente(pedidoDelivery.getCliente());
                 if (idCliente.equals("-1")) {
                     LoggerInFile.printError(MessageDefault.msgErrorAddClient);
-                    return -1;
+                    return "-1";
                 }
+            } else {
+                idCliente = pedidoDelivery.getCliente().getCodCliente();
             }
 
-            clienteDao = _clienteRepository.loadByCode(pedidoDelivery.getCliente().getCodCliente());
+            clienteDao = _clienteRepository.loadByCode(idCliente);
 
             PedidoDao pedido = new PedidoDao();
             pedido.setDataPedido(pedidoDelivery.getDataPedido());
@@ -102,7 +105,7 @@ public class PedidoController {
 
             var orderUid = _pedidoRepository.saveOrder(pedido);
             if (orderUid.equals("-1")) {
-                return -1;
+                return "-1";
             }
 
             for (var item : pedidoDelivery.getItens()) {
@@ -138,13 +141,13 @@ public class PedidoController {
 
             var orderSaved = _pedidoRepository.getOrderByCode(orderUid);
 
-            return orderSaved.getId();
+            return orderSaved.getCodPedido();
         } catch (Exception e) {
             e.printStackTrace();
             LoggerInFile.printError(e.getMessage());
         }
 
-        return -1;
+        return "-1";
     }
 
     /**
@@ -416,9 +419,9 @@ public class PedidoController {
                 }
             }
 
-            if (!data.itens().isEmpty()) {
-                _pedidoRepository.setOrderToPrint(orderConverted.getCodPedido());
-            }
+//            if (!data.itens().isEmpty()) {
+            _pedidoRepository.setOrderToPrint(orderConverted.getCodPedido());
+//            }
         } catch (Exception e) {
             e.printStackTrace();
 

@@ -38,7 +38,7 @@ public class Order {
 
                 try {
                     PedidoController pedidoController = PedidoController.getInstance();
-                    int orderId = pedidoController.savePedidoIntegracao(pedido);
+                    var orderId = pedidoController.savePedidoIntegracao(pedido);
                     if (repository.updateOrderId(orderId, pedido.getCodPedidoIntegracao())) {
                         LoggerInFile.printInfo("Sucesso");
                     }

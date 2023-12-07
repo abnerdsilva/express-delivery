@@ -42,7 +42,7 @@ public class OrderRepository implements IOrderRepository {
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 OrderIntegration order = new OrderIntegration();
-                order.setIdPedido(bd.rs.getInt(1));
+                order.setIdPedido(bd.rs.getString(1));
                 order.setId(bd.rs.getString(2));
                 order.setCodPedidoIntegracao(bd.rs.getString(3));
                 order.setDataCriacao(bd.rs.getTimestamp(4));
@@ -110,16 +110,16 @@ public class OrderRepository implements IOrderRepository {
      * @return - retorna se foi atualizado numero do pedido
      */
     @Override
-    public boolean updateOrderId(int id, String codPedidoIntegracao) {
+    public boolean updateOrderId(String id, String codPedidoIntegracao) {
         String sql = "UPDATE TB_PEDIDO SET"
                 + " cod_pedido_integracao='" + codPedidoIntegracao + "'"
-                + " WHERE COD_PEDIDO=" + id + ";";
+                + " WHERE COD_PEDIDO='" + id + "';";
 
         DatabaseConnection bd = new DatabaseConnection();
         bd.getConnection();
 
         try {
-            bd.st = bd.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            bd.st = bd.connection.prepareStatement(sql);
             int result = bd.st.executeUpdate();
             if (result > 0) {
                 return true;
@@ -224,8 +224,8 @@ public class OrderRepository implements IOrderRepository {
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 PedidoDao order = new PedidoDao();
-                order.setCodPedido(bd.rs.getInt("cod_pedido"));
-                order.setCodCliente(bd.rs.getInt("cod_cliente"));
+                order.setCodPedido(bd.rs.getString("cod_pedido"));
+                order.setCodCliente(bd.rs.getString("cod_cliente"));
                 order.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
                 order.setStatusPedido(bd.rs.getString("status_pedido"));
                 order.setDataPedido(bd.rs.getString("data_pedido"));
@@ -269,8 +269,8 @@ public class OrderRepository implements IOrderRepository {
             bd.rs = bd.st.executeQuery();
             while (bd.rs.next()) {
                 PedidoDao order = new PedidoDao();
-                order.setCodPedido(bd.rs.getInt("cod_pedido"));
-                order.setCodCliente(bd.rs.getInt("cod_cliente"));
+                order.setCodPedido(bd.rs.getString("cod_pedido"));
+                order.setCodCliente(bd.rs.getString("cod_cliente"));
                 order.setCodPedidoIntegracao(bd.rs.getString("cod_pedido_integracao"));
                 order.setStatusPedido(bd.rs.getString("status_pedido"));
                 order.setDataPedido(bd.rs.getString("data_pedido"));

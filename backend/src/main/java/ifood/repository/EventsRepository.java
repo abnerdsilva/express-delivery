@@ -71,8 +71,9 @@ public class EventsRepository implements IEventsRepository {
      */
     @Override
     public boolean saveEventHeader(EventsPolling event) {
-        String sql = "INSERT INTO TB_PEDIDO_INTEGRACAO (id_integracao, cod_pedido_integracao, data_criacao," +
+        String sql = "INSERT INTO TB_PEDIDO_INTEGRACAO (id_pedido_integracao, id_integracao, cod_pedido_integracao, data_criacao," +
                 " status_integracao, codigo_status_integracao) VALUES ("
+                + "uuid(), "
                 + "'" + event.getId() + "', "
                 + "'" + event.getOrderId() + "', "
                 + "'" + Geral.formateDateToLocal(event.getCreatedAt()) + "', "
@@ -149,7 +150,7 @@ public class EventsRepository implements IEventsRepository {
             bd.st.setString(1, orderId);
             ResultSet resultSet = bd.st.executeQuery();
             if (resultSet.next()) {
-                if (resultSet.getInt(1) > 0) {
+                if (!resultSet.getString(1).isEmpty()) {
                     return true;
                 }
             }

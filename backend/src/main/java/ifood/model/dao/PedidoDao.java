@@ -3,8 +3,8 @@ package ifood.model.dao;
 import delivery.model.dao.ClienteDao;
 
 public class PedidoDao {
-    private int codPedido;
-    private int codCliente;
+    private String codPedido;
+    private String codCliente;
     private ClienteDao cliente;
     private String statusPedido;
     private String dataPedido;
@@ -33,19 +33,19 @@ public class PedidoDao {
         this.cliente = cliente;
     }
 
-    public int getCodPedido() {
+    public String getCodPedido() {
         return codPedido;
     }
 
-    public void setCodPedido(int codPedido) {
+    public void setCodPedido(String codPedido) {
         this.codPedido = codPedido;
     }
 
-    public int getCodCliente() {
+    public String getCodCliente() {
         return codCliente;
     }
 
-    public void setCodCliente(int codCliente) {
+    public void setCodCliente(String codCliente) {
         this.codCliente = codCliente;
     }
 

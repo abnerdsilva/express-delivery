@@ -13,7 +13,7 @@ public interface IOrderRepository {
 
     Order getOrderDetails(String orderId);
 
-    boolean updateOrderId(int id, String codPedidoIntegracao);
+    boolean updateOrderId(String id, String codPedidoIntegracao);
 
     boolean confirmProductionOrder(String codPedidoIntegracao);
 

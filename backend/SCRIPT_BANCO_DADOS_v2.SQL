@@ -183,3 +183,8 @@ create table TB_PEDIDO_INTEGRACAO
     nr_pedido                int default 0 not null,
     PRIMARY KEY (id_pedido_integracao)
 );
+
+alter table TB_PEDIDO_INTEGRACAO
+    add status_sync_pedido int default 0 null after nr_pedido;
+
+
