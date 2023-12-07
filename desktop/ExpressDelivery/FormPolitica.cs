@@ -23,12 +23,12 @@ namespace ExpressDelivery
 
         private void btnContinuar_Click(object sender, EventArgs e)
         {
-            // var isSaved = _privacyController.AddPrivacy(User).Result;
-            // if (isSaved)
-            // {
-            //     IsPrivacyAccept = true;
-            //     Close();
-            // }
+            var isSaved = _privacyController.AddPrivacy(User).Result;
+            if (isSaved)
+            {
+                IsPrivacyAccept = true;
+                Close();
+            }
             
             IsPrivacyAccept = true;
             Close();
