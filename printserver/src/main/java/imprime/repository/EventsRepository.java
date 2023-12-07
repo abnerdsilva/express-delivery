@@ -14,8 +14,8 @@ public class EventsRepository implements IEventsRepository {
 
     private final OkHttpClient client = new OkHttpClient();
 
-    private final String URL_BASE_API = "http://localhost:8080";
-//    private final String URL_BASE_API = "http://68.183.49.109:8080";
+//    private final String URL_BASE_API = "http://localhost:8080";
+    private final String URL_BASE_API = "http://68.183.49.109:8080";
 
     @Override
     public List<PedidoDelivery> getEvents(String token) {

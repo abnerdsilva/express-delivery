@@ -12,8 +12,8 @@ public class LoginRepository implements ILoginRepository {
 
     private final OkHttpClient client = new OkHttpClient();
 
-    private final String URL_BASE_API = "http://localhost:8080";
-//    private final String URL_BASE_API = "http://68.183.49.109:8080";
+//    private final String URL_BASE_API = "http://localhost:8080";
+    private final String URL_BASE_API = "http://68.183.49.109:8080";
 
     public String auth() {
         MediaType mediaType = MediaType.parse("application/json");

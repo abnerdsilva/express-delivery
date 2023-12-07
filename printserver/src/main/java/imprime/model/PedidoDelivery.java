@@ -31,7 +31,7 @@ public class PedidoDelivery {
     private double vrTotal;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private double vrAdicional;
+    private double vrTaxa;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private double vrTroco;
@@ -136,11 +136,11 @@ public class PedidoDelivery {
     }
 
     public double getVrAdicional() {
-        return vrAdicional;
+        return vrTaxa;
     }
 
-    public void setVrAdicional(double vrAdicional) {
-        this.vrAdicional = vrAdicional;
+    public void setVrAdicional(double valor) {
+        this.vrTaxa = valor;
     }
 
     public double getVrDesconto() {
