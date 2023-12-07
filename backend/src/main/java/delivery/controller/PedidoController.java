@@ -268,6 +268,29 @@ public class PedidoController {
         }
     }
 
+    @RequestMapping("/v1/orders/print")
+    public ResponseEntity<?> getOrdersToPrint() throws SQLException {
+        List<OrderDTO> orders = new ArrayList<>();
+        List<PedidoDao> pedidoDao = _pedidoRepository.getPedidosParaImprimir();
+
+        for (var ped : pedidoDao) {
+            var itensListDto = new ArrayList<OrderItemDTO>();
+
+            List<PedidoItemDao> itensDao = _pedidoRepository.loadItensByCode(ped.getCodPedido());
+            for (var it : itensDao) {
+                var temp = convertPedidoItenDaoToOrderItemDTO(it);
+                itensListDto.add(temp);
+            }
+
+            var clientDto = convertClienteDaoToClientDTO(ped.getCliente());
+            var ord = convertPedidoDaoToOrderDto(ped, itensListDto, clientDto);
+
+            orders.add(ord);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(orders);
+    }
+
     @RequestMapping(value = "/v1/order/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getOrderFromId(@PathVariable String id) throws SQLException {
         List<PedidoItemDelivery> itens = new ArrayList<>();
@@ -344,6 +367,26 @@ public class PedidoController {
         } catch (Exception e) {
             e.printStackTrace();
 
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(e.getMessage()));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @RequestMapping(value = "/v1/order/{id}/printed", method = RequestMethod.POST)
+    public ResponseEntity<?> setOrderPrinted(@PathVariable String id) {
+        try {
+            PedidoDao pedidoDao = _pedidoRepository.getOrderByCode(id);
+            if (pedidoDao.getId() <= 0) {
+                throw new Exception("pedido não encontrado, tente novamente");
+            }
+
+            int statusOrder = _pedidoRepository.updateOrderPrinted(id);
+            if (statusOrder == -1) {
+                throw new Exception("pedido não atualizado, tente novamente");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(e.getMessage()));
         }
 
@@ -451,50 +494,54 @@ public class PedidoController {
 
     @PostMapping("/v1/order/{code}/reprint")
     public ResponseEntity<?> printOrder(@PathVariable String code) throws SQLException {
-        List<PedidoItemDelivery> itens = new ArrayList<>();
-        List<PedidoItemDao> itensDao = _pedidoRepository.loadItensByCode(code);
+//        List<PedidoItemDelivery> itens = new ArrayList<>();
+//        List<PedidoItemDao> itensDao = _pedidoRepository.loadItensByCode(code);
+//
+//        for (var item : itensDao) {
+//            itens.add(item.itemDaoToItemDelivery());
+//        }
+//
+//        PedidoDao pedidoDao = _pedidoRepository.getOrderByCode(code);
+//
+//        ClienteDao clienteDao = _clienteRepository.loadByCode(pedidoDao.getCodCliente());
+//
+//        PedidoDelivery pedidoDelivery = new PedidoDelivery();
+//        pedidoDelivery.setId(pedidoDao.getId());
+//        pedidoDelivery.setCodPedido(pedidoDao.getCodPedido());
+//        pedidoDelivery.setItens(itens);
+//        pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+//        pedidoDelivery.setDataPedido(pedidoDao.getDataPedido());
+//        pedidoDelivery.setVrTotal(pedidoDao.getVrTotal());
+//        pedidoDelivery.setVrTroco(pedidoDao.getVrTroco());
+//        pedidoDelivery.setVrDesconto(pedidoDao.getVrDesconto());
+//        pedidoDelivery.setVrAdicional(pedidoDao.getVrTaxa());
+//        pedidoDelivery.setObservacao(pedidoDao.getObservacao());
+//        pedidoDelivery.setCodPedidoIntegracao(pedidoDao.getCodPedidoIntegracao());
+//        pedidoDelivery.setOrigem(pedidoDao.getOrigem());
+//        pedidoDelivery.setTipo(pedidoDao.getTipoPedido());
+//        pedidoDelivery.setReferencia("");
+//        pedidoDelivery.setReferenciaCurta("");
+//        pedidoDelivery.setStatusPedido(pedidoDao.getStatusPedido());
+//
+//        PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
+//        pagamentoDelivery.setTroco(pedidoDao.getVrTroco());
+//        pagamentoDelivery.setPrePago(false);
+//        pagamentoDelivery.setValor(pedidoDao.getVrTotal());
+//        pagamentoDelivery.setTipo(pedidoDao.getFormaPagamento());
+//        pagamentoDelivery.setNome(pedidoDao.getFormaPagamento());
+//
+//        pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
+//
+//        pedidoDelivery.setPagamento(pagamentoDelivery);
+//
+//        var orderPrinted = ImprimeController.imprimePedido(pedidoDelivery);
+//        if (!orderPrinted) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro("Falha ao imprimir pedido"));
+//        }
 
-        for (var item : itensDao) {
-            itens.add(item.itemDaoToItemDelivery());
-        }
-
-        PedidoDao pedidoDao = _pedidoRepository.getOrderByCode(code);
-
-        ClienteDao clienteDao = _clienteRepository.loadByCode(pedidoDao.getCodCliente());
-
-        PedidoDelivery pedidoDelivery = new PedidoDelivery();
-        pedidoDelivery.setId(pedidoDao.getId());
-        pedidoDelivery.setCodPedido(pedidoDao.getCodPedido());
-        pedidoDelivery.setItens(itens);
-        pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
-        pedidoDelivery.setDataPedido(pedidoDao.getDataPedido());
-        pedidoDelivery.setVrTotal(pedidoDao.getVrTotal());
-        pedidoDelivery.setVrTroco(pedidoDao.getVrTroco());
-        pedidoDelivery.setVrDesconto(pedidoDao.getVrDesconto());
-        pedidoDelivery.setVrAdicional(pedidoDao.getVrTaxa());
-        pedidoDelivery.setObservacao(pedidoDao.getObservacao());
-        pedidoDelivery.setCodPedidoIntegracao(pedidoDao.getCodPedidoIntegracao());
-        pedidoDelivery.setOrigem(pedidoDao.getOrigem());
-        pedidoDelivery.setTipo(pedidoDao.getTipoPedido());
-        pedidoDelivery.setReferencia("");
-        pedidoDelivery.setReferenciaCurta("");
-        pedidoDelivery.setStatusPedido(pedidoDao.getStatusPedido());
-
-        PagamentoDelivery pagamentoDelivery = new PagamentoDelivery();
-        pagamentoDelivery.setTroco(pedidoDao.getVrTroco());
-        pagamentoDelivery.setPrePago(false);
-        pagamentoDelivery.setValor(pedidoDao.getVrTotal());
-        pagamentoDelivery.setTipo(pedidoDao.getFormaPagamento());
-        pagamentoDelivery.setNome(pedidoDao.getFormaPagamento());
-
-        pedidoDelivery.setCliente(clienteDao.clientDaoToClienteDelivery());
-
-        pedidoDelivery.setPagamento(pagamentoDelivery);
-
-        var orderPrinted = ImprimeController.imprimePedido(pedidoDelivery);
-        if (!orderPrinted) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro("Falha ao imprimir pedido"));
-        }
+        var status = _pedidoRepository.setOrderToPrint(code);
+        if (status <= 0)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro("falha ao enviar para impressão"));
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

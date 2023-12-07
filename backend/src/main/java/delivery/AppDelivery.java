@@ -53,7 +53,7 @@ public class AppDelivery {
                 LoggerInFile.printInfo(MessageDefault.msgAccessPrnterNotGranted);
             } else {
                 LoggerInFile.printInfo(MessageDefault.msgAccessrPrinterGranted);
-                imprimeController.startPrinter();
+//                imprimeController.startPrinter();
             }
 
             boolean webserverPermition = configController.checkWebserverPermition();
