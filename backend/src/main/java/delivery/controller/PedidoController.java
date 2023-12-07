@@ -4,6 +4,7 @@ import delivery.Erro;
 import delivery.domain.user.ClientDTO;
 import delivery.domain.user.OrderDTO;
 import delivery.domain.user.OrderItemDTO;
+import delivery.domain.user.PagamentoDTO;
 import delivery.model.ClienteDelivery;
 import delivery.model.PagamentoDelivery;
 import delivery.model.PedidoDelivery;
@@ -593,13 +594,16 @@ public class PedidoController {
 
     @NotNull
     private static OrderDTO convertPedidoDaoToOrderDto(PedidoDao ped, ArrayList<OrderItemDTO> itensListDto, ClientDTO cliente) {
+        var pagamento = new PagamentoDTO(ped.getFormaPagamento(), ped.getVrTotal(), ped.getFormaPagamento(),
+                ped.getVrTroco(), false);
+
         return new OrderDTO(ped.getId(), ped.getCodPedido(), ped.getCodCliente(),
                 ped.getCliente().getNome(), ped.getStatusPedido(), ped.getDataPedido(),
                 ped.getDataAtualizacao(), ped.getDataEntrega(), ped.getVrTotal(),
                 ped.getVrTaxa(), ped.getVrTroco(), ped.getLogradouro(), ped.getNumero(),
                 ped.getCodUsuario(), ped.getBairro(), ped.getCidade(), ped.getEstado(),
                 ped.getCep(), ped.getTipoPedido(), ped.getOrigem(), ped.getObservacao(),
-                ped.getFormaPagamento(), itensListDto, cliente);
+                ped.getFormaPagamento(), itensListDto, cliente, pagamento);
     }
 
     @NotNull
